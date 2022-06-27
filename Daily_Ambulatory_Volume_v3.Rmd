@@ -109,12 +109,10 @@ h4 {
 
 
 ```{r Load Packages, echo = FALSE, warning = FALSE, message = FALSE}
-# memory.limit(size = 8000000)
+
 # Load packages -----------------------------------------------------------------------------------
 suppressMessages({
-  
-
-  
+  memory.limit(size = 8000000)
   library(readxl)
   library(writexl)
   library(plyr)
@@ -296,28 +294,28 @@ scale_fill_MountSinai <- function(palette = "all", discrete = TRUE, reverse = FA
 
 '%!in%' <- function(x,y)!('%in%'(x,y))
 
-scheduling_data_raw <- as.data.frame(read_rds(file.choose())) %>%
-  filter(!is.na(Campus)) %>%
-  filter(Campus %!in% c("OTHER", "MSQ", "MS NOW", "NYEE")) %>%
-  filter(Appt.Status == "Arrived")%>%
-  filter(Appt.DateYear <= as.Date(Sys.time(), format="%Y-%m-%d")-1 & Appt.Year >= as.numeric(format(Sys.time(), format="%Y"))-1)
+# scheduling_data_raw <- as.data.frame(read_rds(file.choose())) %>%
+#   filter(!is.na(Campus)) %>%
+#   filter(Campus %!in% c("OTHER", "MSQ", "MS NOW", "NYEE")) %>%
+#   filter(Appt.Status == "Arrived")%>%
+#   filter(Appt.DateYear <= as.Date(Sys.time(), format="%Y-%m-%d")-1 & Appt.Year >= as.numeric(format(Sys.time(), format="%Y"))-1)
 
 
 # scheduling_data_raw <- readRDS("/data/Ambulatory/Data/historical_data.rds") %>%
 #   filter(!is.na(Campus)) %>%
 #   filter(Campus %!in% c("OTHER", "MSQ", "MS NOW", "NYEE"))
 
-# scheduling_data_raw <- as.data.frame(readRDS("/nfs/data/Applications/Ambulatory/Data/historical_data.rds")) %>%
-#   filter(!is.na(Campus)) %>%
-#   filter(Campus %!in% c("OTHER", "MSQ", "MS NOW", "NYEE")) %>%
-#   filter(Appt.Status == "Arrived")%>%
-#   filter(Appt.DateYear <= as.Date(Sys.time(), format="%Y-%m-%d")-1 & Appt.Year >= as.numeric(format(Sys.time(), format="%Y"))-1)
+scheduling_data_raw <- as.data.frame(readRDS("/nfs/data/Applications/Ambulatory/Data/historical_data.rds")) %>%
+  filter(!is.na(Campus)) %>%
+  filter(Campus %!in% c("OTHER", "MSQ", "MS NOW", "NYEE")) %>%
+  filter(Appt.Status == "Arrived")%>%
+  filter(Appt.DateYear <= as.Date(Sys.time(), format="%Y-%m-%d")-1 & Appt.Year >= as.numeric(format(Sys.time(), format="%Y"))-1)
 
 scheduling_data_raw <- scheduling_data_raw %>% distinct()
 
-rad_onc_data_raw <- as.data.frame(read.csv("Rad_Onc_Data.csv"))
-radiology_data_raw <- as.data.frame(read.csv("Radiology_Data.csv"))
-radiology_ref <- as.data.frame(read.csv("Radiology_Site_Mapping.csv"))
+rad_onc_data_raw <- as.data.frame(read.csv("/nfs/data/Applications/Ambulatory/Rad_Onc_Data.csv"))
+radiology_data_raw <- as.data.frame(read.csv("/nfs/data/Applications/Ambulatory/Radiology_Data.csv"))
+radiology_ref <- as.data.frame(read.csv("/nfs/data/Applications/Ambulatory/Radiology_Site_Mapping.csv"))
 
 ```
 

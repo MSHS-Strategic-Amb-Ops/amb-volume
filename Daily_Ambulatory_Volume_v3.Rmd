@@ -305,11 +305,11 @@ scale_fill_MountSinai <- function(palette = "all", discrete = TRUE, reverse = FA
 #   filter(!is.na(Campus)) %>%
 #   filter(Campus %!in% c("OTHER", "MSQ", "MS NOW", "NYEE"))
 
-scheduling_data_raw <- as.data.frame(readRDS("/nfs/data/Applications/Ambulatory/Data/historical_data.rds")) %>%
+scheduling_data_raw <- as.data.frame(readRDS("/nfs/data/Applications/Ambulatory/Data_Updated/historical_data.rds")) %>%
   filter(!is.na(Campus)) %>%
   filter(Campus %!in% c("OTHER", "MSQ", "MS NOW", "NYEE")) %>%
   filter(Appt.Status == "Arrived")%>%
-  filter(Appt.DateYear <= as.Date(Sys.time(), format="%Y-%m-%d")-1 & Appt.Year >= as.numeric(format(Sys.time(), format="%Y"))-1)
+  filter(Appt.DateYear <= as.Date(Sys.time(), format="%Y-%m-%d")-1)
 
 scheduling_data_raw <- scheduling_data_raw %>% distinct()
 

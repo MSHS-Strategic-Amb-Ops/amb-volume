@@ -306,9 +306,9 @@ scheduling_data_raw <- readRDS("/nfs/data/Applications/Ambulatory/Data_Updated/h
   filter(Appt.Status == "Arrived")%>%
   filter(Appt.DateYear >= as.Date("2021-01-01", format="%Y-%m-%d") & Appt.DateYear <= as.Date(max(Appt.Made.DTTM), format="%Y-%m-%d"))
 
-rad_onc_data_raw <- read.csv("/nfs/data/Applications/Ambulatory/Rad_Onc_Data.csv")
-radiology_data_raw <- read.csv("/nfs/data/Applications/Ambulatory/Radiology_Data.csv")
-radiology_ref <- read.csv("/nfs/data/Applications/Ambulatory/Radiology_Site_Mapping.csv")
+rad_onc_data_raw <- read.csv("/nfs/data/Applications/Ambulatory/Rad_Onc_Data.csv", row.names=FALSE)
+radiology_data_raw <- read.csv("/nfs/data/Applications/Ambulatory/Radiology_Data.csv", row.names=FALSE)
+radiology_ref <- read.csv("/nfs/data/Applications/Ambulatory/Radiology_Site_Mapping.csv", row.names=FALSE)
 
 # rad_onc_data_raw <- read.csv(file.choose())
 # radiology_data_raw <- read.csv(file.choose())

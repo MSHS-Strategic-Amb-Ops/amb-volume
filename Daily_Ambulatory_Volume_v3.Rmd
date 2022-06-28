@@ -2963,55 +2963,6 @@ monthly_vol_dept_function(site = "MSH-MSDFP")
 _________________________________________________________________________________________________________________________________________________________________
 
 
-<!-- ## MSHP {.tabset .tabset-fade .tabset-pills} -->
-<!-- ### MSHP Daily Volume -->
-<!-- ```{r MSHP Metrics Output1, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'} -->
-<!-- print(daily_vol_site_function(site = "MSHP")) -->
-<!-- print(daily_vol_last_year_site_function(site = "MSHP")) -->
-
-<!-- ``` -->
-<!-- _________________________________________________________________________________________________________________________________________________________________ -->
-
-<!-- ### MSHP Weekly Volume -->
-<!-- ```{r MSHP Metrics Output2, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'} -->
-<!-- print(weekly_vol_site_function(site = "MSHP")) -->
-<!-- print(weekly_vol_last_year_site_function(site = "MSHP")) -->
-<!-- ``` -->
-<!-- _________________________________________________________________________________________________________________________________________________________________ -->
-
-<!-- ### MSHP Monthly Volume -->
-<!-- ```{r MSHP Metrics Output3, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'} -->
-<!-- print(monthly_vol_site_function(site = "MSHP")) -->
-<!-- ``` -->
-<!-- _________________________________________________________________________________________________________________________________________________________________ -->
-
-<!-- ### MSHP Volume Graphs -->
-<!-- ```{r MSHP Metrics Output4, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'} -->
-<!-- print(vol_trend_site_graph(site = "MSHP")) -->
-<!-- print(vol_breakdown_site_graph(site = "MSHP")) -->
-<!-- ``` -->
-
-<!-- :::: {.blackbox data-latex=""} -->
-<!-- ::: {.center data-latex=""} -->
-<!-- <font size="4">**For `r vol_takeaways_function(site = "MSHP")[1]` in `r full_month` `r full_year`:**</font> -->
-<!-- ::: -->
-
-<!-- <font size="4">--  Total ambulatory encounters were **`r vol_takeaways_function(site = "MSHP")[2]`**, reaching **`r vol_takeaways_function(site = "MSHP")[3]`** of `r full_month` `r last_year`.</font><br/> -->
-<!-- <font size="4">--  In-person encounters were at **`r vol_takeaways_function(site = "MSHP")[4]`** of `r full_month` `r last_year` volume.</font><br/> -->
-<!-- <font size="4">--  Total ambulatory encounters were at **`r vol_takeaways_function(site = "MSHP")[5]`** of `r last_year` monthly average and **`r vol_takeaways_function(site = "MSHP")[6]`** of 2019 monthly average.</font><br/> -->
-<!-- :::: -->
-<!-- _________________________________________________________________________________________________________________________________________________________________ -->
-
-<!-- ### MSHP Volume by Dept -->
-<!-- <!-- <span style='font-size: 16px; color: black'>**MSHP `r todays_month`-`r todays_year` MTD Volume by Department**</span><br/> --> -->
-<!-- <!-- <span style='font-size: 14px; color: black'>*Includes visits up to `r date_end`</span><br/> --> -->
-<!-- <span style='font-size: 16px; color: black'>**MSHP `r full_month`-`r full_year` Volume by Department**</span><br/> -->
-<!-- ```{r MSHP Metrics Output5, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'} -->
-<!-- monthly_vol_dept_function(site = "MSHP") -->
-<!-- ``` -->
-_________________________________________________________________________________________________________________________________________________________________
-
-
 ## MSM {.tabset .tabset-fade .tabset-pills}
 ### MSM Daily Volume
 ```{r MSM Metrics Output1, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}

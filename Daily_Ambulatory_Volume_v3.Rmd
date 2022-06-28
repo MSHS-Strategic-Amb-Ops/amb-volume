@@ -377,7 +377,7 @@ scheduling_data <- scheduling_data_raw %>%
          Appt.Week = floor_date(as.Date(Appt.DateYear, "%Y-%m-%d"), unit="week", week_start = 7),
          Visit.Method  = case_when(Visit.Method == "IN PERSON" ~ 'IN PERSON'
                                    ,TRUE ~ 'TELEHEALTH'))
-rm(scheduling_data_raw)
+# rm(scheduling_data_raw)
 
 scheduling_data <- merge(scheduling_data, weekNum_sunday[,c("Appt.Year","Appt.WeekNum","Appt.Week")])
 

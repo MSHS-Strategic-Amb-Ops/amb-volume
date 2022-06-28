@@ -294,9 +294,9 @@ scale_fill_MountSinai <- function(palette = "all", discrete = TRUE, reverse = FA
 
 '%!in%' <- function(x,y)!('%in%'(x,y))
 
-# scheduling_data_raw <- as.data.frame(read_rds(file.choose())) %>%
+# scheduling_data_raw <- as.data.frame(readRDS(file.choose())) %>%
 #   filter(!is.na(Campus)) %>%
-#   filter(Campus %!in% c("OTHER", "MSQ", "MS NOW", "NYEE")) %>%
+#   filter(Campus %in% c("NETWORK","MSM","MSH-MSDFP","ONCOLOGY","MSW","MSBI","MSUS","MSH- AMBULATORY CARE","MSDD")) %>%
 #   filter(Appt.Status == "Arrived")%>%
 #   filter(Appt.DateYear <= as.Date(Sys.time(), format="%Y-%m-%d")-1)
 

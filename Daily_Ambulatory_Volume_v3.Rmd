@@ -294,7 +294,7 @@ scale_fill_MountSinai <- function(palette = "all", discrete = TRUE, reverse = FA
 
 '%!in%' <- function(x,y)!('%in%'(x,y))
 
-# scheduling_data_raw <- as.data.frame(readRDS(file.choose())) %>%
+# scheduling_data_raw <- readRDS(file.choose()) %>%
 #   filter(!is.na(Campus)) %>%
 #   filter(Campus %in% c("NETWORK","MSM","MSH-MSDFP","ONCOLOGY","MSW","MSBI","MSUS","MSH- AMBULATORY CARE","MSDD")) %>%
 #   filter(Appt.Status == "Arrived")%>%
@@ -306,15 +306,13 @@ scheduling_data_raw <- readRDS("/nfs/data/Applications/Ambulatory/Data_Updated/h
   filter(Appt.Status == "Arrived")%>%
   filter(Appt.DateYear <= as.Date(Sys.time(), format="%Y-%m-%d")-1)
 
-scheduling_data_raw <- scheduling_data_raw %>% distinct()
-
 rad_onc_data_raw <- read.csv("/nfs/data/Applications/Ambulatory/Rad_Onc_Data.csv")
 radiology_data_raw <- read.csv("/nfs/data/Applications/Ambulatory/Radiology_Data.csv")
 radiology_ref <- read.csv("/nfs/data/Applications/Ambulatory/Radiology_Site_Mapping.csv")
 
-# rad_onc_data_raw <- as.data.frame(read.csv(file.choose()))
-# radiology_data_raw <- as.data.frame(read.csv(file.choose()))
-# radiology_ref <- as.data.frame(read.csv(file.choose()))
+# rad_onc_data_raw <- read.csv(file.choose())
+# radiology_data_raw <- read.csv(file.choose())
+# radiology_ref <- read.csv(file.choose())
 
 ```
 

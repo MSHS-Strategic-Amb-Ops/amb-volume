@@ -1324,7 +1324,7 @@ g1 <- ggplot(vol_trend_mshs,
     
     # ann_text_2019 <- data.frame(Appt.Month = "April",monthly_vol = avg_2019,lab=paste0("2019 Monthly \nAverage: ", prettyNum(avg_2019, big.mark = ',')),
     #                    Appt.Year = factor("2022",levels = c("2021","2022")), Visit.Method = "Total")
-    ann_text_2021 <- data.frame(Appt.Month = "July",monthly_vol = avg_2021,lab=paste0("2021 Monthly\nAvg: ", prettyNum(avg_2021, big.mark = ',')),
+    ann_text_2021 <- data.frame(Appt.Month = "June",monthly_vol = avg_2021,lab=paste0("2021 Monthly\nAvg: ", prettyNum(avg_2021, big.mark = ',')),
                        Appt.Year = factor("2022",levels = c("2021","2022")), Visit.Method = "Total")
 
      
@@ -2346,7 +2346,7 @@ vol_breakdown_site_graph <- function(site){
       
     max <- vol_breakdown_site %>% group_by(Appt.Year, Appt.Month) %>% summarise(max = sum(monthly_vol))
 
-      ann_text_2021 <- data.frame(Appt.Month = "July",monthly_vol = avg_2021,lab=paste0("2021 Monthly Average:\n", prettyNum(avg_2021, big.mark = ',')),
+      ann_text_2021 <- data.frame(Appt.Month = "June",monthly_vol = avg_2021,lab=paste0("2021 Monthly Average:\n", prettyNum(avg_2021, big.mark = ',')),
                        Appt.Year = factor("2022",levels = c("2021","2022")), Visit.Method = "Total")
       
    ggplot(vol_breakdown_site, aes(x= factor(Appt.Month, levels = monthOptions), y=monthly_vol, group=Visit.Method, fill=Visit.Method))+

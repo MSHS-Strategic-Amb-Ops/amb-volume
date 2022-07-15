@@ -2435,12 +2435,18 @@ vol_takeaways_function <- function(site){
 monthly_vol_dept_function <- function(site){
 
   # site <- "MSUS"
-  
+
 monthly_vol_dept <- monthly_vol %>%
   filter(Campus == site) %>%
   filter(Appt.Month == full_month) %>%
   arrange(Visit.Method, Appt.MonNum) %>%
   group_by(Department, Visit.Method) %>%
+  pivot_wider(names_from = Appt.Year,
+              values_from = monthly_vol,
+              values_fill = 0) %>%
+  pivot_longer(7:8,
+               names_to = "Appt.Year",
+               values_to = "monthly_vol") %>%
   mutate(last_year = shift(monthly_vol)) %>%
   mutate(perc_diff = percent((monthly_vol - last_year)/last_year,0)) %>%
   filter(!is.na(last_year)) %>%

@@ -1367,8 +1367,7 @@ g1 <- ggplot(vol_trend_mshs,
 
 ```{r MSHS Key Takeaways for Volume Graphs, echo = FALSE, warning = FALSE, message = FALSE}
 
-# full_month <- format((lubridate::floor_date(max(scheduling_data$Appt.DateYear), unit = "month")-1), "%B")
-full_month <- "May"
+full_month <- format((lubridate::floor_date(max(scheduling_data$Appt.DateYear), unit = "month")-1), "%B")
 
 full_year <- format((lubridate::floor_date(max(scheduling_data$Appt.DateYear), unit = "month")-1), "%Y")
 last_year <- as.numeric(full_year)-1

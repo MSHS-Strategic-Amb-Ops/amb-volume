@@ -1400,7 +1400,7 @@ last_year: `r last_year`
 current_month: `r current_month`
 current_encounters: `r current_encounters`
 total_encounters: `r total_encounters`
-prev_encounters: `r prev_encounter`
+prev_encounters: `r prev_encounters`
 total_encounters_comp: `r total_encounters_comp`
 total_in_person: `r total_in_person`
 total_amb_prior_year: `r total_amb_prior_year`

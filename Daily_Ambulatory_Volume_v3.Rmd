@@ -353,7 +353,7 @@ weekNum_sunday <- scheduling_data_raw %>%
 # weekNum_monday <- tail(weekNum_monday, 58)
 
 # Set Variables
-report_run_date <- Sys.time()
+report_run_date <- Sys.Date()
 
 todays_date <- (tail(weekNum_sunday,1))$Appt.Week
 todays_year <- strftime(todays_date, format = "%Y")

@@ -294,25 +294,25 @@ scale_fill_MountSinai <- function(palette = "all", discrete = TRUE, reverse = FA
 
 '%!in%' <- function(x,y)!('%in%'(x,y))
 
-# scheduling_data_raw <- readRDS(file.choose()) %>%
-#   filter(!is.na(Campus)) %>%
-#   filter(Campus %in% c("NETWORK","MSM","MSH-MSDFP","ONCOLOGY","MSW","MSBI","MSUS","MSH- AMBULATORY CARE","MSDD")) %>%
-#   filter(Appt.Status == "Arrived")%>%
-#   filter(Appt.DateYear <= as.Date(Sys.time(), format="%Y-%m-%d")-1)
-
-scheduling_data_raw <- readRDS("/nfs/data/Applications/Ambulatory/Data_Updated/historical_data.rds") %>%
+scheduling_data_raw <- readRDS(file.choose()) %>%
   filter(!is.na(Campus)) %>%
   filter(Campus %in% c("NETWORK","MSM","MSH-MSDFP","ONCOLOGY","MSW","MSBI","MSUS","MSH- AMBULATORY CARE","MSDD")) %>%
   filter(Appt.Status == "Arrived")%>%
   filter(Appt.DateYear >= as.Date("2021-01-01", format="%Y-%m-%d") & Appt.DateYear <= as.Date(max(Appt.Made.DTTM), format="%Y-%m-%d"))
 
-rad_onc_data_raw <- read.csv("/nfs/data/Applications/Ambulatory/Rad_Onc_Data.csv")
-radiology_data_raw <- read.csv("/nfs/data/Applications/Ambulatory/Radiology_Data.csv")
-radiology_ref <- read.csv("/nfs/data/Applications/Ambulatory/Radiology_Site_Mapping.csv")
+# scheduling_data_raw <- readRDS("/nfs/data/Applications/Ambulatory/Data_Updated/historical_data.rds") %>%
+#   filter(!is.na(Campus)) %>%
+#   filter(Campus %in% c("NETWORK","MSM","MSH-MSDFP","ONCOLOGY","MSW","MSBI","MSUS","MSH- AMBULATORY CARE","MSDD")) %>%
+#   filter(Appt.Status == "Arrived")%>%
+#   filter(Appt.DateYear >= as.Date("2021-01-01", format="%Y-%m-%d") & Appt.DateYear <= as.Date(max(Appt.Made.DTTM), format="%Y-%m-%d"))
 
-# rad_onc_data_raw <- read.csv(file.choose())
-# radiology_data_raw <- read.csv(file.choose())
-# radiology_ref <- read.csv(file.choose())
+# rad_onc_data_raw <- read.csv("/nfs/data/Applications/Ambulatory/Rad_Onc_Data.csv")
+# radiology_data_raw <- read.csv("/nfs/data/Applications/Ambulatory/Radiology_Data.csv")
+# radiology_ref <- read.csv("/nfs/data/Applications/Ambulatory/Radiology_Site_Mapping.csv")
+
+rad_onc_data_raw <- read.csv(file.choose())
+radiology_data_raw <- read.csv(file.choose())
+radiology_ref <- read.csv(file.choose())
 
 ```
 
@@ -1318,7 +1318,7 @@ g1 <- ggplot(vol_trend_mshs,
       group_by(Appt.Year, Appt.Month, Appt.MonNum, Visit.Method) %>%
       summarise(monthly_vol = sum(monthly_vol)) %>%
       arrange(Appt.Year, Appt.MonNum) %>%
-      head(-2) %>%
+      # head(-2) %>%
       tail(26)
     
     max <- vol_breakdown_mshs %>% group_by(Appt.Year, Appt.Month) %>% summarise(max = sum(monthly_vol))
@@ -1391,15 +1391,15 @@ prev_encounters <- as.numeric((vol_trend_mshs %>%
 
 total_encounters_comp <- percent((current_encounters-prev_encounters)/prev_encounters,0)
 total_encounters_comp <- as.character(ifelse(total_encounters_comp >0, 
-                                paste0(total_encounters_comp, " increase from ",full_month," ", full_year),
-                                paste0(total_encounters_comp, " decrease from ",full_month," ", full_year)))
+                                paste0(total_encounters_comp, " increase from ",full_month," ", last_year),
+                                paste0(total_encounters_comp, " decrease from ",full_month," ", last_year)))
 
 
   
 total_in_person <- percent((monthly_vol_mshs %>% filter(Visit.Method == "IN PERSON") %>% filter(Appt.Month == full_month))$perc_diff,0)
 total_in_person <- as.character(ifelse(total_in_person >0, 
-                                paste0(" increased by ",total_in_person," from ", full_month," ", full_year),
-                                paste0(" decreased by ",total_in_person," from ", full_month," ", full_year)))
+                                paste0(" increased by ",total_in_person," from ", full_month," ", last_year),
+                                paste0(" decreased by ",total_in_person," from ", full_month," ", last_year)))
 
 total_amb_prior_year <- percent((current_encounters-avg_2021)/avg_2021,0)
 total_amb_prior_year <- as.character(ifelse(total_amb_prior_year >0, 

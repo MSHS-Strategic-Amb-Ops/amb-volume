@@ -304,7 +304,7 @@ scheduling_data_raw <- readRDS("/nfs/data/Applications/Ambulatory/Data_Updated/h
   filter(!is.na(Campus)) %>%
   filter(Campus %in% c("NETWORK","MSM","MSH-MSDFP","ONCOLOGY","MSW","MSBI","MSUS","MSH- AMBULATORY CARE","MSDD")) %>%
   filter(Appt.Status == "Arrived")%>%
-  filter(Appt.DateYear >= as.Date("2021-01-01", format="%Y-%m-%d") & Appt.DateYear <= as.Date("2022-08-31", format="%Y-%m-%d"))
+  filter(Appt.DateYear >= as.Date("2021-01-01", format="%Y-%m-%d") & Appt.DateYear <= as.Date("2022-09-01", format="%Y-%m-%d"))
   # filter(Appt.DateYear >= as.Date("2021-01-01", format="%Y-%m-%d") & Appt.DateYear <= as.Date(max(Appt.Made.DTTM), format="%Y-%m-%d"))
 
 rad_onc_data_raw <- read.csv("/nfs/data/Applications/Ambulatory/Rad_Onc_Data.csv")
@@ -424,7 +424,7 @@ rad_radOnc_data <- bind_rows(rad_onc_data_raw, radiology_data_raw)
 rad_radOnc_data <- rad_radOnc_data %>%
   mutate(Campus = toupper(Campus)) %>%
   filter(Campus %!in% c("OTHER", "MSQ", "MS NOW", "NYEE")) %>%
-  filter(Month %!in% c("22-Sep","22-Oct"))
+  filter(Month %!in% c("22-Sep","22-Oct")) 
 
 
 rad_onc_date <- paste0(rad_onc_data_raw[nrow(rad_onc_data_raw),"Appt.Month"],", ", rad_onc_data_raw[nrow(rad_onc_data_raw),"Appt.Year"])

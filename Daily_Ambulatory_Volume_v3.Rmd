@@ -304,8 +304,7 @@ scheduling_data_raw <- readRDS("/nfs/data/Applications/Ambulatory/Data_Updated/h
   filter(!is.na(Campus)) %>%
   filter(Campus %in% c("NETWORK","MSM","MSH-MSDFP","ONCOLOGY","MSW","MSBI","MSUS","MSH- AMBULATORY CARE","MSDD")) %>%
   filter(Appt.Status == "Arrived")%>%
-  filter(Appt.DateYear >= as.Date("2021-01-01", format="%Y-%m-%d") & Appt.DateYear <= as.Date("2022-09-01", format="%Y-%m-%d"))
-  # filter(Appt.DateYear >= as.Date("2021-01-01", format="%Y-%m-%d") & Appt.DateYear <= as.Date(max(Appt.Made.DTTM), format="%Y-%m-%d"))
+  filter(Appt.DateYear >= as.Date("2021-01-01", format="%Y-%m-%d") & Appt.DateYear <= as.Date(max(Appt.Made.DTTM), format="%Y-%m-%d"))
 
 rad_onc_data_raw <- read.csv("/nfs/data/Applications/Ambulatory/Rad_Onc_Data.csv")
 radiology_data_raw <- read.csv("/nfs/data/Applications/Ambulatory/Radiology_Data.csv")
@@ -423,8 +422,7 @@ rad_radOnc_data <- bind_rows(rad_onc_data_raw, radiology_data_raw)
 
 rad_radOnc_data <- rad_radOnc_data %>%
   mutate(Campus = toupper(Campus)) %>%
-  filter(Campus %!in% c("OTHER", "MSQ", "MS NOW", "NYEE")) %>%
-  filter(Month %!in% c("22-Sep","22-Oct")) 
+  filter(Campus %!in% c("OTHER", "MSQ", "MS NOW", "NYEE")) 
 
 
 rad_onc_date <- paste0(rad_onc_data_raw[nrow(rad_onc_data_raw),"Appt.Month"],", ", rad_onc_data_raw[nrow(rad_onc_data_raw),"Appt.Year"])
@@ -1320,6 +1318,7 @@ g1 <- ggplot(vol_trend_mshs,
       group_by(Appt.Year, Appt.Month, Appt.MonNum, Visit.Method) %>%
       summarise(monthly_vol = sum(monthly_vol)) %>%
       arrange(Appt.Year, Appt.MonNum) %>%
+      head(-2) %>%
       tail(26)
     
     max <- vol_breakdown_mshs %>% group_by(Appt.Year, Appt.Month) %>% summarise(max = sum(monthly_vol))
@@ -1337,7 +1336,8 @@ g1 <- ggplot(vol_trend_mshs,
       scale_fill_manual(values = c("#212070","#d80b8c","black"))+
       scale_y_continuous(limits=c(0,(max(max$max))*1.2), labels = scales::number_format(accuracy = 1))+
       labs(title = paste0("MSHS Ambulatory Arrived Volume Breakdown by Month"),
-           subtitle = paste0("Based on data from 2021-01-01 to ",max(scheduling_data$Appt.DateYear),"\n"),
+           subtitle = paste0("Based on data from 2021-01-01 to 2022-09-30","\n"),
+           # subtitle = paste0("Based on data from 2021-01-01 to ",max(scheduling_data$Appt.DateYear),"\n"),
            x = NULL, y = NULL, fill = NULL)+
       theme_new_line()+
       theme(axis.title.y = element_text(size = 12, angle = 90),  
@@ -1346,15 +1346,17 @@ g1 <- ggplot(vol_trend_mshs,
       theme(strip.placement = "outside",
             strip.text.x = element_text(size = 14))+
       geom_text(aes(label=prettyNum(monthly_vol, big.mark = ',')), color="white", 
-                size=3, fontface="bold", position = position_stack(vjust = 0.5))+
+                size=3.5, fontface="bold", position = position_stack(vjust = 0.5))+
       stat_summary(fun.y = sum, vjust = -1, aes(label=ifelse(..y.. == 0,"",prettyNum(..y.., big.mark = ',')), group = Appt.Month), geom="text", color="black", 
-                   size=3, fontface="bold.italic")+
+                   size=3.5, fontface="bold.italic")+
      # geom_hline(yintercept=avg_2019, linetype = "dashed") +
      # geom_text(data = ann_text_2019, aes(label = lab), vjust=-0.5, size=3.5, fontface="bold")+
-          geom_hline(yintercept=avg_2021, linetype = "dashed") +
-          geom_text(data = ann_text_2021, aes(label = lab), size=3, fontface="bold", vjust = -1, nudge_x = 1)+
-        labs(caption = paste0("*2019 Monthly Average: ", prettyNum(avg_2019, big.mark = ','),"\n**Includes Rad Onc data up to ", rad_onc_date, " and Radiology data up to ",radiology_date))+
-      theme(plot.caption = element_text(hjust = 0, vjust = 0, face="italic", size = 10),
+          geom_hline(yintercept=avg_2021, linetype = "dotted", color="red", size=0.8) +
+          geom_text(data = ann_text_2021, aes(label = lab), size=3.5, fontface="bold", vjust = -1, nudge_x = 1, color = "red")+
+     labs(caption = paste0("*2019 Monthly Average: ", prettyNum(avg_2019, big.mark = ','),"\n**Includes Rad Onc data up to September, 2022", " and Radiology data up to September, 2022"))+
+     
+        # labs(caption = paste0("*2019 Monthly Average: ", prettyNum(avg_2019, big.mark = ','),"\n**Includes Rad Onc data up to ", rad_onc_date, " and Radiology data up to ",radiology_date))+
+      theme(plot.caption = element_text(hjust = 0, vjust = 0, face="italic", size = 12),
             plot.margin = margin(10,10,10,10))
      
   # 

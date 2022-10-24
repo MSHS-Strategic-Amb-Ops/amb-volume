@@ -2435,14 +2435,14 @@ vol_takeaways_function <- function(site){
 
     total_encounters_comp_site <- percent((current_encounters_site-prev_encounters_site)/prev_encounters_site,0)
     total_encounters_comp_site <- as.character(ifelse(total_encounters_comp_site >0, 
-                                             paste0(total_encounters_comp_site, " increase from ",full_month," ", full_year),
-                                             paste0(total_encounters_comp_site, " decrease from ",full_month," ", full_year)))
+                                             paste0(total_encounters_comp_site, " increase from ",full_month," ", last_year),
+                                             paste0(total_encounters_comp_site, " decrease from ",full_month," ", last_year)))
 
     total_in_person_site <- percent((monthly_vol_site %>% filter(Visit.Method == "IN PERSON") %>% filter(Appt.Month == full_month) %>%
                                        mutate(perc_diff =  (`2022`-`2021`)/`2021`))$perc_diff,0)
     total_in_person_site <- as.character(ifelse(total_in_person_site >0, 
-                                       paste0(" increased by ",total_in_person_site," from ", full_month," ", full_year),
-                                       paste0(" decreased by ",total_in_person_site," from ", full_month," ", full_year)))
+                                       paste0(" increased by ",total_in_person_site," from ", full_month," ", last_year),
+                                       paste0(" decreased by ",total_in_person_site," from ", full_month," ", last_year)))
 
     avg_2021_site <- round(mean((monthly_vol_site %>% filter(Visit.Method == "Total"))[[4]]))
 

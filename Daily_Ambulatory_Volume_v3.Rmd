@@ -734,6 +734,8 @@ daily_vol_mshs_all %>%
   column_spec(1, width = "150px") %>%
   row_spec(nrow(daily_vol_mshs_all), bold = T)
 ```
+
+
 ```{r MSHS Daily Volume Comparison Last Year, echo = FALSE, warning = FALSE, message = FALSE}
 daily_vol_last_year_mshs <- daily_vol_last_year %>%
   group_by(Appt.DateYear, Appt.Day, Visit.Method) %>%
@@ -802,6 +804,8 @@ daily_vol_last_year_mshs_all %>%
   column_spec(1, width = "150px") %>%
   row_spec(nrow(daily_vol_last_year_mshs_all), bold = T)
 ```
+
+
 ### MSHS Weekly Volume
 ```{r MSHS Weekly Volume, echo = FALSE, warning = FALSE, message = FALSE}
 weekly_vol_mshs <- weekly_vol %>%

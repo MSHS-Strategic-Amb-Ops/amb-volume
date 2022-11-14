@@ -581,15 +581,14 @@ monthly_vol_12mo <- monthly_vol_12mo %>%
 knitr::include_graphics("Mount_Sinai_Logo_H.png")
 ```
 
-# Ambulatory Volume Summary
 
+# Ambulatory Volume Summary
 *Report run date: `r report_run_date`*<br/>
 *Report produced for week of `r todays_date`*<br/>
 *A Full week is comprised of Sunday to Saturday.*<br/>
 *Includes all completed/arrived visits.*<br/>
 *Rad Onc and Radiology data is included only in monthly volumes.*<br/>
 _________________________________________________________________________________________________________________________________________________________________
-
 ## MSHS {.tabset .tabset-fade .tabset-pills}
 ### MSHS Daily Volume
 ```{r MSHS Daily Volume, echo = FALSE, warning = FALSE, message = FALSE}
@@ -735,7 +734,6 @@ daily_vol_mshs_all %>%
   column_spec(1, width = "150px") %>%
   row_spec(nrow(daily_vol_mshs_all), bold = T)
 ```
-
 ```{r MSHS Daily Volume Comparison Last Year, echo = FALSE, warning = FALSE, message = FALSE}
 daily_vol_last_year_mshs <- daily_vol_last_year %>%
   group_by(Appt.DateYear, Appt.Day, Visit.Method) %>%
@@ -804,8 +802,6 @@ daily_vol_last_year_mshs_all %>%
   column_spec(1, width = "150px") %>%
   row_spec(nrow(daily_vol_last_year_mshs_all), bold = T)
 ```
-
-
 ### MSHS Weekly Volume
 ```{r MSHS Weekly Volume, echo = FALSE, warning = FALSE, message = FALSE}
 weekly_vol_mshs <- weekly_vol %>%
@@ -1183,7 +1179,7 @@ g1 <- ggplot(vol_trend_mshs,
       scale_fill_manual(values = c("#212070","#d80b8c","black"))+
       scale_y_continuous(limits=c(0,(max(max$max))*1.2), labels = scales::number_format(accuracy = 1))+
       labs(title = paste0("MSHS Ambulatory Arrived Volume Breakdown by Month"),
-           subtitle = paste0("Based on data from 2021-01-01 to ",max(scheduling_data$Appt.DateYear),"\n"),
+           subtitle = paste0("Based on data from 2021-01-01 to 2022-09-30","\n"),
            # subtitle = paste0("Based on data from 2021-01-01 to ",max(scheduling_data$Appt.DateYear),"\n"),
            x = NULL, y = NULL, fill = NULL)+
       theme_new_line()+
@@ -1200,9 +1196,9 @@ g1 <- ggplot(vol_trend_mshs,
      # geom_text(data = ann_text_2019, aes(label = lab), vjust=-0.5, size=3.5, fontface="bold")+
           geom_hline(yintercept=avg_2021, linetype = "dotted", color="red", size=0.8) +
           geom_text(data = ann_text_2021, aes(label = lab), size=3.5, fontface="bold", vjust = -1, nudge_x = 1, color = "red")+
-     # labs(caption = paste0("*2019 Monthly Average: ", prettyNum(avg_2019, big.mark = ','),"\n**Includes Rad Onc data up to September, 2022", " and Radiology data up to September, 2022"))+
-     # 
-        labs(caption = paste0("*2019 Monthly Average: ", prettyNum(avg_2019, big.mark = ','),"\n**Includes Rad Onc data up to ", rad_onc_date, " and Radiology data up to ",radiology_date))+
+     labs(caption = paste0("*2019 Monthly Average: ", prettyNum(avg_2019, big.mark = ','),"\n**Includes Rad Onc data up to September, 2022", " and Radiology data up to September, 2022"))+
+     
+        # labs(caption = paste0("*2019 Monthly Average: ", prettyNum(avg_2019, big.mark = ','),"\n**Includes Rad Onc data up to ", rad_onc_date, " and Radiology data up to ",radiology_date))+
       theme(plot.caption = element_text(hjust = 0, vjust = 0, face="italic", size = 12),
             plot.margin = margin(10,10,10,10))
      
@@ -1213,8 +1209,6 @@ g1 <- ggplot(vol_trend_mshs,
   #  annotate(data = (vol_breakdown_mshs %>% filter(Appt.Year == max(Appt.Year))), geom="text", label=paste0("2021 Monthly Average: ", prettyNum(avg_2021, big.mark = ',')), 
   #           x=(length(unique((vol_breakdown_mshs %>% filter(Appt.Year == max(Appt.Year)))$Appt.Month))-1), y=avg_2021, vjust=-1, size=3.5, fontface="bold")
 ```
-
-
 ```{r MSHS Key Takeaways for Volume Graphs, echo = FALSE, warning = FALSE, message = FALSE}
 full_month <- format((lubridate::floor_date(max(scheduling_data$Appt.DateYear), unit = "month")-1), "%B")
 full_year <- format((lubridate::floor_date(max(scheduling_data$Appt.DateYear), unit = "month")-1), "%Y")
@@ -1252,16 +1246,16 @@ total_amb_prev_year <- as.character(ifelse(total_amb_prev_year >0,
 ::: {.center data-latex=""}
 <font size="4">**In `r full_month` `r full_year`:**</font>
 :::
-
 <font size="4">--  Total ambulatory encounters were `r total_encounters`. This is `r total_encounters_comp`.</font><br/>
 <font size="4">--  In-person encounters `r total_in_person`.</font><br/>
 <font size="4">--  Total ambulatory encounters `r total_amb_prior_year` from `r last_year` monthly average and `r total_amb_prev_year` from 2019 monthly average.
 ::::
-
 ### MSHS Volume by Specialty
 <span style='font-size: 16px; color: black'>**MSHS `r todays_month`-`r todays_year` MTD Volume by Specialty**</span><br/>
 <span style='font-size: 14px; color: black'>*Includes visits up to `r visits_end_date` </span><br/>
 <!-- <span style='font-size: 14px; color: black'>*Includes Rad Onc data up to `r rad_onc_date` and Radiology data up to `r radiology_date`</span><br/> -->
+
+
 ```{r MSHS Volume by Speicalty, echo = FALSE, warning = FALSE, message = FALSE}
 # Total Current Month Volume
 monthly_vol_mshs_specialty <- monthly_vol %>%
@@ -1966,7 +1960,6 @@ monthly_vol_site_all %>%
 ```
 
 
-
 ```{r Site Total Volume Graph Function, echo = FALSE, warning = FALSE, message = FALSE}
 vol_trend_site_graph <- function(site){
   # site <- "MSUS"
@@ -2120,13 +2113,13 @@ vol_takeaways_function <- function(site){
                                           filter(Appt.Month == format((lubridate::floor_date(max(scheduling_data$Appt.DateYear), unit = "month")), "%B")))$monthly_vol)
     total_encounters_comp_site <- percent((current_encounters_site-prev_encounters_site)/prev_encounters_site,0)
     total_encounters_comp_site <- as.character(ifelse(total_encounters_comp_site >0, 
-                                             paste0(total_encounters_comp_site, " increase from ",full_month," ", last_year),
-                                             paste0(total_encounters_comp_site, " decrease from ",full_month," ", last_year)))
+                                             paste0(total_encounters_comp_site, " increase from ",full_month," ", full_year),
+                                             paste0(total_encounters_comp_site, " decrease from ",full_month," ", full_year)))
     total_in_person_site <- percent((monthly_vol_site %>% filter(Visit.Method == "IN PERSON") %>% filter(Appt.Month == full_month) %>%
                                        mutate(perc_diff =  (`2022`-`2021`)/`2021`))$perc_diff,0)
     total_in_person_site <- as.character(ifelse(total_in_person_site >0, 
-                                       paste0(" increased by ",total_in_person_site," from ", full_month," ", last_year),
-                                       paste0(" decreased by ",total_in_person_site," from ", full_month," ", last_year)))
+                                       paste0(" increased by ",total_in_person_site," from ", full_month," ", full_year),
+                                       paste0(" decreased by ",total_in_person_site," from ", full_month," ", full_year)))
     avg_2021_site <- round(mean((monthly_vol_site %>% filter(Visit.Method == "Total"))[[4]]))
     total_amb_prior_year_site <- percent((current_encounters_site-avg_2021_site)/avg_2021_site,0)
     total_amb_prior_year_site <- as.character(ifelse(total_amb_prior_year_site >0, 
@@ -2407,7 +2400,6 @@ reactable(monthly_vol_dept,
 #   print(vol_breakdown_site_graph(site = i))
 # }
 ```
-
 <!-- # ```{r Site Metrics Output, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'} -->
 <!-- # -->
 <!-- # sites <- as.vector(unique(daily_vol$Campus)) -->
@@ -2430,35 +2422,28 @@ reactable(monthly_vol_dept,
 <!-- #   } -->
 <!-- # -->
 <!-- # ``` -->
-
-
 <!-- ## MS Now {.tabset .tabset-fade .tabset-pills} -->
 <!-- ### MS Now Daily Volume -->
 <!-- ```{r MS Now Metrics Output1, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'} -->
 <!-- print(daily_vol_site_function(site = "MS Now")) -->
 <!-- ``` -->
 <!-- _________________________________________________________________________________________________________________________________________________________________ -->
-
 <!-- ### MS Now Weekly Volume -->
 <!-- ```{r MS Now Metrics Output2, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'} -->
 <!-- print(weekly_vol_site_function(site = "MS Now")) -->
 <!-- ``` -->
 <!-- _________________________________________________________________________________________________________________________________________________________________ -->
-
 <!-- ### MS Now Monthly Volume -->
 <!-- ```{r MS Now Metrics Output3, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'} -->
 <!-- print(monthly_vol_site_function(site = "MS Now")) -->
 <!-- ``` -->
 <!-- _________________________________________________________________________________________________________________________________________________________________ -->
-
 <!-- ### MS Now Volume Graphs -->
 <!-- ```{r MS Now Metrics Output4, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'} -->
 <!-- print(vol_trend_site_graph(site = "MS Now")) -->
 <!-- print(vol_breakdown_site_graph(site = "MS Now")) -->
 <!-- ``` -->
-
 <!-- _________________________________________________________________________________________________________________________________________________________________ -->
-
 ## MSBI {.tabset .tabset-fade .tabset-pills}
 ### MSBI Daily Volume
 ```{r MSBI Metrics Output1, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
@@ -2466,40 +2451,32 @@ print(daily_vol_site_function(site = "MSBI"))
 print(daily_vol_last_year_site_function(site = "MSBI"))
 ```
 _________________________________________________________________________________________________________________________________________________________________
-
 ### MSBI Weekly Volume
 ```{r MSBI Metrics Output2, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
 print(weekly_vol_site_function(site = "MSBI"))
 print(weekly_vol_last_year_site_function(site = "MSBI"))
 ```
 _________________________________________________________________________________________________________________________________________________________________
-
 ### MSBI Monthly Volume
 ```{r MSBI Metrics Output3, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
 print(monthly_vol_site_function(site = "MSBI"))
 ```
 _________________________________________________________________________________________________________________________________________________________________
-
 ### MSBI Volume Graphs
 ```{r MSBI Metrics Output4, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
 print(vol_trend_site_graph(site = "MSBI"))
 print(vol_breakdown_site_graph(site = "MSBI"))
 vol_takeaways_function(site = "MSBI")[1]
 ```
-
-
 :::: {.blackbox data-latex=""}
 ::: {.center data-latex=""}
 <font size="4">**For `r vol_takeaways_function(site = "MSBI")[1]` in `r full_month` `r full_year`:**</font>
 :::
-
 <font size="4">--  Total ambulatory encounters were `r vol_takeaways_function(site = "MSBI")[2]`. This is `r vol_takeaways_function(site = "MSBI")[3]`.</font><br/>
 <font size="4">--  In-person encounters `r vol_takeaways_function(site = "MSBI")[4]`.</font><br/>
 <font size="4">--  Total ambulatory encounters `r vol_takeaways_function(site = "MSBI")[5]` from `r last_year` monthly average and `r vol_takeaways_function(site = "MSBI")[6]` from 2019 monthly average.
 ::::
-
 __________________________________________________________________________________________________________________________________________________________
-
 ### MSBI Volume by Dept
 <!-- <span style='font-size: 16px; color: black'>**MSBI `r todays_month`-`r todays_year` MTD Volume by Department**</span><br/> -->
 <!-- <span style='font-size: 14px; color: black'>*Includes visits up to `r date_end`</span><br/> -->
@@ -2508,8 +2485,6 @@ ________________________________________________________________________________
 monthly_vol_dept_function(site = "MSBI")
 ```
 _________________________________________________________________________________________________________________________________________________________________
-
-
 ## MSDD {.tabset .tabset-fade .tabset-pills}
 ### MSDD Daily Volume
 ```{r MSDD Metrics Output1, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
@@ -2517,38 +2492,31 @@ print(daily_vol_site_function(site = "MSDD"))
 print(daily_vol_last_year_site_function(site = "MSDD"))
 ```
 _________________________________________________________________________________________________________________________________________________________________
-
 ### MSDD Weekly Volume
 ```{r MSDD Metrics Output2, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
 print(weekly_vol_site_function(site = "MSDD"))
 print(weekly_vol_last_year_site_function(site = "MSDD"))
 ```
 _________________________________________________________________________________________________________________________________________________________________
-
 ### MSDD Monthly Volume
 ```{r MSDD Metrics Output3, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
 print(monthly_vol_site_function(site = "MSDD"))
 ```
 _________________________________________________________________________________________________________________________________________________________________
-
 ### MSDD Volume Graphs
 ```{r MSDD Metrics Output4, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
 print(vol_trend_site_graph(site = "MSDD"))
 print(vol_breakdown_site_graph(site = "MSDD"))
 ```
-
 :::: {.blackbox data-latex=""}
 ::: {.center data-latex=""}
 <font size="4">**For `r vol_takeaways_function(site = "MSDD")[1]` in `r full_month` `r full_year`:**</font>
 :::
-
 <font size="4">--  Total ambulatory encounters were `r vol_takeaways_function(site = "MSDD")[2]`. This is `r vol_takeaways_function(site = "MSDD")[3]`.</font><br/>
 <font size="4">--  In-person encounters `r vol_takeaways_function(site = "MSDD")[4]`.</font><br/>
 <font size="4">--  Total ambulatory encounters `r vol_takeaways_function(site = "MSDD")[5]` from `r last_year` monthly average and `r vol_takeaways_function(site = "MSDD")[6]` from 2019 monthly average.
 ::::
-
 _________________________________________________________________________________________________________________________________________________________________
-
 ### MSDD Volume by Dept
 <!-- <span style='font-size: 16px; color: black'>**MSDD `r todays_month`-`r todays_year` MTD Volume by Department**</span><br/> -->
 <!-- <span style='font-size: 14px; color: black'>*Includes visits up to `r date_end`</span><br/> -->
@@ -2557,8 +2525,6 @@ ________________________________________________________________________________
 monthly_vol_dept_function(site = "MSDD")
 ```
 _________________________________________________________________________________________________________________________________________________________________
-
-
 ## MSH- AMBULATORY CARE {.tabset .tabset-fade .tabset-pills}
 ### MSH- AMBULATORY CARE Daily Volume
 ```{r MSH- Ambulatory Care Metrics Output1, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
@@ -2566,38 +2532,31 @@ print(daily_vol_site_function(site = "MSH- AMBULATORY CARE"))
 print(daily_vol_last_year_site_function(site = "MSH- AMBULATORY CARE"))
 ```
 _________________________________________________________________________________________________________________________________________________________________
-
 ### MSH- AMBULATORY CARE Weekly Volume
 ```{r MSH- Ambulatory Care Metrics Output2, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
 print(weekly_vol_site_function(site = "MSH- AMBULATORY CARE"))
 print(weekly_vol_last_year_site_function(site = "MSH- AMBULATORY CARE"))
 ```
 _________________________________________________________________________________________________________________________________________________________________
-
 ### MSH- AMBULATORY CARE Monthly Volume
 ```{r MSH- Ambulatory Care Metrics Output3, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
 print(monthly_vol_site_function(site = "MSH- AMBULATORY CARE"))
 ```
 _________________________________________________________________________________________________________________________________________________________________
-
 ### MSH- AMBULATORY CARE Volume Graphs
 ```{r MSH- Ambulatory Care Metrics Output4, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
 print(vol_trend_site_graph(site = "MSH- AMBULATORY CARE"))
 print(vol_breakdown_site_graph(site = "MSH- AMBULATORY CARE"))
 ```
-
 :::: {.blackbox data-latex=""}
 ::: {.center data-latex=""}
 <font size="4">**For `r vol_takeaways_function(site = "MSH- AMBULATORY CARE")[1]` in `r full_month` `r full_year`:**</font>
 :::
-
 <font size="4">--  Total ambulatory encounters were `r vol_takeaways_function(site = "MSH- AMBULATORY CARE")[2]`. This is `r vol_takeaways_function(site = "MSH- AMBULATORY CARE")[3]`.</font><br/>
 <font size="4">--  In-person encounters `r vol_takeaways_function(site = "MSH- AMBULATORY CARE")[4]`.</font><br/>
 <font size="4">--  Total ambulatory encounters `r vol_takeaways_function(site = "MSH- AMBULATORY CARE")[5]` from `r last_year` monthly average and `r vol_takeaways_function(site = "MSH- AMBULATORY CARE")[6]` from 2019 monthly average.
 ::::
-
 _________________________________________________________________________________________________________________________________________________________________
-
 ### MSH- AMBULATORY CARE Volume by Dept
 <!-- <span style='font-size: 16px; color: black'>**MSH- AMBULATORY CARE `r todays_month`-`r todays_year` MTD Volume by Department**</span><br/> -->
 <!-- <span style='font-size: 14px; color: black'>*Includes visits up to `r date_end`</span><br/> -->
@@ -2606,8 +2565,6 @@ ________________________________________________________________________________
 monthly_vol_dept_function(site = "MSH- AMBULATORY CARE")
 ```
 _________________________________________________________________________________________________________________________________________________________________
-
-
 ## MSH-MSDFP {.tabset .tabset-fade .tabset-pills}
 ### MSH-MSDFP Daily Volume
 ```{r MSH-MSDFP Metrics Output1, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
@@ -2615,38 +2572,31 @@ print(daily_vol_site_function(site = "MSH-MSDFP"))
 print(daily_vol_last_year_site_function(site = "MSH-MSDFP"))
 ```
 _________________________________________________________________________________________________________________________________________________________________
-
 ### MSH-MSDFP Weekly Volume
 ```{r MSH-MSDFP Metrics Output2, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
 print(weekly_vol_site_function(site = "MSH-MSDFP"))
 print(weekly_vol_last_year_site_function(site = "MSH-MSDFP"))
 ```
 _________________________________________________________________________________________________________________________________________________________________
-
 ### MSH-MSDFP Monthly Volume
 ```{r MSH-MSDFP Metrics Output3, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
 print(monthly_vol_site_function(site = "MSH-MSDFP"))
 ```
 _________________________________________________________________________________________________________________________________________________________________
-
 ### MSH-MSDFP Volume Graphs
 ```{r MSH-MSDFP Metrics Output4, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
 print(vol_trend_site_graph(site = "MSH-MSDFP"))
 print(vol_breakdown_site_graph(site = "MSH-MSDFP"))
 ```
-
 :::: {.blackbox data-latex=""}
 ::: {.center data-latex=""}
 <font size="4">**For `r vol_takeaways_function(site = "MSH-MSDFP")[1]` in `r full_month` `r full_year`:**</font>
 :::
-
 <font size="4">--  Total ambulatory encounters were `r vol_takeaways_function(site = "MSH-MSDFP")[2]`. This is `r vol_takeaways_function(site = "MSH-MSDFP")[3]`.</font><br/>
 <font size="4">--  In-person encounters `r vol_takeaways_function(site = "MSH-MSDFP")[4]`.</font><br/>
 <font size="4">--  Total ambulatory encounters `r vol_takeaways_function(site = "MSH-MSDFP")[5]` from `r last_year` monthly average and `r vol_takeaways_function(site = "MSH-MSDFP")[6]` from 2019 monthly average.
 ::::
-
 _________________________________________________________________________________________________________________________________________________________________
-
 ### MSH-MSDFP Volume by Dept
 <!-- <span style='font-size: 16px; color: black'>**MSH-MSDFP `r todays_month`-`r todays_year` MTD Volume by Department**</span><br/> -->
 <!-- <span style='font-size: 14px; color: black'>*Includes visits up to `r date_end`</span><br/> -->
@@ -2655,8 +2605,6 @@ ________________________________________________________________________________
 monthly_vol_dept_function(site = "MSH-MSDFP")
 ```
 _________________________________________________________________________________________________________________________________________________________________
-
-
 ## MSM {.tabset .tabset-fade .tabset-pills}
 ### MSM Daily Volume
 ```{r MSM Metrics Output1, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
@@ -2664,38 +2612,31 @@ print(daily_vol_site_function(site = "MSM"))
 print(daily_vol_last_year_site_function(site = "MSM"))
 ```
 _________________________________________________________________________________________________________________________________________________________________
-
 ### MSM Weekly Volume
 ```{r MSM Metrics Output2, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
 print(weekly_vol_site_function(site = "MSM"))
 print(weekly_vol_last_year_site_function(site = "MSM"))
 ```
 _________________________________________________________________________________________________________________________________________________________________
-
 ### MSM Monthly Volume
 ```{r MSM Metrics Output3, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
 print(monthly_vol_site_function(site = "MSM"))
 ```
 _________________________________________________________________________________________________________________________________________________________________
-
 ### MSM Volume Graphs
 ```{r MSM Metrics Output4, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
 print(vol_trend_site_graph(site = "MSM"))
 print(vol_breakdown_site_graph(site = "MSM"))
 ```
-
 :::: {.blackbox data-latex=""}
 ::: {.center data-latex=""}
 <font size="4">**For `r vol_takeaways_function(site = "MSM")[1]` in `r full_month` `r full_year`:**</font>
 :::
-
 <font size="4">--  Total ambulatory encounters were `r vol_takeaways_function(site = "MSM")[2]`. This is `r vol_takeaways_function(site = "MSM")[3]`.</font><br/>
 <font size="4">--  In-person encounters `r vol_takeaways_function(site = "MSM")[4]`.</font><br/>
 <font size="4">--  Total ambulatory encounters `r vol_takeaways_function(site = "MSM")[5]` from `r last_year` monthly average and `r vol_takeaways_function(site = "MSM")[6]` from 2019 monthly average.
 ::::
-
 _________________________________________________________________________________________________________________________________________________________________
-
 ### MSM Volume by Dept
 <!-- <span style='font-size: 16px; color: black'>**MSM `r todays_month`-`r todays_year` MTD Volume by Department**</span><br/> -->
 <!-- <span style='font-size: 14px; color: black'>*Includes visits up to `r date_end`</span><br/> -->
@@ -2704,34 +2645,28 @@ ________________________________________________________________________________
 monthly_vol_dept_function(site = "MSM")
 ```
 _________________________________________________________________________________________________________________________________________________________________
-
 <!-- ## MSQ {.tabset .tabset-fade .tabset-pills} -->
 <!-- ### MSQ Daily Volume -->
 <!-- ```{r MSQ Metrics Output1, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'} -->
 <!-- print(daily_vol_site_function(site = "MSQ")) -->
 <!-- ``` -->
 <!-- _________________________________________________________________________________________________________________________________________________________________ -->
-
 <!-- ### MSQ Weekly Volume -->
 <!-- ```{r MSQ Metrics Output2, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'} -->
 <!-- print(weekly_vol_site_function(site = "MSQ")) -->
 <!-- ``` -->
 <!-- _________________________________________________________________________________________________________________________________________________________________ -->
-
 <!-- ### MSQ Monthly Volume -->
 <!-- ```{r MSQ Metrics Output3, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'} -->
 <!-- print(monthly_vol_site_function(site = "MSQ")) -->
 <!-- ``` -->
 <!-- _________________________________________________________________________________________________________________________________________________________________ -->
-
 <!-- ### MSQ Volume Graphs -->
 <!-- ```{r MSQ Metrics Output4, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'} -->
 <!-- print(vol_trend_site_graph(site = "MSQ")) -->
 <!-- print(vol_breakdown_site_graph(site = "MSQ")) -->
 <!-- ``` -->
-
 <!-- _________________________________________________________________________________________________________________________________________________________________ -->
-
 ## MSUS {.tabset .tabset-fade .tabset-pills}
 ### MSUS Daily Volume
 ```{r MSUS Metrics Output1, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
@@ -2739,39 +2674,32 @@ print(daily_vol_site_function(site = "MSUS"))
 print(daily_vol_last_year_site_function(site = "MSUS"))
 ```
 _________________________________________________________________________________________________________________________________________________________________
-
 ### MSUS Weekly Volume
 ```{r MSUS Metrics Output2, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
 print(weekly_vol_site_function(site = "MSUS"))
 print(weekly_vol_last_year_site_function(site = "MSUS"))
 ```
 _________________________________________________________________________________________________________________________________________________________________
-
 ### MSUS Monthly Volume
 ```{r MSUS Metrics Output3, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
 print(monthly_vol_site_function(site = "MSUS"))
 ```
 _________________________________________________________________________________________________________________________________________________________________
-
 ### MSUS Volume Graphs
 ```{r MSUS Metrics Output4, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
 print(vol_trend_site_graph(site = "MSUS"))
 print(vol_breakdown_site_graph(site = "MSUS"))
 ```
 _________________________________________________________________________________________________________________________________________________________________
-
 :::: {.blackbox data-latex=""}
 ::: {.center data-latex=""}
 <font size="4">**For `r vol_takeaways_function(site = "MSUS")[1]` in `r full_month` `r full_year`:**</font>
 :::
-
 <font size="4">--  Total ambulatory encounters were `r vol_takeaways_function(site = "MSUS")[2]`. This is `r vol_takeaways_function(site = "MSUS")[3]`.</font><br/>
 <font size="4">--  In-person encounters `r vol_takeaways_function(site = "MSUS")[4]`.</font><br/>
 <font size="4">--  Total ambulatory encounters `r vol_takeaways_function(site = "MSUS")[5]` from `r last_year` monthly average and `r vol_takeaways_function(site = "MSUS")[6]` from 2019 monthly average.
 ::::
-
 _________________________________________________________________________________________________________________________________________________________________
-
 ### MSUS Volume by Dept
 <!-- <span style='font-size: 16px; color: black'>**MSUS `r todays_month`-`r todays_year` MTD Volume by Department**</span><br/> -->
 <!-- <span style='font-size: 14px; color: black'>*Includes visits up to `r date_end`</span><br/> -->
@@ -2780,7 +2708,6 @@ ________________________________________________________________________________
 monthly_vol_dept_function(site = "MSUS")
 ```
 _________________________________________________________________________________________________________________________________________________________________
-
 ## MSW {.tabset .tabset-fade .tabset-pills}
 ### MSW Daily Volume
 ```{r MSW Metrics Output1, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
@@ -2788,38 +2715,31 @@ print(daily_vol_site_function(site = "MSW"))
 print(daily_vol_last_year_site_function(site = "MSW"))
 ```
 _________________________________________________________________________________________________________________________________________________________________
-
 ### MSW Weekly Volume
 ```{r MSW Metrics Output2, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
 print(weekly_vol_site_function(site = "MSW"))
 print(weekly_vol_last_year_site_function(site = "MSW"))
 ```
 _________________________________________________________________________________________________________________________________________________________________
-
 ### MSW Monthly Volume
 ```{r MSW Metrics Output3, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
 print(monthly_vol_site_function(site = "MSW"))
 ```
 _________________________________________________________________________________________________________________________________________________________________
-
 ### MSW Volume Graphs
 ```{r MSW Metrics Output4, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
 print(vol_trend_site_graph(site = "MSW"))
 print(vol_breakdown_site_graph(site = "MSW"))
 ```
-
 :::: {.blackbox data-latex=""}
 ::: {.center data-latex=""}
 <font size="4">**For `r vol_takeaways_function(site = "MSW")[1]` in `r full_month` `r full_year`:**</font>
 :::
-
 <font size="4">--  Total ambulatory encounters were `r vol_takeaways_function(site = "MSW")[2]`. This is `r vol_takeaways_function(site = "MSW")[3]`.</font><br/>
 <font size="4">--  In-person encounters `r vol_takeaways_function(site = "MSW")[4]`.</font><br/>
 <font size="4">--  Total ambulatory encounters `r vol_takeaways_function(site = "MSW")[5]` from `r last_year` monthly average and `r vol_takeaways_function(site = "MSW")[6]` from 2019 monthly average.
 ::::
-
 _________________________________________________________________________________________________________________________________________________________________
-
 ### MSW Volume by Dept
 <!-- <span style='font-size: 16px; color: black'>**MSW `r todays_month`-`r todays_year` MTD Volume by Department**</span><br/> -->
 <!-- <span style='font-size: 14px; color: black'>*Includes visits up to `r date_end`</span><br/> -->
@@ -2828,8 +2748,6 @@ ________________________________________________________________________________
 monthly_vol_dept_function(site = "MSW")
 ```
 _________________________________________________________________________________________________________________________________________________________________
-
-
 ## NETWORK {.tabset .tabset-fade .tabset-pills}
 ### NETWORK Daily Volume
 ```{r Network Metrics Output1, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
@@ -2837,38 +2755,31 @@ print(daily_vol_site_function(site = "NETWORK"))
 print(daily_vol_last_year_site_function(site = "NETWORK"))
 ```
 _________________________________________________________________________________________________________________________________________________________________
-
 ### NETWORK Weekly Volume
 ```{r Network Metrics Output2, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
 print(weekly_vol_site_function(site = "NETWORK"))
 print(weekly_vol_last_year_site_function(site = "NETWORK"))
 ```
 _________________________________________________________________________________________________________________________________________________________________
-
 ### NETWORK Monthly Volume
 ```{r Network Metrics Output3, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
 print(monthly_vol_site_function(site = "NETWORK"))
 ```
 _________________________________________________________________________________________________________________________________________________________________
-
 ### NETWORK Volume Graphs
 ```{r Network Metrics Output4, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
 print(vol_trend_site_graph(site = "NETWORK"))
 print(vol_breakdown_site_graph(site = "NETWORK"))
 ```
-
 :::: {.blackbox data-latex=""}
 ::: {.center data-latex=""}
 <font size="4">**For `r vol_takeaways_function(site = "NETWORK")[1]` in `r full_month` `r full_year`:**</font>
 :::
-
 <font size="4">--  Total ambulatory encounters were `r vol_takeaways_function(site = "NETWORK")[2]`. This is `r vol_takeaways_function(site = "NETWORK")[3]`.</font><br/>
 <font size="4">--  In-person encounters `r vol_takeaways_function(site = "NETWORK")[4]`.</font><br/>
 <font size="4">--  Total ambulatory encounters `r vol_takeaways_function(site = "NETWORK")[5]` from `r last_year` monthly average and `r vol_takeaways_function(site = "NETWORK")[6]` from 2019 monthly average.
 ::::
-
 _________________________________________________________________________________________________________________________________________________________________
-
 ### NETWORK Volume by Dept
 <!-- <span style='font-size: 16px; color: black'>**NETWORK `r todays_month`-`r todays_year` MTD Volume by Department**</span><br/> -->
 <!-- <span style='font-size: 14px; color: black'>*Includes visits up to `r date_end`</span><br/> -->
@@ -2877,79 +2788,63 @@ ________________________________________________________________________________
 monthly_vol_dept_function(site = "NETWORK")
 ```
 _________________________________________________________________________________________________________________________________________________________________
-
 <!-- ## NYEE {.tabset .tabset-fade .tabset-pills} -->
 <!-- ### NYEE Daily Volume -->
 <!-- ```{r NYEE Metrics Output1, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'} -->
 <!-- print(daily_vol_site_function(site = "NYEE")) -->
 <!-- ``` -->
 <!-- _________________________________________________________________________________________________________________________________________________________________ -->
-
 <!-- ### NYEE Weekly Volume -->
 <!-- ```{r NYEE Metrics Output2, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'} -->
 <!-- print(weekly_vol_site_function(site = "NYEE")) -->
 <!-- ``` -->
 <!-- _________________________________________________________________________________________________________________________________________________________________ -->
-
 <!-- ### NYEE Monthly Volume -->
 <!-- ```{r NYEE Metrics Output3, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'} -->
 <!-- print(monthly_vol_site_function(site = "NYEE")) -->
 <!-- ``` -->
 <!-- _________________________________________________________________________________________________________________________________________________________________ -->
-
 <!-- ### NYEE Volume Graphs -->
 <!-- ```{r NYEE Metrics Output4, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'} -->
 <!-- print(vol_trend_site_graph(site = "NYEE")) -->
 <!-- print(vol_breakdown_site_graph(site = "NYEE")) -->
 <!-- ``` -->
-
 <!-- _________________________________________________________________________________________________________________________________________________________________ -->
-
 ## ONCOLOGY {.tabset .tabset-fade .tabset-pills}
 ### ONCOLOGY Daily Volume
 ```{r Oncology Metrics Output1, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
 print(daily_vol_site_function(site = "ONCOLOGY"))
 print(daily_vol_last_year_site_function(site = "ONCOLOGY"))
 ```
-
 _________________________________________________________________________________________________________________________________________________________________
 *End of Report.*
-
 ### ONCOLOGY Weekly Volume
 ```{r Oncology Metrics Output2, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
 print(weekly_vol_site_function(site = "ONCOLOGY"))
 print(weekly_vol_last_year_site_function(site = "ONCOLOGY"))
 ```
-
 _________________________________________________________________________________________________________________________________________________________________
 *End of Report.*
-
 ### ONCOLOGY Monthly Volume
 ```{r Oncology Metrics Output3, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
 print(monthly_vol_site_function(site = "ONCOLOGY"))
 ```
-
 _________________________________________________________________________________________________________________________________________________________________
 *End of Report.*
-
 ### ONCOLOGY Volume Graphs
 ```{r Oncology Metrics Output4, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
 print(vol_trend_site_graph(site = "ONCOLOGY"))
 print(vol_breakdown_site_graph(site = "ONCOLOGY"))
 ```
-
 :::: {.blackbox data-latex=""}
 ::: {.center data-latex=""}
 <font size="4">**For `r vol_takeaways_function(site = "ONCOLOGY")[1]` in `r full_month` `r full_year`:**</font>
 :::
-
 <font size="4">--  Total ambulatory encounters were `r vol_takeaways_function(site = "ONCOLOGY")[2]`. This is `r vol_takeaways_function(site = "ONCOLOGY")[3]`.</font><br/>
 <font size="4">--  In-person encounters `r vol_takeaways_function(site = "ONCOLOGY")[4]`.</font><br/>
 <font size="4">--  Total ambulatory encounters `r vol_takeaways_function(site = "ONCOLOGY")[5]` from `r last_year` monthly average and `r vol_takeaways_function(site = "ONCOLOGY")[6]` from 2019 monthly average.
 ::::
-
 _______________________________________________________________________________________________________________________________________________________________
-
 ### ONCOLOGY Volume by Dept
 <!-- <span style='font-size: 16px; color: black'>**ONCOLOGY `r todays_month`-`r todays_year` MTD Volume by Department**</span><br/> -->
 <!-- <span style='font-size: 14px; color: black'>*Includes visits up to `r date_end`</span><br/> -->
@@ -2959,5 +2854,4 @@ monthly_vol_dept_function(site = "ONCOLOGY")
 ```
 _________________________________________________________________________________________________________________________________________________________________
 *End of Report.*
-
 <br/>

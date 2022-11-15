@@ -1220,8 +1220,8 @@ g1 <- ggplot(vol_trend_mshs,
       scale_fill_manual(values = c("#212070","#d80b8c","black"))+
       scale_y_continuous(limits=c(0,(max(max$max))*1.2), labels = scales::number_format(accuracy = 1))+
       labs(title = paste0("MSHS Ambulatory Arrived Volume Breakdown by Month"),
-           subtitle = paste0("Based on data from 2021-01-01 to 2022-09-30","\n"),
-           # subtitle = paste0("Based on data from 2021-01-01 to ",max(scheduling_data$Appt.DateYear),"\n"),
+           # subtitle = paste0("Based on data from 2021-01-01 to 2022-10-31","\n"),
+           subtitle = paste0("Based on data from 2021-01-01 to ",max(scheduling_data$Appt.DateYear),"\n"),
            x = NULL, y = NULL, fill = NULL)+
       theme_new_line()+
       theme(axis.title.y = element_text(size = 12, angle = 90),  
@@ -1237,9 +1237,8 @@ g1 <- ggplot(vol_trend_mshs,
      # geom_text(data = ann_text_2019, aes(label = lab), vjust=-0.5, size=3.5, fontface="bold")+
           geom_hline(yintercept=avg_2021, linetype = "dotted", color="red", size=0.8) +
           geom_text(data = ann_text_2021, aes(label = lab), size=3.5, fontface="bold", vjust = -1, nudge_x = 1, color = "red")+
-     labs(caption = paste0("*2019 Monthly Average: ", prettyNum(avg_2019, big.mark = ','),"\n**Includes Rad Onc data up to September, 2022", " and Radiology data up to September, 2022"))+
-     
-        # labs(caption = paste0("*2019 Monthly Average: ", prettyNum(avg_2019, big.mark = ','),"\n**Includes Rad Onc data up to ", rad_onc_date, " and Radiology data up to ",radiology_date))+
+     # labs(caption = paste0("*2019 Monthly Average: ", prettyNum(avg_2019, big.mark = ','),"\n**Includes Rad Onc data up to October, 2022", " and Radiology data up to October, 2022"))+
+        labs(caption = paste0("*2019 Monthly Average: ", prettyNum(avg_2019, big.mark = ','),"\n**Includes Rad Onc data up to ", rad_onc_date, " and Radiology data up to ",radiology_date))+
       theme(plot.caption = element_text(hjust = 0, vjust = 0, face="italic", size = 12),
             plot.margin = margin(10,10,10,10))
      
@@ -1293,12 +1292,12 @@ total_amb_prev_year <- as.character(ifelse(total_amb_prev_year >0,
 <font size="4">--  In-person encounters `r total_in_person`.</font><br/>
 <font size="4">--  Total ambulatory encounters `r total_amb_prior_year` from `r last_year` monthly average and `r total_amb_prev_year` from 2019 monthly average.
 ::::
+
+
 ### MSHS Volume by Specialty
 <span style='font-size: 16px; color: black'>**MSHS `r todays_month`-`r todays_year` MTD Volume by Specialty**</span><br/>
 <span style='font-size: 14px; color: black'>*Includes visits up to `r visits_end_date` </span><br/>
 <!-- <span style='font-size: 14px; color: black'>*Includes Rad Onc data up to `r rad_onc_date` and Radiology data up to `r radiology_date`</span><br/> -->
-
-
 ```{r MSHS Volume by Speicalty, echo = FALSE, warning = FALSE, message = FALSE}
 # Total Current Month Volume
 monthly_vol_mshs_specialty <- monthly_vol %>%

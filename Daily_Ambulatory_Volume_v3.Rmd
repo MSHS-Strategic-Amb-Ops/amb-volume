@@ -276,7 +276,7 @@ scale_fill_MountSinai <- function(palette = "all", discrete = TRUE, reverse = FA
 ```{r Import Data, echo = FALSE, warning = FALSE, message = FALSE}
 '%!in%' <- function(x,y)!('%in%'(x,y))
 
-# scheduling_data_raw <- readRDS(file.choose()) %>%
+# scheduling_data_raw <- readRDS("/SharedDrive/deans/Presidents/SixSigma/Individual Folders/Current Employees/Engineers/So Youn Kweon/server-upload/historical_data_11.2.2022.rds") %>%
 #   filter(!is.na(Campus)) %>%
 #   filter(Campus %in% c("NETWORK","MSM","MSH-MSDFP","ONCOLOGY","MSW","MSBI","MSUS","MSH- AMBULATORY CARE","MSDD")) %>%
 #   filter(Appt.Status == "Arrived")%>%
@@ -294,9 +294,9 @@ rad_onc_data_raw <- read.csv("/nfs/data/Applications/Ambulatory/Rad_Onc_Data.csv
 radiology_data_raw <- read.csv("/nfs/data/Applications/Ambulatory/Radiology_Data.csv")
 radiology_ref <- read.csv("/nfs/data/Applications/Ambulatory/Radiology_Site_Mapping.csv")
 
-# rad_onc_data_raw <- read.csv(file.choose())
-# radiology_data_raw <- read.csv(file.choose())
-# radiology_ref <- read.csv(file.choose())
+# rad_onc_data_raw <- read.csv("~/server-upload/Rad_Onc_Data.csv")
+# radiology_data_raw <- read.csv("~/server-upload/Radiology_Data.csv")
+# radiology_ref <- read.csv("~/server-upload/Radiology_Site_Mapping.csv")
 ```
 
 
@@ -399,15 +399,96 @@ radiology_date <- paste0(radiology_data_raw[nrow(radiology_data_raw),"Appt.Month
 
 ```{r Daily Volume Data, echo = FALSE, warning = FALSE, message = FALSE}
 # Daily volume comparison for past week
-if(format(max(scheduling_data$Appt.DateYear), format = "%A") %in% c("Sunday")){
-  
+# if(format(max(scheduling_data$Appt.DateYear), format = "%A") == "Sunday"){
+#   
+#   daily_vol <- scheduling_data %>%
+#   filter(Appt.Status == "Arrived") %>%
+#   filter(Appt.DateYear >= max(scheduling_data$Appt.DateYear)-14 & Appt.DateYear < max(scheduling_data$Appt.DateYear)) %>%
+#   group_by(Campus, Appt.Year, Appt.WeekNum, Appt.DateYear, Appt.Day, Visit.Method) %>%
+#   summarise(daily_vol = n()) %>%
+#   pivot_wider(
+#     names_from = Visit.Method, 
+#     values_from = daily_vol,
+#     values_fill=list(daily_vol=0)
+#   ) %>%
+#   mutate(Total = sum(`IN PERSON`, TELEHEALTH)) %>%
+#   pivot_longer(
+#     6:8,
+#     names_to = "Visit.Method",
+#     values_to = "daily_vol",
+#   )
+#   
+# } else{
+#   
+#   daily_vol <- scheduling_data %>%
+#   filter(Appt.Status == "Arrived") %>%
+#   filter(Appt.DateYear > max(scheduling_data$Appt.DateYear)-14 & Appt.DateYear <= max(scheduling_data$Appt.DateYear)) %>%
+#   group_by(Campus, Appt.Year, Appt.WeekNum, Appt.DateYear, Appt.Day, Visit.Method) %>%
+#   summarise(daily_vol = n()) %>%
+#   pivot_wider(
+#     names_from = Visit.Method, 
+#     values_from = daily_vol,
+#     values_fill=list(daily_vol=0)
+#   ) %>%
+#   mutate(Total = sum(`IN PERSON`, TELEHEALTH)) %>%
+#   pivot_longer(
+#     6:8,
+#     names_to = "Visit.Method",
+#     values_to = "daily_vol",
+#   )
+#   
+# }
+#                            
+#                            
+# if(format(max(scheduling_data$Appt.DateYear), format = "%A") == "Sunday"){
+#   
+# # Daily volume comparison of same week last year 
+# daily_vol_last_year <- scheduling_data %>%
+#   filter(Appt.Status == "Arrived") %>%
+#   filter(Appt.WeekNum == lubridate::epiweek(todays_date) - 1) %>%
+#   # filter(Appt.DateYear >= max(scheduling_data$Appt.DateYear)-5) %>%
+#   group_by(Campus, Appt.Year, Appt.WeekNum, Appt.DateYear, Appt.Day, Visit.Method) %>%
+#   summarise(daily_vol = n()) %>%
+#   pivot_wider(
+#     names_from = Visit.Method, 
+#     values_from = daily_vol,
+#     values_fill=list(daily_vol=0)
+#   ) %>%
+#   mutate(Total = sum(`IN PERSON`, TELEHEALTH)) %>%
+#   pivot_longer(
+#     6:8,
+#     names_to = "Visit.Method",
+#     values_to = "daily_vol",
+#   )
+# } else{
+#   
+#   # Daily volume comparison of same week last year 
+# daily_vol_last_year <- scheduling_data %>%
+#   filter(Appt.Status == "Arrived") %>%
+#   filter(Appt.WeekNum == lubridate::epiweek(todays_date)) %>%
+#   # filter(Appt.DateYear >= max(scheduling_data$Appt.DateYear)-5) %>%
+#   group_by(Campus, Appt.Year, Appt.WeekNum, Appt.DateYear, Appt.Day, Visit.Method) %>%
+#   summarise(daily_vol = n()) %>%
+#   pivot_wider(
+#     names_from = Visit.Method, 
+#     values_from = daily_vol,
+#     values_fill=list(daily_vol=0)
+#   ) %>%
+#   mutate(Total = sum(`IN PERSON`, TELEHEALTH)) %>%
+#   pivot_longer(
+#     6:8,
+#     names_to = "Visit.Method",
+#     values_to = "daily_vol",
+#   )
+# }
+
   daily_vol <- scheduling_data %>%
   filter(Appt.Status == "Arrived") %>%
-  filter(Appt.DateYear >= max(scheduling_data$Appt.DateYear)-14 & Appt.DateYear < max(scheduling_data$Appt.DateYear)) %>%
+  filter(Appt.DateYear >= todays_date-14 & Appt.DateYear < todays_date) %>%
   group_by(Campus, Appt.Year, Appt.WeekNum, Appt.DateYear, Appt.Day, Visit.Method) %>%
   summarise(daily_vol = n()) %>%
   pivot_wider(
-    names_from = Visit.Method, 
+    names_from = Visit.Method,
     values_from = daily_vol,
     values_fill=list(daily_vol=0)
   ) %>%
@@ -417,52 +498,7 @@ if(format(max(scheduling_data$Appt.DateYear), format = "%A") %in% c("Sunday")){
     names_to = "Visit.Method",
     values_to = "daily_vol",
   )
-  
-} else{
-  
-  daily_vol <- scheduling_data %>%
-  filter(Appt.Status == "Arrived") %>%
-  filter(Appt.DateYear > max(scheduling_data$Appt.DateYear)-14 & Appt.DateYear <= max(scheduling_data$Appt.DateYear)) %>%
-  group_by(Campus, Appt.Year, Appt.WeekNum, Appt.DateYear, Appt.Day, Visit.Method) %>%
-  summarise(daily_vol = n()) %>%
-  pivot_wider(
-    names_from = Visit.Method, 
-    values_from = daily_vol,
-    values_fill=list(daily_vol=0)
-  ) %>%
-  mutate(Total = sum(`IN PERSON`, TELEHEALTH)) %>%
-  pivot_longer(
-    6:8,
-    names_to = "Visit.Method",
-    values_to = "daily_vol",
-  )
-  
-}
-                           
-                           
-if(format(max(scheduling_data$Appt.DateYear), format = "%A") == "Sunday"){
-  
-# Daily volume comparison of same week last year 
-daily_vol_last_year <- scheduling_data %>%
-  filter(Appt.Status == "Arrived") %>%
-  filter(Appt.WeekNum == lubridate::epiweek(todays_date) - 1) %>%
-  # filter(Appt.DateYear >= max(scheduling_data$Appt.DateYear)-5) %>%
-  group_by(Campus, Appt.Year, Appt.WeekNum, Appt.DateYear, Appt.Day, Visit.Method) %>%
-  summarise(daily_vol = n()) %>%
-  pivot_wider(
-    names_from = Visit.Method, 
-    values_from = daily_vol,
-    values_fill=list(daily_vol=0)
-  ) %>%
-  mutate(Total = sum(`IN PERSON`, TELEHEALTH)) %>%
-  pivot_longer(
-    6:8,
-    names_to = "Visit.Method",
-    values_to = "daily_vol",
-  )
-} else{
-  
-  # Daily volume comparison of same week last year 
+
 daily_vol_last_year <- scheduling_data %>%
   filter(Appt.Status == "Arrived") %>%
   filter(Appt.WeekNum == lubridate::epiweek(todays_date)) %>%
@@ -470,7 +506,7 @@ daily_vol_last_year <- scheduling_data %>%
   group_by(Campus, Appt.Year, Appt.WeekNum, Appt.DateYear, Appt.Day, Visit.Method) %>%
   summarise(daily_vol = n()) %>%
   pivot_wider(
-    names_from = Visit.Method, 
+    names_from = Visit.Method,
     values_from = daily_vol,
     values_fill=list(daily_vol=0)
   ) %>%
@@ -480,7 +516,8 @@ daily_vol_last_year <- scheduling_data %>%
     names_to = "Visit.Method",
     values_to = "daily_vol",
   )
-}
+
+
 ```
 
 

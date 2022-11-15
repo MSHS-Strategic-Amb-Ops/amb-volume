@@ -286,7 +286,7 @@ scheduling_data_raw <- readRDS("/nfs/data/Applications/Ambulatory/Data_Updated/h
   filter(!is.na(Campus)) %>%
   filter(Campus %in% c("NETWORK","MSM","MSH-MSDFP","ONCOLOGY","MSW","MSBI","MSUS","MSH- AMBULATORY CARE","MSDD")) %>%
   filter(Appt.Status == "Arrived")%>%
-  filter(Appt.DateYear >= as.Date("2021-01-01", format="%Y-%m-%d") & Appt.DateYear <= as.Date("2021-11-05", format="%Y-%m-%d"))
+  filter(Appt.DateYear >= as.Date("2021-01-01", format="%Y-%m-%d") & Appt.DateYear <= as.Date(max(Appt.Made.DTTM), format="%Y-%m-%d"))
 
   # filter(Appt.DateYear >= as.Date("2021-01-01", format="%Y-%m-%d") & Appt.DateYear <= as.Date(max(Appt.Made.DTTM), format="%Y-%m-%d"))
 
@@ -1250,6 +1250,8 @@ g1 <- ggplot(vol_trend_mshs,
   #  annotate(data = (vol_breakdown_mshs %>% filter(Appt.Year == max(Appt.Year))), geom="text", label=paste0("2021 Monthly Average: ", prettyNum(avg_2021, big.mark = ',')), 
   #           x=(length(unique((vol_breakdown_mshs %>% filter(Appt.Year == max(Appt.Year)))$Appt.Month))-1), y=avg_2021, vjust=-1, size=3.5, fontface="bold")
 ```
+
+
 ```{r MSHS Key Takeaways for Volume Graphs, echo = FALSE, warning = FALSE, message = FALSE}
 full_month <- format((lubridate::floor_date(max(scheduling_data$Appt.DateYear), unit = "month")-1), "%B")
 full_year <- format((lubridate::floor_date(max(scheduling_data$Appt.DateYear), unit = "month")-1), "%Y")

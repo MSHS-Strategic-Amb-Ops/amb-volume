@@ -484,7 +484,7 @@ radiology_date <- paste0(radiology_data_raw[nrow(radiology_data_raw),"Appt.Month
 
   daily_vol <- scheduling_data %>%
   filter(Appt.Status == "Arrived") %>%
-  filter(Appt.DateYear >= todays_date-6 & Appt.DateYear < todays_date+8) %>%
+  filter(Appt.DateYear >= todays_date-7 & Appt.DateYear < todays_date+8) %>%
   group_by(Campus, Appt.Year, Appt.WeekNum, Appt.DateYear, Appt.Day, Visit.Method) %>%
   summarise(daily_vol = n()) %>%
   pivot_wider(

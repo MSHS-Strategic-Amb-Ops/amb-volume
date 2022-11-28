@@ -336,8 +336,8 @@ todays_year <- strftime(todays_date, format = "%Y")
 todays_month <- strftime(todays_date, format = "%B")
 todays_week <- (tail(weekNum_sunday,1))$Appt.Week
 past_4_wks <- tail(weekNum_sunday, 4)
-past_5_wks <- tail(weekNum_sunday, 6)
-past_5_wks <- head(past_5_wks, 5)
+past_5_wks <- tail(weekNum_sunday, 5)
+# past_5_wks <- head(past_5_wks, 5)
 past_year <- weekNum_sunday %>%
   filter(Appt.WeekNum %in% unique(past_5_wks$Appt.WeekNum))
 reporting_week <- paste0("from Sunday, ",todays_date, " to Saturday, ",todays_date+6)

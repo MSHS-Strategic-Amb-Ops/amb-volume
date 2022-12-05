@@ -294,9 +294,9 @@ rad_onc_data_raw <- read.csv("/nfs/data/Applications/Ambulatory/Rad_Onc_Data.csv
 radiology_data_raw <- read.csv("/nfs/data/Applications/Ambulatory/Radiology_Data.csv")
 radiology_ref <- read.csv("/nfs/data/Applications/Ambulatory/Radiology_Site_Mapping.csv")
 
-rad_onc_data_raw <- read.csv("~/server-upload/Rad_Onc_Data.csv")
-radiology_data_raw <- read.csv("~/server-upload/Radiology_Data.csv")
-radiology_ref <- read.csv("~/server-upload/Radiology_Site_Mapping.csv")
+# rad_onc_data_raw <- read.csv("~/server-upload/Rad_Onc_Data.csv")
+# radiology_data_raw <- read.csv("~/server-upload/Radiology_Data.csv")
+# radiology_ref <- read.csv("~/server-upload/Radiology_Site_Mapping.csv")
 ```
 
 

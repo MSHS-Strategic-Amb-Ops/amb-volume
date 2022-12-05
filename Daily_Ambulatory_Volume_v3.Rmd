@@ -1205,7 +1205,7 @@ g1 <- ggplot(vol_trend_mshs,
       group_by(Appt.Year, Appt.Month, Appt.MonNum, Visit.Method) %>%
       summarise(monthly_vol = sum(monthly_vol)) %>%
       arrange(Appt.Year, Appt.MonNum) %>%
-      head(-2) %>%
+      # head(-2) %>%
       tail(26)
     
     max <- vol_breakdown_mshs %>% group_by(Appt.Year, Appt.Month) %>% summarise(max = sum(monthly_vol))

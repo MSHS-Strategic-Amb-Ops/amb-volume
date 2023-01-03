@@ -314,6 +314,7 @@ avg_2019_ref <- data.frame(
 ```{r Set Variables, echo = FALSE, warning = FALSE, message = FALSE}
 library(lubridate)
 weekNum_sunday <- scheduling_data_raw %>%
+  filter(Appt.Year != "2023") %>%
   filter(Appt.Day == "Sun") %>%
   mutate(Appt.WeekNum = lubridate::epiweek(Appt.DateYear)) %>%
   dplyr::select(Appt.Year, Appt.WeekNum, Appt.Day, Appt.DateYear) %>%

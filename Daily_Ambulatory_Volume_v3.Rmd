@@ -276,14 +276,14 @@ scale_fill_MountSinai <- function(palette = "all", discrete = TRUE, reverse = FA
 ```{r Import Data, echo = FALSE, warning = FALSE, message = FALSE}
 '%!in%' <- function(x,y)!('%in%'(x,y))
 
-scheduling_data_raw <- readRDS("/SharedDrive/deans/Presidents/SixSigma/Individual Folders/Current Employees/Engineers/So Youn Kweon/server-upload/historical_data_12.20.2022.rds") %>%
-  # filter(!is.na(Campus)) %>%
-  # filter(Campus %in% c("NETWORK","MSM","MSH-MSDFP","ONCOLOGY","MSW","MSBI","MSUS","MSH- AMBULATORY CARE","MSDD")) %>%
-  filter(Appt.Status == "Arrived")%>%
-  filter(Appt.DateYear >= as.Date("2022-12-01", format="%Y-%m-%d") & Appt.DateYear <= as.Date(max(Appt.Made.DTTM), format="%Y-%m-%d"))
-
-require(openxlsx)
-write.xlsx(scheduling_data_raw, "/SharedDrive/deans/Presidents/SixSigma/Individual Folders/Current Employees/Engineers/So Youn Kweon/server-upload/scheduling_data_Dec22.xlsx")
+# scheduling_data_raw <- readRDS("/SharedDrive/deans/Presidents/SixSigma/Individual Folders/Current Employees/Engineers/So Youn Kweon/server-upload/historical_data.rds") %>%
+#   # filter(!is.na(Campus)) %>%
+#   # filter(Campus %in% c("NETWORK","MSM","MSH-MSDFP","ONCOLOGY","MSW","MSBI","MSUS","MSH- AMBULATORY CARE","MSDD")) %>%
+#   filter(Appt.Status == "Arrived")%>%
+#   filter(Appt.DateYear >= as.Date("2021-01-01", format="%Y-%m-%d") & Appt.DateYear <= as.Date(max(Appt.Made.DTTM), format="%Y-%m-%d"))
+# # 
+# require(openxlsx)
+# write.xlsx(scheduling_data_raw, "/SharedDrive/deans/Presidents/SixSigma/Individual Folders/Current Employees/Engineers/So Youn Kweon/server-upload/scheduling_data_Dec22.xlsx")
 
 scheduling_data_raw <- readRDS("/nfs/data/Applications/Ambulatory/Data_Updated/historical_data.rds") %>%
   filter(!is.na(Campus)) %>%
@@ -317,7 +317,6 @@ avg_2019_ref <- data.frame(
 ```{r Set Variables, echo = FALSE, warning = FALSE, message = FALSE}
 library(lubridate)
 weekNum_sunday <- scheduling_data_raw %>%
-  filter(Appt.Year != "2023") %>%
   filter(Appt.Day == "Sun") %>%
   mutate(Appt.WeekNum = lubridate::epiweek(Appt.DateYear)) %>%
   dplyr::select(Appt.Year, Appt.WeekNum, Appt.Day, Appt.DateYear) %>%
@@ -355,7 +354,7 @@ scheduling_data <- scheduling_data_raw %>%
          Appt.Week = floor_date(as.Date(Appt.DateYear, "%Y-%m-%d"), unit="week", week_start = 7),
          Visit.Method  = case_when(Visit.Method == "IN PERSON" ~ 'IN PERSON'
                                    ,TRUE ~ 'TELEHEALTH'))
-# rm(scheduling_data_raw)
+rm(scheduling_data_raw)
 scheduling_data <- merge(scheduling_data, weekNum_sunday[,c("Appt.Year","Appt.WeekNum","Appt.Week")])
 # Radiology + Rad Onc Data
 rad_onc_data_raw <- rad_onc_data_raw %>%
@@ -589,32 +588,33 @@ monthly_vol <- monthly_vol %>%
   )
 monthly_vol <- monthly_vol %>%
   filter(Appt.Year >= as.numeric(todays_year)-1) 
+
 # Last 12 months of monthly data 
-monthly_vol_12mo <- scheduling_data %>%
-  filter(Appt.Status == "Arrived") %>%
-  filter(Appt.DTTM >= max(Appt.DTTM) - months(13)) %>%
-  mutate(Appt.MonNum = as.numeric(strftime(Appt.DateYear, format = "%m")),
-         Appt.Month = strftime(Appt.DateYear, format = "%B")) %>%
-  group_by(Campus, Campus.Specialty, Department, Appt.Year, Appt.MonNum, Appt.Month, Visit.Method) %>%
-  summarise(monthly_vol = n()) 
-# Merge with Rad Onc and Radiology Data
-rad_radOnc_data_12mo <- merge(unique(monthly_vol_12mo[,c("Appt.Year","Appt.MonNum")]), rad_radOnc_data)
-monthly_vol_12mo <- bind_rows(monthly_vol_12mo, rad_radOnc_data_12mo)
-monthly_vol_12mo <- monthly_vol_12mo %>%
-  dplyr::select(-Month) %>%
-  pivot_wider(
-    names_from = Visit.Method, 
-    values_from = monthly_vol,
-    values_fill=list(monthly_vol=0)
-  ) %>%
-  mutate(Total = sum(`IN PERSON`, TELEHEALTH)) %>%
-  pivot_longer(
-    7:9,
-    names_to = "Visit.Method",
-    values_to = "monthly_vol"
-  )
-monthly_vol_12mo <- monthly_vol_12mo %>%
-  filter(Appt.Year >= as.numeric(todays_year)-1) 
+# monthly_vol_12mo <- scheduling_data %>%
+#   filter(Appt.Status == "Arrived") %>%
+#   filter(Appt.DTTM >= max(Appt.DTTM) - months(13)) %>%
+#   mutate(Appt.MonNum = as.numeric(strftime(Appt.DateYear, format = "%m")),
+#          Appt.Month = strftime(Appt.DateYear, format = "%B")) %>%
+#   group_by(Campus, Campus.Specialty, Department, Appt.Year, Appt.MonNum, Appt.Month, Visit.Method) %>%
+#   summarise(monthly_vol = n()) 
+# # Merge with Rad Onc and Radiology Data
+# rad_radOnc_data_12mo <- merge(unique(monthly_vol_12mo[,c("Appt.Year","Appt.MonNum")]), rad_radOnc_data)
+# monthly_vol_12mo <- bind_rows(monthly_vol_12mo, rad_radOnc_data_12mo)
+# monthly_vol_12mo <- monthly_vol_12mo %>%
+#   dplyr::select(-Month) %>%
+#   pivot_wider(
+#     names_from = Visit.Method, 
+#     values_from = monthly_vol,
+#     values_fill=list(monthly_vol=0)
+#   ) %>%
+#   mutate(Total = sum(`IN PERSON`, TELEHEALTH)) %>%
+#   pivot_longer(
+#     7:9,
+#     names_to = "Visit.Method",
+#     values_to = "monthly_vol"
+#   )
+# monthly_vol_12mo <- monthly_vol_12mo %>%
+#   filter(Appt.Year >= as.numeric(todays_year)-1) 
 ```
 
 

@@ -280,8 +280,8 @@ scale_fill_MountSinai <- function(palette = "all", discrete = TRUE, reverse = FA
 #   # filter(!is.na(Campus)) %>%
 #   # filter(Campus %in% c("NETWORK","MSM","MSH-MSDFP","ONCOLOGY","MSW","MSBI","MSUS","MSH- AMBULATORY CARE","MSDD")) %>%
 #   filter(Appt.Status == "Arrived")%>%
-#   filter(Appt.DateYear >= as.Date("2021-01-01", format="%Y-%m-%d") & Appt.DateYear <= as.Date(max(Appt.Made.DTTM), format="%Y-%m-%d"))
-# # 
+#   filter(Appt.DateYear >= as.Date("2022-01-01", format="%Y-%m-%d") & Appt.DateYear <= as.Date(max(Appt.Made.DTTM), format="%Y-%m-%d"))
+#
 # require(openxlsx)
 # write.xlsx(scheduling_data_raw, "/SharedDrive/deans/Presidents/SixSigma/Individual Folders/Current Employees/Engineers/So Youn Kweon/server-upload/scheduling_data_Dec22.xlsx")
 
@@ -289,17 +289,17 @@ scheduling_data_raw <- readRDS("/nfs/data/Applications/Ambulatory/Data_Updated/h
   filter(!is.na(Campus)) %>%
   filter(Campus %in% c("NETWORK","MSM","MSH-MSDFP","ONCOLOGY","MSW","MSBI","MSUS","MSH- AMBULATORY CARE","MSDD")) %>%
   filter(Appt.Status == "Arrived")%>%
-  filter(Appt.DateYear >= as.Date("2021-01-01", format="%Y-%m-%d") & Appt.DateYear <= as.Date(max(Appt.Made.DTTM), format="%Y-%m-%d"))
+  filter(Appt.DateYear >= as.Date("2022-01-01", format="%Y-%m-%d") & Appt.DateYear <= as.Date(max(Appt.Made.DTTM), format="%Y-%m-%d"))
 
-  # filter(Appt.DateYear >= as.Date("2021-01-01", format="%Y-%m-%d") & Appt.DateYear <= as.Date(max(Appt.Made.DTTM), format="%Y-%m-%d"))
+  # filter(Appt.DateYear >= as.Date("2022-01-01", format="%Y-%m-%d") & Appt.DateYear <= as.Date(max(Appt.Made.DTTM), format="%Y-%m-%d"))
 
 rad_onc_data_raw <- read.csv("/nfs/data/Applications/Ambulatory/Rad_Onc_Data.csv")
 radiology_data_raw <- read.csv("/nfs/data/Applications/Ambulatory/Radiology_Data.csv")
 radiology_ref <- read.csv("/nfs/data/Applications/Ambulatory/Radiology_Site_Mapping.csv")
 
-# rad_onc_data_raw <- read.csv("~/server-upload/Rad_Onc_Data.csv")
-# radiology_data_raw <- read.csv("~/server-upload/Radiology_Data.csv")
-# radiology_ref <- read.csv("~/server-upload/Radiology_Site_Mapping.csv")
+# rad_onc_data_raw <- read.csv("/SharedDrive/deans/Presidents/SixSigma/Individual Folders/Current Employees/Engineers/So Youn Kweon/server-upload/Rad_Onc_Data.csv")
+# radiology_data_raw <- read.csv("/SharedDrive/deans/Presidents/SixSigma/Individual Folders/Current Employees/Engineers/So Youn Kweon/server-upload/Radiology_Data.csv")
+# radiology_ref <- read.csv("/SharedDrive/deans/Presidents/SixSigma/Individual Folders/Current Employees/Engineers/So Youn Kweon/server-upload/Radiology_Site_Mapping.csv")
 ```
 
 
@@ -311,6 +311,7 @@ avg_2019_ref <- data.frame(
   avg_2019 = c(416628, 15634, 25121, 37702, 118317,
              1334, 28211, 36684, 40224, 76345, 31823)
 )
+
 ```
 
 
@@ -396,7 +397,7 @@ rad_radOnc_data <- rad_radOnc_data %>%
 rad_onc_date <- paste0(rad_onc_data_raw[nrow(rad_onc_data_raw),"Appt.Month"],", ", rad_onc_data_raw[nrow(rad_onc_data_raw),"Appt.Year"])
 radiology_date <- paste0(radiology_data_raw[nrow(radiology_data_raw),"Appt.Month"],", ", radiology_data_raw[nrow(radiology_data_raw),"Appt.Year"])
 # scheduling_data <- scheduling_data %>%
-#   filter(Appt.DateYear <= "2022-03-29") 
+#   filter(Appt.DateYear <= "2023-03-29") 
 ```
 
 
@@ -615,6 +616,19 @@ monthly_vol <- monthly_vol %>%
 #   )
 # monthly_vol_12mo <- monthly_vol_12mo %>%
 #   filter(Appt.Year >= as.numeric(todays_year)-1) 
+```
+
+
+```{r 2022 Past Year Volume Reference, echo = FALSE, warning = FALSE, message = FALSE}
+# In Person + Telehealth (Includes Radiology and Rad Onc) - Based on Exeutive Dashboard Tableau Workbook
+avg_2022_ref <- monthly_vol %>%
+  filter(Appt.Year == 2022) %>%
+  filter(Visit.Method == "Total") %>%
+  group_by(Campus, Appt.Year, Appt.Month) %>%
+  summarise(total = sum(monthly_vol)) %>%
+  group_by(Campus) %>%
+  summarise(avg = round(mean(total),0))
+
 ```
 
 
@@ -914,6 +928,7 @@ weekly_vol_mshs_all %>%
   column_spec(8:10, background = "#E6F8FF", width = "100px") %>%
   column_spec(1, width = "150px") %>%
   row_spec(nrow(weekly_vol_mshs_all), bold = T)
+
 weekly_vol_last_year_mshs <- weekly_vol_last_year %>%
   group_by(Appt.Year, Appt.WeekNum, Appt.Week, Visit.Method) %>%
   summarise(weekly_vol = sum(weekly_vol, na.rm = TRUE)) %>%
@@ -964,6 +979,7 @@ weekly_vol_last_year_mshs_all$perc_diff <- diff_formatter(weekly_vol_last_year_m
 col_names <- c("Week of", rep(c("Prior Week","Same Week Last Year","% Difference"),3))
 header_above <- c("title" = length(weekly_vol_last_year_mshs_all))
 names(header_above) <- paste0("MSHS Ambulatory Weekly Arrived Volume: Same Week Last Year Comparison")
+
 weekly_vol_last_year_mshs_all %>% 
   dplyr::select(everything()) %>%
   #   replace(is.na(.), "-") %>%
@@ -1003,7 +1019,7 @@ ytd_total <- ytd_total %>%
                       across(where(is.character), ~"YTD Total"))) %>%
   filter(Appt.Month == "YTD Total")
 monthly_vol_mshs <- bind_rows(monthly_vol_mshs, ytd_total)
-monthly_vol_mshs$perc_diff <- percent((monthly_vol_mshs$`2022` - monthly_vol_mshs$`2021`)/monthly_vol_mshs$`2021`,1)
+monthly_vol_mshs$perc_diff <- percent((monthly_vol_mshs$`2023` - monthly_vol_mshs$`2022`)/monthly_vol_mshs$`2022`,1)
 monthly_vol_mshs_total <- monthly_vol_mshs %>%
   filter(Appt.Month != "YTD Total" & Visit.Method == "Total")
 monthly_vol_mshs_total$Visit.Method <- NULL
@@ -1019,9 +1035,9 @@ aggregate_row <- monthly_vol_mshs %>%
     names_from = Visit.Method,
     values_from = 4:6
   ) %>%
-  dplyr::select(Appt.MonNum, Appt.Month, '2021_Total', '2022_Total', 'perc_diff_Total',
-         '2021_IN PERSON', '2022_IN PERSON', 'perc_diff_IN PERSON',
-         '2021_TELEHEALTH', '2022_TELEHEALTH', 'perc_diff_TELEHEALTH')
+  dplyr::select(Appt.MonNum, Appt.Month, '2022_Total', '2023_Total', 'perc_diff_Total',
+         '2022_IN PERSON', '2023_IN PERSON', 'perc_diff_IN PERSON',
+         '2022_TELEHEALTH', '2023_TELEHEALTH', 'perc_diff_TELEHEALTH')
 monthly_vol_mshs_all <- merge(monthly_vol_mshs_total, monthly_vol_mshs_person, by = c("Appt.MonNum","Appt.Month"))
 monthly_vol_mshs_all <- merge(monthly_vol_mshs_all, monthly_vol_mshs_tele, by = c("Appt.MonNum","Appt.Month"))
 monthly_vol_mshs_all <- monthly_vol_mshs_all %>%
@@ -1039,7 +1055,7 @@ diff_formatter <- formatter("span",
 monthly_vol_mshs_all$perc_diff.x <- diff_formatter(monthly_vol_mshs_all$perc_diff.x)
 monthly_vol_mshs_all$perc_diff.y <- diff_formatter(monthly_vol_mshs_all$perc_diff.y)
 monthly_vol_mshs_all$perc_diff <- diff_formatter(monthly_vol_mshs_all$perc_diff)
-col_names <- c("Month", rep(c("2021","2022","% Difference"),3))
+col_names <- c("Month", rep(c("2022","2023","% Difference"),3))
 header_above <- c("title" = length(monthly_vol_mshs_all))
 names(header_above) <- paste0("MSHS Ambulatory Monthly Arrived Volume Comparison")
 header_above_2 <- c("title" = length(monthly_vol_mshs_all))
@@ -1122,7 +1138,7 @@ vol_trend_mshs <- monthly_vol %>%
   # pivot_longer(
   #   
   # )
-# vol_trend_mshs$perc_diff <- (vol_trend_mshs$`2022` - vol_trend_mshs$`2021`)/vol_trend_mshs$`2021`
+# vol_trend_mshs$perc_diff <- (vol_trend_mshs$`2023` - vol_trend_mshs$`2022`)/vol_trend_mshs$`2022`
 # vol_trend_mshs <- vol_trend_mshs %>%
 #   pivot_longer(
 #     3:5,
@@ -1130,25 +1146,25 @@ vol_trend_mshs <- monthly_vol %>%
 #     values_to = "monthly_vol"
 #   )
 # Reference Lines
-avg_2021 <- round(mean((vol_trend_mshs %>% filter(Appt.Year == "2021"))$monthly_vol),0)
+avg_2022 <- round(mean((vol_trend_mshs %>% filter(Appt.Year == "2022"))$monthly_vol),0)
 avg_2019 <- avg_2019_ref$avg_2019[which(avg_2019_ref$Campus == "MSHS")]
 g1 <- ggplot(vol_trend_mshs, 
              aes(x=factor(Appt.Month, levels = monthOptions), y=monthly_vol, group=Appt.Year))+ 
   geom_line(aes(color=Appt.Year), size=1.1)+
   geom_point(aes(color=Appt.Year), size=3)+
    scale_colour_manual(values = c("#212070","#d80b8c"))+
-  scale_y_continuous(limits = c(0, max(max(vol_trend_mshs$monthly_vol),avg_2021)*1.2), labels = scales::number_format(accuracy = 1,
+  scale_y_continuous(limits = c(0, max(max(vol_trend_mshs$monthly_vol),avg_2022)*1.2), labels = scales::number_format(accuracy = 1,
                                  decimal.mark = ','))+
   labs(title = "MSHS Ambulatory Arrived Volume by Month",
-       subtitle = paste0("Based on data from 2021-01-01 to ", max(scheduling_data$Appt.DateYear),"\n"),
+       subtitle = paste0("Based on data from 2022-01-01 to ", max(scheduling_data$Appt.DateYear),"\n"),
        y = NULL, x = NULL, fill = NULL)+
   theme_new_line()+
   # scale_y_continuous(limits=c(0,(max(vol_trend_mshs$monthly_vol))*1.3), labels = scales::number_format(accuracy = 1))+
   #  geom_hline(yintercept=avg_2019, linetype = "dashed") +
   #  annotate(geom="text", label=paste0("2019 Monthly Average: ", prettyNum(avg_2019, big.mark = ',')), x=11, y=avg_2019, vjust=-1, size=3.5, fontface="bold")+
-  geom_hline(yintercept=avg_2021, linetype = "dashed") +
-   annotate(geom="text", label=paste0("2021 Monthly Average:\n", prettyNum(avg_2021, big.mark = ',')), x=11, y=avg_2021, vjust=-1, size=3.5, fontface="bold")+
-   labs(caption = paste0("*2019 Monthly Average: ", prettyNum(avg_2019, big.mark = ','),"\n**Includes Rad Onc data up to ", rad_onc_date, " and Radiology data up to ",radiology_date))+
+  geom_hline(yintercept=avg_2022, linetype = "dashed") +
+   annotate(geom="text", label=paste0("2022 Monthly Average:\n", prettyNum(avg_2022, big.mark = ',')), x=11, y=avg_2022, vjust=-1, size=3.5, fontface="bold")+
+   labs(caption = paste0("*2022 Monthly Average: ", prettyNum(avg_2022, big.mark = ','),"\n**Includes Rad Onc data up to ", rad_onc_date, " and Radiology data up to ",radiology_date))+
       theme(plot.caption = element_text(hjust = 0, vjust = -1, face="italic", size = 10))
     n <- length(unique(vol_trend_mshs$Appt.Year)) - 1
     if(n==0){
@@ -1215,9 +1231,9 @@ g1 <- ggplot(vol_trend_mshs,
     max <- vol_breakdown_mshs %>% group_by(Appt.Year, Appt.Month) %>% summarise(max = sum(monthly_vol))
     
     # ann_text_2019 <- data.frame(Appt.Month = "April",monthly_vol = avg_2019,lab=paste0("2019 Monthly \nAverage: ", prettyNum(avg_2019, big.mark = ',')),
-    #                    Appt.Year = factor("2022",levels = c("2021","2022")), Visit.Method = "Total")
-    ann_text_2021 <- data.frame(Appt.Month = "June",monthly_vol = avg_2021,lab=paste0("2021 Monthly\nAvg: ", prettyNum(avg_2021, big.mark = ',')),
-                       Appt.Year = factor("2022",levels = c("2021","2022")), Visit.Method = "Total")
+    #                    Appt.Year = factor("2023",levels = c("2022","2023")), Visit.Method = "Total")
+    ann_text_2022 <- data.frame(Appt.Month = "June",monthly_vol = avg_2022,lab=paste0("2022 Monthly\nAvg: ", prettyNum(avg_2022, big.mark = ',')),
+                       Appt.Year = factor("2023",levels = c("2022","2023")), Visit.Method = "Total")
      
    ggplot(vol_breakdown_mshs, aes(x= factor(Appt.Month, levels = monthOptions), 
                                   y=monthly_vol, group=Visit.Method, fill=Visit.Method), legend.labs = c("IN PERSON", "TELEHEALTH"))+
@@ -1226,8 +1242,8 @@ g1 <- ggplot(vol_trend_mshs,
       scale_fill_manual(values = c("#212070","#d80b8c","black"))+
       scale_y_continuous(limits=c(0,(max(max$max))*1.2), labels = scales::number_format(accuracy = 1))+
       labs(title = paste0("MSHS Ambulatory Arrived Volume Breakdown by Month"),
-           # subtitle = paste0("Based on data from 2021-01-01 to 2022-10-31","\n"),
-           subtitle = paste0("Based on data from 2021-01-01 to ",max(scheduling_data$Appt.DateYear),"\n"),
+           # subtitle = paste0("Based on data from 2022-01-01 to 2023-10-31","\n"),
+           subtitle = paste0("Based on data from 2022-01-01 to ",max(scheduling_data$Appt.DateYear),"\n"),
            x = NULL, y = NULL, fill = NULL)+
       theme_new_line()+
       theme(axis.title.y = element_text(size = 12, angle = 90),  
@@ -1241,19 +1257,19 @@ g1 <- ggplot(vol_trend_mshs,
                    size=3.5, fontface="bold.italic")+
      # geom_hline(yintercept=avg_2019, linetype = "dashed") +
      # geom_text(data = ann_text_2019, aes(label = lab), vjust=-0.5, size=3.5, fontface="bold")+
-          geom_hline(yintercept=avg_2021, linetype = "dotted", color="red", size=0.8) +
-          geom_text(data = ann_text_2021, aes(label = lab), size=3.5, fontface="bold", vjust = -1, nudge_x = 1, color = "red")+
-     # labs(caption = paste0("*2019 Monthly Average: ", prettyNum(avg_2019, big.mark = ','),"\n**Includes Rad Onc data up to October, 2022", " and Radiology data up to October, 2022"))+
-        labs(caption = paste0("*2019 Monthly Average: ", prettyNum(avg_2019, big.mark = ','),"\n**Includes Rad Onc data up to ", rad_onc_date, " and Radiology data up to ",radiology_date))+
+          geom_hline(yintercept=avg_2022, linetype = "dotted", color="red", size=0.8) +
+          geom_text(data = ann_text_2022, aes(label = lab), size=3.5, fontface="bold", vjust = -1, nudge_x = -0.5, color = "red")+
+     # labs(caption = paste0("*2019 Monthly Average: ", prettyNum(avg_2019, big.mark = ','),"\n**Includes Rad Onc data up to October, 2023", " and Radiology data up to October, 2023"))+
+        labs(caption = paste0("*2022 Monthly Average: ", prettyNum(avg_2022, big.mark = ','),"\n**Includes Rad Onc data up to ", rad_onc_date, " and Radiology data up to ",radiology_date))+
       theme(plot.caption = element_text(hjust = 0, vjust = 0, face="italic", size = 12),
             plot.margin = margin(10,10,10,10))
      
   # 
   #  annotate(geom="text", label=paste0("2019 Monthly Average: ", prettyNum(avg_2019, big.mark = ',')), 
   #           x=(length(unique(vol_breakdown_mshs$Appt.Month))-1), y=avg_2019, vjust=-1, size=3.5, fontface="bold")+
-  # geom_hline(yintercept=avg_2021, linetype = "dashed") +
-  #  annotate(data = (vol_breakdown_mshs %>% filter(Appt.Year == max(Appt.Year))), geom="text", label=paste0("2021 Monthly Average: ", prettyNum(avg_2021, big.mark = ',')), 
-  #           x=(length(unique((vol_breakdown_mshs %>% filter(Appt.Year == max(Appt.Year)))$Appt.Month))-1), y=avg_2021, vjust=-1, size=3.5, fontface="bold")
+  # geom_hline(yintercept=avg_2022, linetype = "dashed") +
+  #  annotate(data = (vol_breakdown_mshs %>% filter(Appt.Year == max(Appt.Year))), geom="text", label=paste0("2022 Monthly Average: ", prettyNum(avg_2022, big.mark = ',')), 
+  #           x=(length(unique((vol_breakdown_mshs %>% filter(Appt.Year == max(Appt.Year)))$Appt.Month))-1), y=avg_2022, vjust=-1, size=3.5, fontface="bold")
 ```
 
 
@@ -1279,11 +1295,11 @@ total_in_person <- percent((monthly_vol_mshs %>% filter(Visit.Method == "IN PERS
 total_in_person <- as.character(ifelse(total_in_person >0, 
                                 paste0(" increased by ",total_in_person," from ", full_month," ", last_year),
                                 paste0(" decreased by ",total_in_person," from ", full_month," ", last_year)))
-total_amb_prior_year <- percent((current_encounters-avg_2021)/avg_2021,0)
+total_amb_prior_year <- percent((current_encounters-avg_2022)/avg_2022,0)
 total_amb_prior_year <- as.character(ifelse(total_amb_prior_year >0, 
                                 paste0(" increased by ",total_amb_prior_year),
                                 paste0(" decreased by ",total_amb_prior_year)))
-total_amb_prev_year <- percent((current_encounters-avg_2019)/avg_2019,0)
+total_amb_prev_year <- percent((current_encounters-avg_2022)/avg_2022,0)
 total_amb_prev_year <- as.character(ifelse(total_amb_prev_year >0, 
                                 paste0(" increased by ",total_amb_prev_year),
                                 paste0(" decreased by ",total_amb_prev_year)))
@@ -1519,12 +1535,12 @@ reactable(monthly_vol_mshs_specialty,
                             list(color = color, fontWeight = "bold")
                             }
                            ),
-            `2021` = colDef(
+            `2022` = colDef(
                            headerStyle = list(background = "#d80b8c", color = "white", fontWeight = "Bold", fontSize = "14px"),
                            # style = list(background = "#EBEBF9")
                            format = colFormat(separators = TRUE)
                            ),
-            `2022` = colDef(
+            `2023` = colDef(
                            headerStyle = list(background = "#d80b8c", color = "white", fontWeight = "Bold", fontSize = "14px"),
                            # style = list(background = "#EBEBF9")
                            format = colFormat(separators = TRUE)
@@ -1943,7 +1959,7 @@ ytd_total <- ytd_total %>%
                       across(where(is.character), ~"YTD Total"))) %>%
   filter(Appt.Month == "YTD Total")
 monthly_vol_site <- bind_rows(monthly_vol_site, ytd_total)
-monthly_vol_site$perc_diff <- percent((monthly_vol_site$`2022` - monthly_vol_site$`2021`)/monthly_vol_site$`2021`,1)
+monthly_vol_site$perc_diff <- percent((monthly_vol_site$`2023` - monthly_vol_site$`2022`)/monthly_vol_site$`2022`,1)
 monthly_vol_site_total <- monthly_vol_site %>%
   filter(Appt.Month != "YTD Total" & Visit.Method == "Total")
 monthly_vol_site_total$Visit.Method <- NULL
@@ -1959,9 +1975,9 @@ aggregate_row <- monthly_vol_site %>%
     names_from = Visit.Method,
     values_from = 4:6
   ) %>%
-  dplyr::select(Appt.MonNum, Appt.Month, '2021_Total', '2022_Total', 'perc_diff_Total',
-         '2021_IN PERSON', '2022_IN PERSON', 'perc_diff_IN PERSON',
-         '2021_TELEHEALTH', '2022_TELEHEALTH', 'perc_diff_TELEHEALTH')
+  dplyr::select(Appt.MonNum, Appt.Month, '2022_Total', '2023_Total', 'perc_diff_Total',
+         '2022_IN PERSON', '2023_IN PERSON', 'perc_diff_IN PERSON',
+         '2022_TELEHEALTH', '2023_TELEHEALTH', 'perc_diff_TELEHEALTH')
 monthly_vol_site_all <- merge(monthly_vol_site_total, monthly_vol_site_person, by = c("Appt.MonNum","Appt.Month"))
 monthly_vol_site_all <- merge(monthly_vol_site_all, monthly_vol_site_tele, by = c("Appt.MonNum","Appt.Month"))
 monthly_vol_site_all <- monthly_vol_site_all %>%
@@ -1979,7 +1995,7 @@ diff_formatter <- formatter("span",
 monthly_vol_site_all$perc_diff.x <- diff_formatter(monthly_vol_site_all$perc_diff.x)
 monthly_vol_site_all$perc_diff.y <- diff_formatter(monthly_vol_site_all$perc_diff.y)
 monthly_vol_site_all$perc_diff <- diff_formatter(monthly_vol_site_all$perc_diff)
-col_names <- c("Month", rep(c("2021","2022","% Difference"),3))
+col_names <- c("Month", rep(c("2022","2023","% Difference"),3))
 header_above <- c("title" = length(monthly_vol_site_all))
 names(header_above) <- paste0(site, " Monthly Arrived Volume Comparison")
 header_above_2 <- c("title" = length(monthly_vol_site_all))
@@ -2017,20 +2033,20 @@ vol_trend_site_graph <- function(site){
   group_by(Appt.Year, Appt.Month, Appt.MonNum) %>%
   summarise(monthly_vol = sum(monthly_vol)) %>%
   arrange(Appt.MonNum)
-  avg_2021 <- round(mean((vol_trend_site %>% filter(Appt.Year == "2021"))$monthly_vol))
+  avg_2022 <- round(mean((vol_trend_site %>% filter(Appt.Year == "2022"))$monthly_vol))
 graph <- ggplot(vol_trend_site,
              aes(x=factor(Appt.Month, levels = monthOptions), y=monthly_vol, group=Appt.Year))+
   geom_line(aes(color=Appt.Year), size=1.1)+
   geom_point(aes(color=Appt.Year), size=3)+
    scale_colour_manual(values = c("#212070","#d80b8c"))+
-  scale_y_continuous(limits = c(0, max(max(vol_trend_site$monthly_vol),avg_2021)*1.2), labels = scales::number_format(accuracy = 1,
+  scale_y_continuous(limits = c(0, max(max(vol_trend_site$monthly_vol),avg_2022)*1.2), labels = scales::number_format(accuracy = 1,
                                  decimal.mark = ','))+
   labs(title = paste0(site," Arrived Volume by Month"),
-       subtitle = paste0("Based on data from 2021-01-01 to ", max(scheduling_data$Appt.DateYear),"\n"),
+       subtitle = paste0("Based on data from 2022-01-01 to ", max(scheduling_data$Appt.DateYear),"\n"),
        y = NULL, x = NULL, fill = NULL)+
   theme_new_line()+
-  geom_hline(yintercept=avg_2021, linetype = "dashed") +
-   annotate(geom="text", label=paste0("2021 Monthly Average:\n", prettyNum(avg_2021, big.mark = ',')), x=11, y=avg_2021, vjust=-1, size=3.5, fontface="bold")+
+  geom_hline(yintercept=avg_2022, linetype = "dashed") +
+   annotate(geom="text", label=paste0("2022 Monthly Average:\n", prettyNum(avg_2022, big.mark = ',')), x=11, y=avg_2022, vjust=-1, size=3.5, fontface="bold")+
           labs(caption = paste0(
             # "*2019 Monthly Average: ", prettyNum(avg_2019, big.mark = ','),
             "\n**Includes Rad Onc data up to ", rad_onc_date, " and Radiology data up to ",radiology_date))+
@@ -2096,20 +2112,20 @@ vol_breakdown_site_graph <- function(site){
       summarise(monthly_vol = sum(monthly_vol)) %>%
       arrange(Appt.Year, Appt.MonNum) %>%
       tail(26)
-      avg_2021 <- round(mean((vol_breakdown_site %>%
-        filter(Appt.Year == "2021") %>%
+      avg_2022 <- round(mean((vol_breakdown_site %>%
+        filter(Appt.Year == "2022") %>%
         group_by(Appt.Month) %>%
         summarise(total = sum(monthly_vol)))$total),0)
     max <- vol_breakdown_site %>% group_by(Appt.Year, Appt.Month) %>% summarise(max = sum(monthly_vol))
-      ann_text_2021 <- data.frame(Appt.Month = "June",monthly_vol = avg_2021,lab=paste0("2021 Monthly Average:\n", prettyNum(avg_2021, big.mark = ',')),
-                       Appt.Year = factor("2022",levels = c("2021","2022")), Visit.Method = "Total")
+      ann_text_2022 <- data.frame(Appt.Month = "June",monthly_vol = avg_2022,lab=paste0("2022 Monthly Average:\n", prettyNum(avg_2022, big.mark = ',')),
+                       Appt.Year = factor("2023",levels = c("2022","2023")), Visit.Method = "Total")
    ggplot(vol_breakdown_site, aes(x= factor(Appt.Month, levels = monthOptions), y=monthly_vol, group=Visit.Method, fill=Visit.Method))+
       geom_bar(position="stack",stat="identity", width=0.7)+
        facet_grid(.~Appt.Year, scales = "free", switch = "x", space = "free_x") +
       scale_fill_manual(values = c("#212070","#d80b8c","black"))+
       scale_y_continuous(limits=c(0,(max(max$max))*1.2), labels = scales::number_format(accuracy = 1))+
       labs(title = paste0(site, " Arrived Volume Breakdown by Month"),
-           subtitle = paste0("Based on data from 2021-01-01 to ",max(scheduling_data$Appt.DateYear),"\n"),
+           subtitle = paste0("Based on data from 2022-01-01 to ",max(scheduling_data$Appt.DateYear),"\n"),
            x = NULL, y = NULL, fill = NULL)+
       theme_new_line()+
       theme(axis.title.y = element_text(size = 12, angle = 90),
@@ -2121,12 +2137,12 @@ vol_breakdown_site_graph <- function(site){
                 size=3, fontface="bold", position = position_stack(vjust = 0.5))+
       stat_summary(fun.y = sum, vjust = -1, aes(label=ifelse(..y.. == 0,"",prettyNum(..y..,',')), group = Appt.Month), geom="text", color="black",
                    size=3, fontface="bold.italic")+
-    geom_hline(yintercept=avg_2021, linetype = "dashed") +
-     geom_text(data = ann_text_2021, aes(label = lab), size=3, fontface="bold", vjust = -1, nudge_x = .5)+
+    geom_hline(yintercept=avg_2022, linetype = "dashed") +
+     geom_text(data = ann_text_2022, aes(label = lab), size=3, fontface="bold", vjust = -1, nudge_x = .5)+
              labs(caption = paste0(
                # "*2019 Monthly Average: ", prettyNum(avg_2019, big.mark = ','),
-               "*Includes Rad Onc data up to 02-2022 and Radiology data up to 03-2022"))+
-      labs(caption = paste0("*",site," 2019 Monthly Average: ", prettyNum((avg_2019_ref$avg_2019[which(avg_2019_ref$Campus == site)]), big.mark = ','),
+               "*Includes Rad Onc data up to 02-2023 and Radiology data up to 03-2023"))+
+      labs(caption = paste0("*",site," 2022 Monthly Average: ", prettyNum((avg_2019_ref$avg_2019[which(avg_2019_ref$Campus == site)]), big.mark = ','),
                             "\n**Includes Rad Onc data up to ", rad_onc_date, " and Radiology data up to ",radiology_date))+
       theme(plot.caption = element_text(hjust = 0, vjust = 0, face="italic", size = 10),
             plot.margin = margin(10,10,10,10))
@@ -2164,12 +2180,12 @@ vol_takeaways_function <- function(site){
                                              paste0(total_encounters_comp_site, " increase from ",full_month," ", full_year),
                                              paste0(total_encounters_comp_site, " decrease from ",full_month," ", full_year)))
     total_in_person_site <- percent((monthly_vol_site %>% filter(Visit.Method == "IN PERSON") %>% filter(Appt.Month == full_month) %>%
-                                       mutate(perc_diff =  (`2022`-`2021`)/`2021`))$perc_diff,0)
+                                       mutate(perc_diff =  (`2023`-`2022`)/`2022`))$perc_diff,0)
     total_in_person_site <- as.character(ifelse(total_in_person_site >0,
                                        paste0(" increased by ",total_in_person_site," from ", full_month," ", full_year),
                                        paste0(" decreased by ",total_in_person_site," from ", full_month," ", full_year)))
-    avg_2021_site <- round(mean((monthly_vol_site %>% filter(Visit.Method == "Total"))[[4]]))
-    total_amb_prior_year_site <- percent((current_encounters_site-avg_2021_site)/avg_2021_site,0)
+    avg_2022_site <- round(mean((monthly_vol_site %>% filter(Visit.Method == "Total"))[[4]]))
+    total_amb_prior_year_site <- percent((current_encounters_site-avg_2022_site)/avg_2022_site,0)
     total_amb_prior_year_site <- as.character(ifelse(total_amb_prior_year_site >0,
                                             paste0(" increased by ",total_amb_prior_year_site),
                                             paste0(" decreased by ",total_amb_prior_year_site)))
@@ -2395,12 +2411,12 @@ reactable(monthly_vol_dept,
                             list(color = color, fontWeight = "bold")
                             }
                            ),
-            `2021` = colDef(
+            `2022` = colDef(
                            headerStyle = list(background = "#d80b8c", color = "white", fontWeight = "Bold", fontSize = "14px"),
                            # style = list(background = "#EBEBF9")
                            format = colFormat(separators = TRUE)
                            ),
-            `2022` = colDef(
+            `2023` = colDef(
                            headerStyle = list(background = "#d80b8c", color = "white", fontWeight = "Bold", fontSize = "14px"),
                            # style = list(background = "#EBEBF9")
                            format = colFormat(separators = TRUE)

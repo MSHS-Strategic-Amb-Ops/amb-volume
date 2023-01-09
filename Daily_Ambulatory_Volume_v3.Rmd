@@ -291,8 +291,6 @@ scheduling_data_raw <- readRDS("/nfs/data/Applications/Ambulatory/Data_Updated/h
   filter(Appt.Status == "Arrived")%>%
   filter(Appt.DateYear >= as.Date("2022-01-01", format="%Y-%m-%d") & Appt.DateYear <= as.Date(max(Appt.Made.DTTM), format="%Y-%m-%d"))
 
-  # filter(Appt.DateYear >= as.Date("2022-01-01", format="%Y-%m-%d") & Appt.DateYear <= as.Date(max(Appt.Made.DTTM), format="%Y-%m-%d"))
-
 rad_onc_data_raw <- read.csv("/nfs/data/Applications/Ambulatory/Rad_Onc_Data.csv")
 radiology_data_raw <- read.csv("/nfs/data/Applications/Ambulatory/Radiology_Data.csv")
 radiology_ref <- read.csv("/nfs/data/Applications/Ambulatory/Radiology_Site_Mapping.csv")
@@ -2200,7 +2198,7 @@ vol_takeaways_function <- function(site){
 
 ```{r Monthly Volume by Department, echo = FALSE, warning = FALSE, message = FALSE}
 monthly_vol_dept_function <- function(site){
-  # site <- "MSUS"
+  # site <- "MSBI"
 monthly_vol_dept <- monthly_vol %>%
   filter(Campus == site) %>%
   filter(Appt.Month == full_month) %>%
@@ -2546,7 +2544,7 @@ ________________________________________________________________________________
 <!-- <span style='font-size: 14px; color: black'>*Includes visits up to `r date_end`</span><br/> -->
 <span style='font-size: 16px; color: black'>**MSBI `r full_month`-`r full_year` Volume by Department**</span><br/>
 ```{r MSBI Metrics Output5, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
-monthly_vol_dept_function(site = "MSBI")
+# monthly_vol_dept_function(site = "MSBI")
 ```
 _________________________________________________________________________________________________________________________________________________________________
 ## MSDD {.tabset .tabset-fade .tabset-pills}
@@ -2586,7 +2584,7 @@ ________________________________________________________________________________
 <!-- <span style='font-size: 14px; color: black'>*Includes visits up to `r date_end`</span><br/> -->
 <span style='font-size: 16px; color: black'>**MSDD `r full_month`-`r full_year` Volume by Department**</span><br/>
 ```{r MSDD Metrics Output5, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
-monthly_vol_dept_function(site = "MSDD")
+# monthly_vol_dept_function(site = "MSDD")
 ```
 _________________________________________________________________________________________________________________________________________________________________
 ## MSH- AMBULATORY CARE {.tabset .tabset-fade .tabset-pills}
@@ -2626,7 +2624,7 @@ ________________________________________________________________________________
 <!-- <span style='font-size: 14px; color: black'>*Includes visits up to `r date_end`</span><br/> -->
 <span style='font-size: 16px; color: black'>**MSH- AMBULATORY CARE Volume `r full_month`-`r full_year` Volume by Department**</span><br/>
 ```{r MSH- AMBULATORY CARE Metrics Output5, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
-monthly_vol_dept_function(site = "MSH- AMBULATORY CARE")
+# monthly_vol_dept_function(site = "MSH- AMBULATORY CARE")
 ```
 _________________________________________________________________________________________________________________________________________________________________
 ## MSH-MSDFP {.tabset .tabset-fade .tabset-pills}
@@ -2666,7 +2664,7 @@ ________________________________________________________________________________
 <!-- <span style='font-size: 14px; color: black'>*Includes visits up to `r date_end`</span><br/> -->
 <span style='font-size: 16px; color: black'>**MSH-MSDFP `r full_month`-`r full_year` Volume by Department**</span><br/>
 ```{r MSH-MSDFP Metrics Output5, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
-monthly_vol_dept_function(site = "MSH-MSDFP")
+# monthly_vol_dept_function(site = "MSH-MSDFP")
 ```
 _________________________________________________________________________________________________________________________________________________________________
 ## MSM {.tabset .tabset-fade .tabset-pills}
@@ -2706,7 +2704,7 @@ ________________________________________________________________________________
 <!-- <span style='font-size: 14px; color: black'>*Includes visits up to `r date_end`</span><br/> -->
 <span style='font-size: 16px; color: black'>**MSM `r full_month`-`r full_year` Volume by Department**</span><br/>
 ```{r MSM Metrics Output5, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
-monthly_vol_dept_function(site = "MSM")
+# monthly_vol_dept_function(site = "MSM")
 ```
 _________________________________________________________________________________________________________________________________________________________________
 <!-- ## MSQ {.tabset .tabset-fade .tabset-pills} -->
@@ -2769,7 +2767,7 @@ ________________________________________________________________________________
 <!-- <span style='font-size: 14px; color: black'>*Includes visits up to `r date_end`</span><br/> -->
 <span style='font-size: 16px; color: black'>**MSUS `r full_month`-`r full_year` Volume by Department**</span><br/>
 ```{r MSUS Metrics Output5, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
-monthly_vol_dept_function(site = "MSUS")
+# monthly_vol_dept_function(site = "MSUS")
 ```
 _________________________________________________________________________________________________________________________________________________________________
 ## MSW {.tabset .tabset-fade .tabset-pills}
@@ -2809,7 +2807,7 @@ ________________________________________________________________________________
 <!-- <span style='font-size: 14px; color: black'>*Includes visits up to `r date_end`</span><br/> -->
 <span style='font-size: 16px; color: black'>**MSW `r full_month`-`r full_year` Volume by Department**</span><br/>
 ```{r MSW Metrics Output5, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
-monthly_vol_dept_function(site = "MSW")
+# monthly_vol_dept_function(site = "MSW")
 ```
 _________________________________________________________________________________________________________________________________________________________________
 ## NETWORK {.tabset .tabset-fade .tabset-pills}
@@ -2849,7 +2847,7 @@ ________________________________________________________________________________
 <!-- <span style='font-size: 14px; color: black'>*Includes visits up to `r date_end`</span><br/> -->
 <span style='font-size: 16px; color: black'>**NETWORK `r full_month`-`r full_year` Volume by Department**</span><br/>
 ```{r NETWORK Metrics Output5, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
-monthly_vol_dept_function(site = "NETWORK")
+# monthly_vol_dept_function(site = "NETWORK")
 ```
 _________________________________________________________________________________________________________________________________________________________________
 <!-- ## NYEE {.tabset .tabset-fade .tabset-pills} -->
@@ -2914,7 +2912,7 @@ ________________________________________________________________________________
 <!-- <span style='font-size: 14px; color: black'>*Includes visits up to `r date_end`</span><br/> -->
 <span style='font-size: 16px; color: black'>**ONCOLOGY `r full_month`-`r full_year` Volume by Department**</span><br/>
 ```{r ONCOLOGY Metrics Output5, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
-monthly_vol_dept_function(site = "ONCOLOGY")
+# monthly_vol_dept_function(site = "ONCOLOGY")
 ```
 _________________________________________________________________________________________________________________________________________________________________
 *End of Report.*

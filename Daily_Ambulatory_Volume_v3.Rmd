@@ -1291,7 +1291,7 @@ current_encounters <- as.numeric((vol_trend_mshs %>%
   filter(Appt.Month == format((lubridate::floor_date(max(scheduling_data$Appt.DateYear), unit = "month")-1), "%B")))$monthly_vol)
 total_encounters <- prettyNum(current_encounters, big.mark = ',')
 prev_encounters <- as.numeric((vol_trend_mshs %>% 
-  filter(Appt.Year == as.numeric(last_year)) %>% 
+  filter(Appt.Year == format((lubridate::floor_date(max(scheduling_data$Appt.DateYear), unit = "year")-years(1)), "%Y")) %>% 
   filter(Appt.Month == format((lubridate::floor_date(max(scheduling_data$Appt.DateYear), unit = "month")-1), "%B")))$monthly_vol)
 total_encounters_comp <- percent((current_encounters-prev_encounters)/prev_encounters,0)
 total_encounters_comp <- as.character(ifelse(total_encounters_comp >0, 
@@ -1313,14 +1313,14 @@ total_amb_prev_year <- as.character(ifelse(total_amb_prev_year >0,
 ```
 
 
-:::: {.blackbox data-latex=""}
-::: {.center data-latex=""}
-<font size="4">**In `r full_month` `r full_year`:**</font>
-:::
-<font size="4">--  Total ambulatory encounters were `r total_encounters`. This is `r total_encounters_comp`.</font><br/>
-<font size="4">--  In-person encounters `r total_in_person`.</font><br/>
-<font size="4">--  Total ambulatory encounters `r total_amb_prior_year` from `r last_year` monthly average and `r total_amb_prev_year` from 2019 monthly average.
-::::
+<!-- :::: {.blackbox data-latex=""} -->
+<!-- ::: {.center data-latex=""} -->
+<!-- <font size="4">**In `r full_month` `r full_year`:**</font> -->
+<!-- ::: -->
+<!-- <font size="4">--  Total ambulatory encounters were `r total_encounters`. This is `r total_encounters_comp`.</font><br/> -->
+<!-- <font size="4">--  In-person encounters `r total_in_person`.</font><br/> -->
+<!-- <font size="4">--  Total ambulatory encounters `r total_amb_prior_year` from `r last_year` monthly average and `r total_amb_prev_year` from 2019 monthly average. -->
+<!-- :::: -->
 
 
 ### MSHS Volume by Specialty
@@ -2177,8 +2177,7 @@ vol_takeaways_function <- function(site){
                                              filter(Appt.Month == format((lubridate::floor_date(max(scheduling_data$Appt.DateYear), unit = "month")-1), "%B")))$monthly_vol)
     total_encounters_site <- prettyNum(current_encounters_site, big.mark = ',')
     prev_encounters_site <- as.numeric((vol_trend_site %>%
-                                          filter(Appt.Year == as.numeric(last_year)) %>% 
-                                          # filter(Appt.Year == format((lubridate::floor_date(max(scheduling_data$Appt.DateYear), unit = "year")-years(1)), "%Y")) %>%
+                                          filter(Appt.Year == format((lubridate::floor_date(max(scheduling_data$Appt.DateYear), unit = "year")-years(1)), "%Y")) %>%
                                           filter(Appt.Month == format((lubridate::floor_date(max(scheduling_data$Appt.DateYear), unit = "month")), "%B")))$monthly_vol)
     total_encounters_comp_site <- percent((current_encounters_site-prev_encounters_site)/prev_encounters_site,0)
     total_encounters_comp_site <- as.character(ifelse(total_encounters_comp_site >0,
@@ -2538,14 +2537,14 @@ print(vol_breakdown_site_graph(site = "MSBI"))
 vol_takeaways_function(site = "MSBI")[1]
 ```
 
-:::: {.blackbox data-latex=""}
-::: {.center data-latex=""}
-<font size="4">**For `r vol_takeaways_function(site = "MSBI")[1]` in `r full_month` `r full_year`:**</font>
-:::
-<font size="4">--  Total ambulatory encounters were `r vol_takeaways_function(site = "MSBI")[2]`. This is `r vol_takeaways_function(site = "MSBI")[3]`.</font><br/>
-<font size="4">--  In-person encounters `r vol_takeaways_function(site = "MSBI")[4]`.</font><br/>
-<font size="4">--  Total ambulatory encounters `r vol_takeaways_function(site = "MSBI")[5]` from `r last_year` monthly average and `r vol_takeaways_function(site = "MSBI")[6]` from 2019 monthly average.
-::::
+<!-- :::: {.blackbox data-latex=""} -->
+<!-- ::: {.center data-latex=""} -->
+<!-- <font size="4">**For `r vol_takeaways_function(site = "MSBI")[1]` in `r full_month` `r full_year`:**</font> -->
+<!-- ::: -->
+<!-- <font size="4">--  Total ambulatory encounters were `r vol_takeaways_function(site = "MSBI")[2]`. This is `r vol_takeaways_function(site = "MSBI")[3]`.</font><br/> -->
+<!-- <font size="4">--  In-person encounters `r vol_takeaways_function(site = "MSBI")[4]`.</font><br/> -->
+<!-- <font size="4">--  Total ambulatory encounters `r vol_takeaways_function(site = "MSBI")[5]` from `r last_year` monthly average and `r vol_takeaways_function(site = "MSBI")[6]` from 2019 monthly average. -->
+<!-- :::: -->
 __________________________________________________________________________________________________________________________________________________________
 ### MSBI Volume by Dept
 <!-- <span style='font-size: 16px; color: black'>**MSBI `r todays_month`-`r todays_year` MTD Volume by Department**</span><br/> -->
@@ -2579,14 +2578,14 @@ print(vol_trend_site_graph(site = "MSDD"))
 print(vol_breakdown_site_graph(site = "MSDD"))
 ```
 
-:::: {.blackbox data-latex=""}
-::: {.center data-latex=""}
-<font size="4">**For `r vol_takeaways_function(site = "MSDD")[1]` in `r full_month` `r full_year`:**</font>
-:::
-<font size="4">--  Total ambulatory encounters were `r vol_takeaways_function(site = "MSDD")[2]`. This is `r vol_takeaways_function(site = "MSDD")[3]`.</font><br/>
-<font size="4">--  In-person encounters `r vol_takeaways_function(site = "MSDD")[4]`.</font><br/>
-<font size="4">--  Total ambulatory encounters `r vol_takeaways_function(site = "MSDD")[5]` from `r last_year` monthly average and `r vol_takeaways_function(site = "MSDD")[6]` from 2019 monthly average.
-::::
+<!-- :::: {.blackbox data-latex=""} -->
+<!-- ::: {.center data-latex=""} -->
+<!-- <font size="4">**For `r vol_takeaways_function(site = "MSDD")[1]` in `r full_month` `r full_year`:**</font> -->
+<!-- ::: -->
+<!-- <font size="4">--  Total ambulatory encounters were `r vol_takeaways_function(site = "MSDD")[2]`. This is `r vol_takeaways_function(site = "MSDD")[3]`.</font><br/> -->
+<!-- <font size="4">--  In-person encounters `r vol_takeaways_function(site = "MSDD")[4]`.</font><br/> -->
+<!-- <font size="4">--  Total ambulatory encounters `r vol_takeaways_function(site = "MSDD")[5]` from `r last_year` monthly average and `r vol_takeaways_function(site = "MSDD")[6]` from 2019 monthly average. -->
+<!-- :::: -->
 _________________________________________________________________________________________________________________________________________________________________
 ### MSDD Volume by Dept
 <!-- <span style='font-size: 16px; color: black'>**MSDD `r todays_month`-`r todays_year` MTD Volume by Department**</span><br/> -->
@@ -2620,14 +2619,14 @@ print(vol_trend_site_graph(site = "MSH- AMBULATORY CARE"))
 print(vol_breakdown_site_graph(site = "MSH- AMBULATORY CARE"))
 ```
 
-:::: {.blackbox data-latex=""}
-::: {.center data-latex=""}
-<font size="4">**For `r vol_takeaways_function(site = "MSH- AMBULATORY CARE")[1]` in `r full_month` `r full_year`:**</font>
-:::
-<font size="4">--  Total ambulatory encounters were `r vol_takeaways_function(site = "MSH- AMBULATORY CARE")[2]`. This is `r vol_takeaways_function(site = "MSH- AMBULATORY CARE")[3]`.</font><br/>
-<font size="4">--  In-person encounters `r vol_takeaways_function(site = "MSH- AMBULATORY CARE")[4]`.</font><br/>
-<font size="4">--  Total ambulatory encounters `r vol_takeaways_function(site = "MSH- AMBULATORY CARE")[5]` from `r last_year` monthly average and `r vol_takeaways_function(site = "MSH- AMBULATORY CARE")[6]` from 2019 monthly average.
-::::
+<!-- :::: {.blackbox data-latex=""} -->
+<!-- ::: {.center data-latex=""} -->
+<!-- <font size="4">**For `r vol_takeaways_function(site = "MSH- AMBULATORY CARE")[1]` in `r full_month` `r full_year`:**</font> -->
+<!-- ::: -->
+<!-- <font size="4">--  Total ambulatory encounters were `r vol_takeaways_function(site = "MSH- AMBULATORY CARE")[2]`. This is `r vol_takeaways_function(site = "MSH- AMBULATORY CARE")[3]`.</font><br/> -->
+<!-- <font size="4">--  In-person encounters `r vol_takeaways_function(site = "MSH- AMBULATORY CARE")[4]`.</font><br/> -->
+<!-- <font size="4">--  Total ambulatory encounters `r vol_takeaways_function(site = "MSH- AMBULATORY CARE")[5]` from `r last_year` monthly average and `r vol_takeaways_function(site = "MSH- AMBULATORY CARE")[6]` from 2019 monthly average. -->
+<!-- :::: -->
 _________________________________________________________________________________________________________________________________________________________________
 ### MSH- AMBULATORY CARE Volume by Dept
 <!-- <span style='font-size: 16px; color: black'>**MSH- AMBULATORY CARE `r todays_month`-`r todays_year` MTD Volume by Department**</span><br/> -->
@@ -2661,14 +2660,14 @@ print(vol_trend_site_graph(site = "MSH-MSDFP"))
 print(vol_breakdown_site_graph(site = "MSH-MSDFP"))
 ```
 
-:::: {.blackbox data-latex=""}
-::: {.center data-latex=""}
-<font size="4">**For `r vol_takeaways_function(site = "MSH-MSDFP")[1]` in `r full_month` `r full_year`:**</font>
-:::
-<font size="4">--  Total ambulatory encounters were `r vol_takeaways_function(site = "MSH-MSDFP")[2]`. This is `r vol_takeaways_function(site = "MSH-MSDFP")[3]`.</font><br/>
-<font size="4">--  In-person encounters `r vol_takeaways_function(site = "MSH-MSDFP")[4]`.</font><br/>
-<font size="4">--  Total ambulatory encounters `r vol_takeaways_function(site = "MSH-MSDFP")[5]` from `r last_year` monthly average and `r vol_takeaways_function(site = "MSH-MSDFP")[6]` from 2019 monthly average.
-::::
+<!-- :::: {.blackbox data-latex=""} -->
+<!-- ::: {.center data-latex=""} -->
+<!-- <font size="4">**For `r vol_takeaways_function(site = "MSH-MSDFP")[1]` in `r full_month` `r full_year`:**</font> -->
+<!-- ::: -->
+<!-- <font size="4">--  Total ambulatory encounters were `r vol_takeaways_function(site = "MSH-MSDFP")[2]`. This is `r vol_takeaways_function(site = "MSH-MSDFP")[3]`.</font><br/> -->
+<!-- <font size="4">--  In-person encounters `r vol_takeaways_function(site = "MSH-MSDFP")[4]`.</font><br/> -->
+<!-- <font size="4">--  Total ambulatory encounters `r vol_takeaways_function(site = "MSH-MSDFP")[5]` from `r last_year` monthly average and `r vol_takeaways_function(site = "MSH-MSDFP")[6]` from 2019 monthly average. -->
+<!-- :::: -->
 
 _________________________________________________________________________________________________________________________________________________________________
 ### MSH-MSDFP Volume by Dept
@@ -2703,14 +2702,14 @@ print(vol_trend_site_graph(site = "MSM"))
 print(vol_breakdown_site_graph(site = "MSM"))
 ```
 
-:::: {.blackbox data-latex=""}
-::: {.center data-latex=""}
-<font size="4">**For `r vol_takeaways_function(site = "MSM")[1]` in `r full_month` `r full_year`:**</font>
-:::
-<font size="4">--  Total ambulatory encounters were `r vol_takeaways_function(site = "MSM")[2]`. This is `r vol_takeaways_function(site = "MSM")[3]`.</font><br/>
-<font size="4">--  In-person encounters `r vol_takeaways_function(site = "MSM")[4]`.</font><br/>
-<font size="4">--  Total ambulatory encounters `r vol_takeaways_function(site = "MSM")[5]` from `r last_year` monthly average and `r vol_takeaways_function(site = "MSM")[6]` from 2019 monthly average.
-::::
+<!-- :::: {.blackbox data-latex=""} -->
+<!-- ::: {.center data-latex=""} -->
+<!-- <font size="4">**For `r vol_takeaways_function(site = "MSM")[1]` in `r full_month` `r full_year`:**</font> -->
+<!-- ::: -->
+<!-- <font size="4">--  Total ambulatory encounters were `r vol_takeaways_function(site = "MSM")[2]`. This is `r vol_takeaways_function(site = "MSM")[3]`.</font><br/> -->
+<!-- <font size="4">--  In-person encounters `r vol_takeaways_function(site = "MSM")[4]`.</font><br/> -->
+<!-- <font size="4">--  Total ambulatory encounters `r vol_takeaways_function(site = "MSM")[5]` from `r last_year` monthly average and `r vol_takeaways_function(site = "MSM")[6]` from 2019 monthly average. -->
+<!-- :::: -->
 _________________________________________________________________________________________________________________________________________________________________
 ### MSM Volume by Dept
 <!-- <span style='font-size: 16px; color: black'>**MSM `r todays_month`-`r todays_year` MTD Volume by Department**</span><br/> -->
@@ -2767,14 +2766,14 @@ print(vol_breakdown_site_graph(site = "MSUS"))
 ```
 _________________________________________________________________________________________________________________________________________________________________
 
-:::: {.blackbox data-latex=""}
-::: {.center data-latex=""}
-<font size="4">**For `r vol_takeaways_function(site = "MSUS")[1]` in `r full_month` `r full_year`:**</font>
-:::
-<font size="4">--  Total ambulatory encounters were `r vol_takeaways_function(site = "MSUS")[2]`. This is `r vol_takeaways_function(site = "MSUS")[3]`.</font><br/>
-<font size="4">--  In-person encounters `r vol_takeaways_function(site = "MSUS")[4]`.</font><br/>
-<font size="4">--  Total ambulatory encounters `r vol_takeaways_function(site = "MSUS")[5]` from `r last_year` monthly average and `r vol_takeaways_function(site = "MSUS")[6]` from 2019 monthly average.
-::::
+<!-- :::: {.blackbox data-latex=""} -->
+<!-- ::: {.center data-latex=""} -->
+<!-- <font size="4">**For `r vol_takeaways_function(site = "MSUS")[1]` in `r full_month` `r full_year`:**</font> -->
+<!-- ::: -->
+<!-- <font size="4">--  Total ambulatory encounters were `r vol_takeaways_function(site = "MSUS")[2]`. This is `r vol_takeaways_function(site = "MSUS")[3]`.</font><br/> -->
+<!-- <font size="4">--  In-person encounters `r vol_takeaways_function(site = "MSUS")[4]`.</font><br/> -->
+<!-- <font size="4">--  Total ambulatory encounters `r vol_takeaways_function(site = "MSUS")[5]` from `r last_year` monthly average and `r vol_takeaways_function(site = "MSUS")[6]` from 2019 monthly average. -->
+<!-- :::: -->
 _________________________________________________________________________________________________________________________________________________________________
 ### MSUS Volume by Dept
 <!-- <span style='font-size: 16px; color: black'>**MSUS `r todays_month`-`r todays_year` MTD Volume by Department**</span><br/> -->
@@ -2808,14 +2807,14 @@ print(vol_trend_site_graph(site = "MSW"))
 print(vol_breakdown_site_graph(site = "MSW"))
 ```
 
-:::: {.blackbox data-latex=""}
-::: {.center data-latex=""}
-<font size="4">**For `r vol_takeaways_function(site = "MSW")[1]` in `r full_month` `r full_year`:**</font>
-:::
-<font size="4">--  Total ambulatory encounters were `r vol_takeaways_function(site = "MSW")[2]`. This is `r vol_takeaways_function(site = "MSW")[3]`.</font><br/>
-<font size="4">--  In-person encounters `r vol_takeaways_function(site = "MSW")[4]`.</font><br/>
-<font size="4">--  Total ambulatory encounters `r vol_takeaways_function(site = "MSW")[5]` from `r last_year` monthly average and `r vol_takeaways_function(site = "MSW")[6]` from 2019 monthly average.
-::::
+<!-- :::: {.blackbox data-latex=""} -->
+<!-- ::: {.center data-latex=""} -->
+<!-- <font size="4">**For `r vol_takeaways_function(site = "MSW")[1]` in `r full_month` `r full_year`:**</font> -->
+<!-- ::: -->
+<!-- <font size="4">--  Total ambulatory encounters were `r vol_takeaways_function(site = "MSW")[2]`. This is `r vol_takeaways_function(site = "MSW")[3]`.</font><br/> -->
+<!-- <font size="4">--  In-person encounters `r vol_takeaways_function(site = "MSW")[4]`.</font><br/> -->
+<!-- <font size="4">--  Total ambulatory encounters `r vol_takeaways_function(site = "MSW")[5]` from `r last_year` monthly average and `r vol_takeaways_function(site = "MSW")[6]` from 2019 monthly average. -->
+<!-- :::: -->
 _________________________________________________________________________________________________________________________________________________________________
 ### MSW Volume by Dept
 <!-- <span style='font-size: 16px; color: black'>**MSW `r todays_month`-`r todays_year` MTD Volume by Department**</span><br/> -->
@@ -2849,14 +2848,14 @@ print(vol_trend_site_graph(site = "NETWORK"))
 print(vol_breakdown_site_graph(site = "NETWORK"))
 ```
 
-:::: {.blackbox data-latex=""}
-::: {.center data-latex=""}
-<font size="4">**For `r vol_takeaways_function(site = "NETWORK")[1]` in `r full_month` `r full_year`:**</font>
-:::
-<font size="4">--  Total ambulatory encounters were `r vol_takeaways_function(site = "NETWORK")[2]`. This is `r vol_takeaways_function(site = "NETWORK")[3]`.</font><br/>
-<font size="4">--  In-person encounters `r vol_takeaways_function(site = "NETWORK")[4]`.</font><br/>
-<font size="4">--  Total ambulatory encounters `r vol_takeaways_function(site = "NETWORK")[5]` from `r last_year` monthly average and `r vol_takeaways_function(site = "NETWORK")[6]` from 2019 monthly average.
-::::
+<!-- :::: {.blackbox data-latex=""} -->
+<!-- ::: {.center data-latex=""} -->
+<!-- <font size="4">**For `r vol_takeaways_function(site = "NETWORK")[1]` in `r full_month` `r full_year`:**</font> -->
+<!-- ::: -->
+<!-- <font size="4">--  Total ambulatory encounters were `r vol_takeaways_function(site = "NETWORK")[2]`. This is `r vol_takeaways_function(site = "NETWORK")[3]`.</font><br/> -->
+<!-- <font size="4">--  In-person encounters `r vol_takeaways_function(site = "NETWORK")[4]`.</font><br/> -->
+<!-- <font size="4">--  Total ambulatory encounters `r vol_takeaways_function(site = "NETWORK")[5]` from `r last_year` monthly average and `r vol_takeaways_function(site = "NETWORK")[6]` from 2019 monthly average. -->
+<!-- :::: -->
 _________________________________________________________________________________________________________________________________________________________________
 ### NETWORK Volume by Dept
 <!-- <span style='font-size: 16px; color: black'>**NETWORK `r todays_month`-`r todays_year` MTD Volume by Department**</span><br/> -->
@@ -2915,14 +2914,14 @@ print(vol_trend_site_graph(site = "ONCOLOGY"))
 print(vol_breakdown_site_graph(site = "ONCOLOGY"))
 ```
 
-:::: {.blackbox data-latex=""}
-::: {.center data-latex=""}
-<font size="4">**For `r vol_takeaways_function(site = "ONCOLOGY")[1]` in `r full_month` `r full_year`:**</font>
-:::
-<font size="4">--  Total ambulatory encounters were `r vol_takeaways_function(site = "ONCOLOGY")[2]`. This is `r vol_takeaways_function(site = "ONCOLOGY")[3]`.</font><br/>
-<font size="4">--  In-person encounters `r vol_takeaways_function(site = "ONCOLOGY")[4]`.</font><br/>
-<font size="4">--  Total ambulatory encounters `r vol_takeaways_function(site = "ONCOLOGY")[5]` from `r last_year` monthly average and `r vol_takeaways_function(site = "ONCOLOGY")[6]` from 2019 monthly average.
-::::
+<!-- :::: {.blackbox data-latex=""} -->
+<!-- ::: {.center data-latex=""} -->
+<!-- <font size="4">**For `r vol_takeaways_function(site = "ONCOLOGY")[1]` in `r full_month` `r full_year`:**</font> -->
+<!-- ::: -->
+<!-- <font size="4">--  Total ambulatory encounters were `r vol_takeaways_function(site = "ONCOLOGY")[2]`. This is `r vol_takeaways_function(site = "ONCOLOGY")[3]`.</font><br/> -->
+<!-- <font size="4">--  In-person encounters `r vol_takeaways_function(site = "ONCOLOGY")[4]`.</font><br/> -->
+<!-- <font size="4">--  Total ambulatory encounters `r vol_takeaways_function(site = "ONCOLOGY")[5]` from `r last_year` monthly average and `r vol_takeaways_function(site = "ONCOLOGY")[6]` from 2019 monthly average. -->
+<!-- :::: -->
 _______________________________________________________________________________________________________________________________________________________________
 ### ONCOLOGY Volume by Dept
 <!-- <span style='font-size: 16px; color: black'>**ONCOLOGY `r todays_month`-`r todays_year` MTD Volume by Department**</span><br/> -->

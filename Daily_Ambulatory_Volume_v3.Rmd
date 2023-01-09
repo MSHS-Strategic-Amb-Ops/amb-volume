@@ -1291,7 +1291,7 @@ current_encounters <- as.numeric((vol_trend_mshs %>%
   filter(Appt.Month == format((lubridate::floor_date(max(scheduling_data$Appt.DateYear), unit = "month")-1), "%B")))$monthly_vol)
 total_encounters <- prettyNum(current_encounters, big.mark = ',')
 prev_encounters <- as.numeric((vol_trend_mshs %>% 
-  filter(Appt.Year == format((lubridate::floor_date(max(scheduling_data$Appt.DateYear), unit = "year")-years(1)), "%Y")) %>% 
+  filter(Appt.Year == as.numeric(last_year)) %>% 
   filter(Appt.Month == format((lubridate::floor_date(max(scheduling_data$Appt.DateYear), unit = "month")-1), "%B")))$monthly_vol)
 total_encounters_comp <- percent((current_encounters-prev_encounters)/prev_encounters,0)
 total_encounters_comp <- as.character(ifelse(total_encounters_comp >0, 
@@ -2177,7 +2177,8 @@ vol_takeaways_function <- function(site){
                                              filter(Appt.Month == format((lubridate::floor_date(max(scheduling_data$Appt.DateYear), unit = "month")-1), "%B")))$monthly_vol)
     total_encounters_site <- prettyNum(current_encounters_site, big.mark = ',')
     prev_encounters_site <- as.numeric((vol_trend_site %>%
-                                          filter(Appt.Year == format((lubridate::floor_date(max(scheduling_data$Appt.DateYear), unit = "year")-years(1)), "%Y")) %>%
+                                          filter(Appt.Year == as.numeric(last_year)) %>% 
+                                          # filter(Appt.Year == format((lubridate::floor_date(max(scheduling_data$Appt.DateYear), unit = "year")-years(1)), "%Y")) %>%
                                           filter(Appt.Month == format((lubridate::floor_date(max(scheduling_data$Appt.DateYear), unit = "month")), "%B")))$monthly_vol)
     total_encounters_comp_site <- percent((current_encounters_site-prev_encounters_site)/prev_encounters_site,0)
     total_encounters_comp_site <- as.character(ifelse(total_encounters_comp_site >0,

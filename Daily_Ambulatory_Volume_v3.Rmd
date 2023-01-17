@@ -276,16 +276,19 @@ scale_fill_MountSinai <- function(palette = "all", discrete = TRUE, reverse = FA
 ```{r Import Data, echo = FALSE, warning = FALSE, message = FALSE}
 '%!in%' <- function(x,y)!('%in%'(x,y))
 
-# scheduling_data_raw <- readRDS("/SharedDrive/deans/Presidents/SixSigma/Individual Folders/Current Employees/Engineers/So Youn Kweon/server-upload/historical_data_Jan21Dec22.rds") %>%
-#   # filter(!is.na(Campus)) %>%
-#   # filter(Campus %in% c("NETWORK","MSM","MSH-MSDFP","ONCOLOGY","MSW","MSBI","MSUS","MSH- AMBULATORY CARE","MSDD")) %>%
+# scheduling_data_raw <- readRDS("/SharedDrive/deans/Presidents/SixSigma/Individual Folders/Current Employees/Engineers/So Youn Kweon/server-upload/historical_data.rds") %>%
+#   mutate(Campus = ifelse(Campus == "MSDMG", "MSDD", Campus)) %>%
+#   filter(!is.na(Campus)) %>%
+#   filter(Campus %in% c("NETWORK","MSM","MSH-MSDFP","ONCOLOGY","MSW","MSBI","MSUS","MSH- AMBULATORY CARE","MSDD")) %>%
 #   filter(Appt.Status == "Arrived")%>%
-#   filter(Appt.DateYear >= as.Date("2021-01-01", format="%Y-%m-%d") & Appt.DateYear <= as.Date(max(Appt.Made.DTTM), format="%Y-%m-%d"))
+#   filter(Appt.DateYear >= as.Date("2022-01-01", format="%Y-%m-%d") & Appt.DateYear <= as.Date("2023-01-14", format="%Y-%m-%d"))
+  # filter(Appt.DateYear >= as.Date("2022-01-01", format="%Y-%m-%d") & Appt.DateYear <= as.Date(max(Appt.Made.DTTM), format="%Y-%m-%d"))
 #
 # require(openxlsx)
 # write.xlsx(scheduling_data_raw, "/SharedDrive/deans/Presidents/SixSigma/Individual Folders/Current Employees/Engineers/So Youn Kweon/server-upload/scheduling_data_Dec22.xlsx")
 
 scheduling_data_raw <- readRDS("/nfs/data/Applications/Ambulatory/Data_Updated/historical_data.rds") %>%
+  mutate(Campus = ifelse(Campus == "MSDMG", "MSDD", Campus)) %>%
   filter(!is.na(Campus)) %>%
   filter(Campus %in% c("NETWORK","MSM","MSH-MSDFP","ONCOLOGY","MSW","MSBI","MSUS","MSH- AMBULATORY CARE","MSDD")) %>%
   filter(Appt.Status == "Arrived")%>%
@@ -495,7 +498,9 @@ visits_end_date <- max(scheduling_data$Appt.DateYear)
 
   daily_vol <- scheduling_data %>%
   filter(Appt.Status == "Arrived") %>%
-  filter(Appt.DateYear >= todays_date-7 & Appt.DateYear < todays_date+8) %>%
+    filter(Appt.DateYear >= todays_date-14) %>%
+
+  # filter(Appt.DateYear >= todays_date-7 & Appt.DateYear < todays_date+8) %>%
   group_by(Campus, Appt.Year, Appt.WeekNum, Appt.DateYear, Appt.Day, Visit.Method) %>%
   summarise(daily_vol = n()) %>%
   pivot_wider(
@@ -661,7 +666,7 @@ ________________________________________________________________________________
 #   summarise(daily_vol = sum(daily_vol)) %>%
 #   arrange(Visit.Method, Appt.DateYear, Appt.Day) %>%
 #   group_by(Visit.Method) %>%
-#   mutate(prev_day = shift(daily_vol)) %>%
+#   mutate(prev_day = data.table::shift(daily_vol)) %>%
 #   mutate(perc_diff = percent((daily_vol - prev_day)/prev_day,1)) %>%
 #      mutate(Appt.DateYear = as.character(Appt.DateYear)) %>%
 #     filter(!is.na(prev_day)) %>%
@@ -737,7 +742,7 @@ daily_vol_mshs <- daily_vol %>%
   summarise(daily_vol = sum(daily_vol, na.rm = TRUE)) %>%
   arrange(Visit.Method, Appt.Day) %>%
   group_by(Appt.Day, Visit.Method) %>%
-  mutate(prev_week = shift(daily_vol)) %>%
+  mutate(prev_week = data.table::shift(daily_vol)) %>%
   mutate(perc_diff = percent((daily_vol - prev_week)/prev_week,1)) %>%
   filter(!is.na(prev_week)) %>%
   arrange(Appt.DateYear) %>%
@@ -807,7 +812,7 @@ daily_vol_last_year_mshs <- daily_vol_last_year %>%
   arrange(Visit.Method, Appt.Day) %>%
   group_by(Visit.Method, Appt.Day) %>%
   arrange(Visit.Method, Appt.DateYear, Appt.Day) %>%
-  mutate(prev_day = shift(daily_vol)) %>%
+  mutate(prev_day = data.table::shift(daily_vol)) %>%
   mutate(perc_diff = percent((daily_vol - prev_day)/prev_day,1)) %>%
      mutate(Appt.DateYear = as.character(Appt.DateYear)) %>%
     filter(!is.na(prev_day)) %>%
@@ -877,7 +882,7 @@ weekly_vol_mshs <- weekly_vol %>%
   summarise(weekly_vol = sum(weekly_vol, na.rm = TRUE)) %>%
   arrange(Visit.Method, Appt.Week) %>%
   group_by(Visit.Method) %>%
-  mutate(prev_week = shift(weekly_vol)) %>%
+  mutate(prev_week = data.table::shift(weekly_vol)) %>%
   mutate(perc_diff = percent((weekly_vol - prev_week)/prev_week,1)) %>%
   filter(!is.na(prev_week)) %>%
   # filter(Appt.Week != min(Appt.Week)) %>%
@@ -941,7 +946,7 @@ weekly_vol_last_year_mshs <- weekly_vol_last_year %>%
   summarise(weekly_vol = sum(weekly_vol, na.rm = TRUE)) %>%
   arrange(Appt.WeekNum, Visit.Method, Appt.Year) %>%
   group_by(Appt.WeekNum, Visit.Method) %>%
-  mutate(prev_week = shift(weekly_vol)) %>%
+  mutate(prev_week = data.table::shift(weekly_vol)) %>%
   mutate(perc_diff = percent((weekly_vol - prev_week)/prev_week,1)) %>%
   filter(!is.na(prev_week)) %>%
   ungroup() %>%
@@ -1194,7 +1199,7 @@ g1 <- ggplot(vol_trend_mshs,
     
     perc_diff <- vol_trend_mshs %>%
        group_by(Appt.Month) %>%
-      mutate(last_year = shift(monthly_vol)) %>%
+      mutate(last_year = data.table::shift(monthly_vol)) %>%
       mutate(perc_diff = percent((monthly_vol - last_year)/last_year,0)) %>%
       group_by(Appt.Month) %>% 
       filter(duplicated(Appt.Month) | n()==1) %>%
@@ -1340,7 +1345,7 @@ monthly_vol_mshs_specialty <- monthly_vol %>%
   pivot_longer(5:6,
                names_to = "Appt.Year",
                values_to = "monthly_vol") %>%
-  mutate(last_year = shift(monthly_vol)) %>%
+  mutate(last_year = data.table::shift(monthly_vol)) %>%
   mutate(perc_diff = percent((monthly_vol - last_year)/last_year,1)) %>%
   filter(!is.na(last_year)) %>%
   pivot_wider(names_from = Visit.Method,
@@ -1587,7 +1592,7 @@ daily_vol_site_function <- function(site){
 #   summarise(daily_vol = sum(daily_vol)) %>%
 #   arrange(Visit.Method, Appt.DateYear, Appt.Day) %>%
 #   group_by(Visit.Method) %>%
-#   mutate(prev_day = shift(daily_vol)) %>%
+#   mutate(prev_day = data.table::shift(daily_vol)) %>%
 #   mutate(perc_diff = percent((daily_vol - prev_day)/prev_day,1)) %>%
 #      mutate(Appt.DateYear = as.character(Appt.DateYear)) %>%
 #     filter(!is.na(prev_day)) %>%
@@ -1657,13 +1662,14 @@ daily_vol_site_function <- function(site){
 #   column_spec(9:11, background = "#E6F8FF", width = "100px") %>%
 #   column_spec(1, width = "150px") %>%
 #   row_spec(nrow(daily_vol_site_all), bold = T)
+
 daily_vol_site <- daily_vol %>%
   filter(Campus == site) %>%
   group_by(Appt.DateYear, Appt.Day, Visit.Method) %>%
   summarise(daily_vol = sum(daily_vol, na.rm = TRUE)) %>%
   arrange(Visit.Method, Appt.Day) %>%
   group_by(Appt.Day, Visit.Method) %>%
-  mutate(prev_week = shift(daily_vol)) %>%
+  mutate(prev_week = data.table::shift(daily_vol)) %>%
   mutate(perc_diff = percent((daily_vol - prev_week)/prev_week,1)) %>%
   filter(!is.na(prev_week)) %>%
   arrange(Appt.DateYear) %>%
@@ -1729,7 +1735,7 @@ daily_vol_site_all %>%
 ```{r Site Daily Volume Last Year Comparison Function, echo = FALSE, warning = FALSE, message = FALSE}
 daily_vol_last_year_site_function <- function(site){
 #
-  # site <- "MSH- AMBULATORY CARE"
+  site <- "MSM"
   daily_vol_last_year_site <- daily_vol_last_year %>%
   filter(Campus == site) %>%
   group_by(Appt.DateYear, Appt.Day, Visit.Method) %>%
@@ -1737,7 +1743,7 @@ daily_vol_last_year_site_function <- function(site){
   arrange(Visit.Method, Appt.Day) %>%
   group_by(Visit.Method, Appt.Day) %>%
   arrange(Visit.Method, Appt.DateYear, Appt.Day) %>%
-  mutate(prev_day = shift(daily_vol)) %>%
+  mutate(prev_day = data.table::shift(daily_vol)) %>%
   mutate(perc_diff = percent((daily_vol - prev_day)/prev_day,1)) %>%
      mutate(Appt.DateYear = as.character(Appt.DateYear)) %>%
     filter(!is.na(prev_day)) %>%
@@ -1810,7 +1816,7 @@ weekly_vol_site_function <- function(site){
   summarise(weekly_vol = sum(weekly_vol, na.rm = TRUE)) %>%
   arrange(Visit.Method, Appt.Week) %>%
   group_by(Visit.Method) %>%
-  mutate(prev_week = shift(weekly_vol)) %>%
+  mutate(prev_week = data.table::shift(weekly_vol)) %>%
   mutate(perc_diff = percent((weekly_vol - prev_week)/prev_week,1)) %>%
   filter(!is.na(prev_week)) %>%
   # filter(Appt.Week != min(Appt.Week)) %>%
@@ -1881,7 +1887,7 @@ weekly_vol_last_year_site <- weekly_vol_last_year %>%
   summarise(weekly_vol = sum(weekly_vol, na.rm = TRUE)) %>%
   arrange(Appt.WeekNum, Visit.Method, Appt.Year) %>%
   group_by(Appt.WeekNum, Visit.Method) %>%
-  mutate(prev_week = shift(weekly_vol)) %>%
+  mutate(prev_week = data.table::shift(weekly_vol)) %>%
   mutate(perc_diff = percent((weekly_vol - prev_week)/prev_week,1)) %>%
   filter(!is.na(prev_week)) %>%
   ungroup() %>%
@@ -2076,7 +2082,7 @@ graph <- ggplot(vol_trend_site,
       table_theme()
     perc_diff <- vol_trend_site %>%
        group_by(Appt.Month) %>%
-      mutate(last_year = shift(monthly_vol)) %>%
+      mutate(last_year = data.table::shift(monthly_vol)) %>%
       mutate(perc_diff = percent((monthly_vol - last_year)/last_year,0)) %>%
       group_by(Appt.Month) %>%
       filter(duplicated(Appt.Month) | n()==1) %>%
@@ -2216,7 +2222,7 @@ monthly_vol_dept <- monthly_vol %>%
   pivot_longer(7:8,
                names_to = "Appt.Year",
                values_to = "monthly_vol") %>%
-  mutate(last_year = shift(monthly_vol)) %>%
+  mutate(last_year = data.table::shift(monthly_vol)) %>%
   mutate(perc_diff = percent((monthly_vol - last_year)/last_year,0)) %>%
   filter(!is.na(last_year)) %>%
   pivot_wider(names_from = Visit.Method,
@@ -2534,7 +2540,6 @@ ________________________________________________________________________________
 ```{r MSBI Metrics Output4, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
 print(vol_trend_site_graph(site = "MSBI"))
 print(vol_breakdown_site_graph(site = "MSBI"))
-vol_takeaways_function(site = "MSBI")[1]
 ```
 
 <!-- :::: {.blackbox data-latex=""} -->

@@ -496,7 +496,7 @@ visits_end_date <- max(scheduling_data$Appt.DateYear)
 
   daily_vol <- scheduling_data %>%
   filter(Appt.Status == "Arrived") %>%
-  filter(Appt.DateYear >= todays_date-14) %>%
+  filter(Appt.DateYear >= todays_date-7) %>%
   group_by(Campus, Appt.Year, Appt.WeekNum, Appt.DateYear, Appt.Day, Visit.Method) %>%
   summarise(daily_vol = n()) %>%
   pivot_wider(

@@ -286,8 +286,9 @@ scale_fill_MountSinai <- function(palette = "all", discrete = TRUE, reverse = FA
 # write.xlsx(scheduling_data_raw, "/SharedDrive/deans/Presidents/SixSigma/Individual Folders/Current Employees/Engineers/So Youn Kweon/server-upload/scheduling_data_Dec22.xlsx")
 
 scheduling_data_raw <- readRDS("/nfs/data/Applications/Ambulatory/Data_Updated/historical_data.rds") %>%
+  mutate(Campus = ifelse(Campus == "MSDD", "MSDMG", Campus)) %>%
   filter(!is.na(Campus)) %>%
-  filter(Campus %in% c("NETWORK","MSM","MSH-MSDFP","ONCOLOGY","MSW","MSBI","MSUS","MSH- AMBULATORY CARE","MSDD")) %>%
+  filter(Campus %in% c("NETWORK","MSM","MSH-MSDFP","ONCOLOGY","MSW","MSBI","MSUS","MSH- AMBULATORY CARE","MSDMG")) %>%
   filter(Appt.Status == "Arrived")%>%
   filter(Appt.DateYear >= as.Date("2022-01-01", format="%Y-%m-%d") & Appt.DateYear <= as.Date(max(Appt.Made.DTTM), format="%Y-%m-%d"))
 
@@ -304,7 +305,7 @@ radiology_ref <- read.csv("/nfs/data/Applications/Ambulatory/Radiology_Site_Mapp
 ```{r 2019 Past Year Volume Reference, echo = FALSE, warning = FALSE, message = FALSE}
 # In Person + Telehealth (Includes Radiology and Rad Onc) - Based on Exeutive Dashboard Tableau Workbook
 avg_2019_ref <- data.frame(
-  Campus = c("MSHS", "MSBI", "MSDD", "MSH- AMBULATORY CARE", "MSH-MSDFP",
+  Campus = c("MSHS", "MSBI", "MSDMG", "MSH- AMBULATORY CARE", "MSH-MSDFP",
              "MSHP", "MSM", "MSUS", "MSW", "NETWORK", "ONCOLOGY"),
   avg_2019 = c(416628, 15634, 25121, 37702, 118317,
              1334, 28211, 36684, 40224, 76345, 31823)
@@ -2559,45 +2560,45 @@ ________________________________________________________________________________
 # monthly_vol_dept_function(site = "MSBI")
 ```
 _________________________________________________________________________________________________________________________________________________________________
-## MSDD {.tabset .tabset-fade .tabset-pills}
-### MSDD Daily Volume
-```{r MSDD Metrics Output1, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
-print(daily_vol_site_function(site = "MSDD"))
-print(daily_vol_last_year_site_function(site = "MSDD"))
+## MSDMG {.tabset .tabset-fade .tabset-pills}
+### MSDMG Daily Volume
+```{r MSDMG Metrics Output1, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
+print(daily_vol_site_function(site = "MSDMG"))
+print(daily_vol_last_year_site_function(site = "MSDMG"))
 ```
 _________________________________________________________________________________________________________________________________________________________________
-### MSDD Weekly Volume
-```{r MSDD Metrics Output2, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
-print(weekly_vol_site_function(site = "MSDD"))
-print(weekly_vol_last_year_site_function(site = "MSDD"))
+### MSDMG Weekly Volume
+```{r MSDMG Metrics Output2, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
+print(weekly_vol_site_function(site = "MSDMG"))
+print(weekly_vol_last_year_site_function(site = "MSDMG"))
 ```
 _________________________________________________________________________________________________________________________________________________________________
-### MSDD Monthly Volume
-```{r MSDD Metrics Output3, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
-print(monthly_vol_site_function(site = "MSDD"))
+### MSDMG Monthly Volume
+```{r MSDMG Metrics Output3, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
+print(monthly_vol_site_function(site = "MSDMG"))
 ```
 _________________________________________________________________________________________________________________________________________________________________
-### MSDD Volume Graphs
-```{r MSDD Metrics Output4, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
-print(vol_trend_site_graph(site = "MSDD"))
-print(vol_breakdown_site_graph(site = "MSDD"))
+### MSDMG Volume Graphs
+```{r MSDMG Metrics Output4, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
+print(vol_trend_site_graph(site = "MSDMG"))
+print(vol_breakdown_site_graph(site = "MSDMG"))
 ```
 
 <!-- :::: {.blackbox data-latex=""} -->
 <!-- ::: {.center data-latex=""} -->
-<!-- <font size="4">**For `r vol_takeaways_function(site = "MSDD")[1]` in `r full_month` `r full_year`:**</font> -->
+<!-- <font size="4">**For `r vol_takeaways_function(site = "MSDMG")[1]` in `r full_month` `r full_year`:**</font> -->
 <!-- ::: -->
-<!-- <font size="4">--  Total ambulatory encounters were `r vol_takeaways_function(site = "MSDD")[2]`. This is `r vol_takeaways_function(site = "MSDD")[3]`.</font><br/> -->
-<!-- <font size="4">--  In-person encounters `r vol_takeaways_function(site = "MSDD")[4]`.</font><br/> -->
-<!-- <font size="4">--  Total ambulatory encounters `r vol_takeaways_function(site = "MSDD")[5]` from `r last_year` monthly average and `r vol_takeaways_function(site = "MSDD")[6]` from 2019 monthly average. -->
+<!-- <font size="4">--  Total ambulatory encounters were `r vol_takeaways_function(site = "MSDMG")[2]`. This is `r vol_takeaways_function(site = "MSDMG")[3]`.</font><br/> -->
+<!-- <font size="4">--  In-person encounters `r vol_takeaways_function(site = "MSDMG")[4]`.</font><br/> -->
+<!-- <font size="4">--  Total ambulatory encounters `r vol_takeaways_function(site = "MSDMG")[5]` from `r last_year` monthly average and `r vol_takeaways_function(site = "MSDMG")[6]` from 2019 monthly average. -->
 <!-- :::: -->
 _________________________________________________________________________________________________________________________________________________________________
-### MSDD Volume by Dept
-<!-- <span style='font-size: 16px; color: black'>**MSDD `r todays_month`-`r todays_year` MTD Volume by Department**</span><br/> -->
+### MSDMG Volume by Dept
+<!-- <span style='font-size: 16px; color: black'>**MSDMG `r todays_month`-`r todays_year` MTD Volume by Department**</span><br/> -->
 <!-- <span style='font-size: 14px; color: black'>*Includes visits up to `r date_end`</span><br/> -->
-<span style='font-size: 16px; color: black'>**MSDD `r full_month`-`r full_year` Volume by Department**</span><br/>
-```{r MSDD Metrics Output5, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
-# monthly_vol_dept_function(site = "MSDD")
+<span style='font-size: 16px; color: black'>**MSDMG `r full_month`-`r full_year` Volume by Department**</span><br/>
+```{r MSDMG Metrics Output5, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
+# monthly_vol_dept_function(site = "MSDMG")
 ```
 _________________________________________________________________________________________________________________________________________________________________
 ## MSH- AMBULATORY CARE {.tabset .tabset-fade .tabset-pills}

@@ -305,12 +305,21 @@ radiology_ref <- read.csv("/nfs/data/Applications/Ambulatory/Radiology_Site_Mapp
 
 ```{r 2019 Past Year Volume Reference, echo = FALSE, warning = FALSE, message = FALSE}
 # In Person + Telehealth (Includes Radiology and Rad Onc) - Based on Exeutive Dashboard Tableau Workbook
+# avg_2019_ref <- data.frame(
+#   Campus = c("MSHS", "MSBI", "MSDMG", "MSH- AMBULATORY CARE", "MSH-MSDFP",
+#              "MSHP", "MSM", "MSUS", "MSW", "NETWORK", "ONCOLOGY"),
+#   avg_2019 = c(416628, 15634, 25121, 37702, 118317,
+#              1334, 28211, 36684, 40224, 76345, 31823)
+# )
+
+
 avg_2019_ref <- data.frame(
   Campus = c("MSHS", "MSBI", "MSDMG", "MSH- AMBULATORY CARE", "MSH-MSDFP",
-             "MSHP", "MSM", "MSUS", "MSW", "NETWORK", "ONCOLOGY"),
+             "MSM", "MSUS", "MSW", "NETWORK", "ONCOLOGY"),
   avg_2019 = c(416628, 15634, 25121, 37702, 118317,
-             1334, 28211, 36684, 40224, 76345, 31823)
+               28211, 36684, 40224, 76345, 31823)
 )
+
 
 ```
 
@@ -1093,6 +1102,76 @@ monthly_vol_mshs_all %>%
            general = paste0("*Includes Rad Onc data up to ",rad_onc_date," and ",
                             "Radiology data up to ",radiology_date),
            escape = FALSE)
+```
+
+```{r Monthly Graph Ad-Hoc, echo = FALSE, warning = FALSE, message = FALSE}
+
+# monthly_vol <- read.csv(file.choose())
+# colnames(monthly_vol) <- c("Campus","Campus.Specialty","Department","Appt.Year","Appt.MonNum","Appt.Month","Visit.Method","monthly_vol")
+# sites <- c("MSBI", "MSDMG", "MSH- AMBULATORY CARE", "MSH-MSDFP",
+#              "MSM", "MSUS", "MSW", "NETWORK", "ONCOLOGY")
+# 
+# 
+# total_vol <- monthly_vol %>%
+#       filter(Campus %in% sites) %>%
+#       filter(Visit.Method != "Total") %>%
+#   group_by(Appt.Year) %>%
+#   summarise(total = sum(monthly_vol))
+# 
+# vol_breakdown_mshs <- monthly_vol %>%
+#       filter(Campus %in% sites) %>%
+#       filter(Visit.Method != "Total") %>%
+#       group_by(Appt.Year, Appt.Month, Appt.MonNum, Visit.Method) %>%
+#       summarise(monthly_vol = sum(monthly_vol)) %>%
+#       arrange(Appt.Year, Appt.MonNum) %>%
+#       filter(Appt.Year == 2022) 
+#       # head(-2) %>%
+#       # tail(26)
+#     
+#     max <- vol_breakdown_mshs %>% group_by(Appt.Year, Appt.Month) %>% summarise(max = sum(monthly_vol))
+#     
+#     current_month <- "December"
+#     # ann_text_2019 <- data.frame(Appt.Month = "April",monthly_vol = avg_2019,lab=paste0("2019 Monthly \nAverage: ", prettyNum(avg_2019, big.mark = ',')),
+#     #                    Appt.Year = factor("2023",levels = c("2022","2023")), Visit.Method = "Total")
+#     ann_text_2022 <- data.frame(Appt.Month = current_month ,monthly_vol = avg_2022,lab=paste0("2022 Monthly\nAvg: ", prettyNum(avg_2022, big.mark = ',')),
+#                        Appt.Year = factor("2023",levels = c("2022","2023")), Visit.Method = "Total")
+#      
+#    ggplot(vol_breakdown_mshs, aes(x= factor(Appt.Month, levels = monthOptions), 
+#                                   y=monthly_vol, group=Visit.Method, fill=Visit.Method), legend.labs = c("IN PERSON", "TELEHEALTH"))+
+#       geom_bar(position="stack",stat="identity", width=0.7)+
+#        facet_grid(.~Appt.Year, scales = "free", switch = "x", space = "free_x") + 
+#       scale_fill_manual(values = c("#212070","#d80b8c","black"))+
+#       scale_y_continuous(limits=c(0,(max(max$max))*1.2), labels = scales::number_format(accuracy = 1))+
+#       labs(title = paste0("MSHS Ambulatory Arrived Volume Breakdown by Month"),
+#            subtitle = paste0("Based on data from 2022-01-01 to 2022-12-31","\n"),
+#            # subtitle = paste0("Based on data from 2022-01-01 to ",max(scheduling_data$Appt.DateYear),"\n"),
+#            x = NULL, y = NULL, fill = NULL)+
+#       theme_new_line()+
+#       theme(axis.title.y = element_text(size = 12, angle = 90),  
+#             axis.text.x = element_text(size = 10),
+#             plot.margin=unit(c(1,1,0,1), "cm"))+
+#       theme(strip.placement = "outside",
+#             strip.text.x = element_text(size = 14))+
+#       geom_text(aes(label=prettyNum(monthly_vol, big.mark = ',')), color="white", 
+#                 size=3.5, fontface="bold", position = position_stack(vjust = 0.5))+
+#       stat_summary(fun.y = sum, vjust = -1, aes(label=ifelse(..y.. == 0,"",prettyNum(..y.., big.mark = ',')), group = Appt.Month), geom="text", color="black", 
+#                    size=3.5, fontface="bold.italic")+
+#      labs(caption = paste0(
+#        "*2019 Monthly Average: ", prettyNum(avg_2019, big.mark = ','),"\n",
+#        "*2022 Monthly Average: ", prettyNum(avg_2022, big.mark = ','),"\n",
+#        "Includes MSBI, MSDMG, MSH- AMBULATORY CARE, MSH-MSDFP, MSM, MSUS, MSW, NETWORK, ONCOLOGY"))+
+#      theme(plot.caption = element_text(hjust = 0, vjust = 0, face="italic", size = 12),
+#             plot.margin = margin(10,10,10,10))
+#      
+#      # geom_hline(yintercept=avg_2019, linetype = "dashed") +
+#      # geom_text(data = ann_text_2019, aes(label = lab), vjust=-0.5, size=3.5, fontface="bold")+
+#           # geom_hline(yintercept=avg_2022, linetype = "dotted", color="red", size=0.8) +
+#           # geom_text(data = ann_text_2022, aes(label = lab), size=2.5, fontface="bold", vjust = -1, nudge_x = 0, color = "red")+
+#      # labs(caption = paste0("*2019 Monthly Average: ", prettyNum(avg_2019, big.mark = ','),"\n**Includes Rad Onc data up to October, 2023", " and Radiology data up to October, 2023"))+
+#         labs(caption = paste0("*2022 Monthly Average: ", prettyNum(avg_2022, big.mark = ','),"\n**Includes Rad Onc data up to ", rad_onc_date, " and Radiology data up to ",radiology_date))+
+#       theme(plot.caption = element_text(hjust = 0, vjust = 0, face="italic", size = 12),
+#             plot.margin = margin(10,10,10,10))
+   
 ```
 
 

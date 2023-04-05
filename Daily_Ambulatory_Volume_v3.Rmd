@@ -2601,14 +2601,14 @@ reactable(monthly_vol_dept,
 ## MSBI {.tabset .tabset-fade .tabset-pills}
 ### MSBI Daily Volume
 ```{r MSBI Metrics Output1, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
-print(daily_vol_site_function(site = "MSBI"))
-print(daily_vol_last_year_site_function(site = "MSBI"))
+#print(daily_vol_site_function(site = "MSBI"))
+#print(daily_vol_last_year_site_function(site = "MSBI"))
 ```
 _________________________________________________________________________________________________________________________________________________________________
 ### MSBI Weekly Volume
 ```{r MSBI Metrics Output2, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
-print(weekly_vol_site_function(site = "MSBI"))
-print(weekly_vol_last_year_site_function(site = "MSBI"))
+#print(weekly_vol_site_function(site = "MSBI"))
+#print(weekly_vol_last_year_site_function(site = "MSBI"))
 ```
 _________________________________________________________________________________________________________________________________________________________________
 ### MSBI Monthly Volume

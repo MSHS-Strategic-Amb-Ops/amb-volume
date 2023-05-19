@@ -288,7 +288,7 @@ scale_fill_MountSinai <- function(palette = "all", discrete = TRUE, reverse = FA
 scheduling_data_raw <- readRDS("/nfs/data/Applications/Ambulatory/Data_Updated/historical_data.rds") %>%
   mutate(Campus = ifelse(Campus == "MSDD", "MSDMG", Campus)) %>%
   filter(!is.na(Campus)) %>%
-  filter(Campus %in% c("NETWORK","MSM","MSH-MSDFP","ONCOLOGY","MSW","MSBI","MSUS","MSH- AMBULATORY CARE","MSDMG")) %>%
+  filter(Campus %in% c("NETWORK","MSM","MSH-MSDFP","MSW","MSBI","MSUS","MSH- AMBULATORY CARE","MSDMG")) %>%
   filter(Appt.Status == "Arrived")%>%
   filter(Appt.DateYear >= as.Date("2022-01-01", format="%Y-%m-%d") & Appt.DateYear <= as.Date(max(Appt.Made.DTTM), format="%Y-%m-%d"))
 
@@ -2973,49 +2973,49 @@ ________________________________________________________________________________
 <!-- print(vol_breakdown_site_graph(site = "NYEE")) -->
 <!-- ``` -->
 <!-- _________________________________________________________________________________________________________________________________________________________________ -->
-## ONCOLOGY {.tabset .tabset-fade .tabset-pills}
-### ONCOLOGY Daily Volume
-```{r Oncology Metrics Output1, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
-print(daily_vol_site_function(site = "ONCOLOGY"))
-print(daily_vol_last_year_site_function(site = "ONCOLOGY"))
-```
-_________________________________________________________________________________________________________________________________________________________________
-*End of Report.*
-### ONCOLOGY Weekly Volume
-```{r Oncology Metrics Output2, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
-print(weekly_vol_site_function(site = "ONCOLOGY"))
-print(weekly_vol_last_year_site_function(site = "ONCOLOGY"))
-```
-_________________________________________________________________________________________________________________________________________________________________
-*End of Report.*
-### ONCOLOGY Monthly Volume
-```{r Oncology Metrics Output3, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
-print(monthly_vol_site_function(site = "ONCOLOGY"))
-```
-_________________________________________________________________________________________________________________________________________________________________
-*End of Report.*
-### ONCOLOGY Volume Graphs
-```{r Oncology Metrics Output4, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
-print(vol_trend_site_graph(site = "ONCOLOGY"))
-print(vol_breakdown_site_graph(site = "ONCOLOGY"))
-```
+<!-- ## ONCOLOGY {.tabset .tabset-fade .tabset-pills} -->
+<!-- ### ONCOLOGY Daily Volume -->
+<!-- ```{r Oncology Metrics Output1, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'} -->
+<!-- print(daily_vol_site_function(site = "ONCOLOGY")) -->
+<!-- print(daily_vol_last_year_site_function(site = "ONCOLOGY")) -->
+<!-- ``` -->
+<!-- _________________________________________________________________________________________________________________________________________________________________ -->
+<!-- *End of Report.* -->
+<!-- ### ONCOLOGY Weekly Volume -->
+<!-- ```{r Oncology Metrics Output2, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'} -->
+<!-- print(weekly_vol_site_function(site = "ONCOLOGY")) -->
+<!-- print(weekly_vol_last_year_site_function(site = "ONCOLOGY")) -->
+<!-- ``` -->
+<!-- _________________________________________________________________________________________________________________________________________________________________ -->
+<!-- *End of Report.* -->
+<!-- ### ONCOLOGY Monthly Volume -->
+<!-- ```{r Oncology Metrics Output3, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'} -->
+<!-- print(monthly_vol_site_function(site = "ONCOLOGY")) -->
+<!-- ``` -->
+<!-- _________________________________________________________________________________________________________________________________________________________________ -->
+<!-- *End of Report.* -->
+<!-- ### ONCOLOGY Volume Graphs -->
+<!-- ```{r Oncology Metrics Output4, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'} -->
+<!-- print(vol_trend_site_graph(site = "ONCOLOGY")) -->
+<!-- print(vol_breakdown_site_graph(site = "ONCOLOGY")) -->
+<!-- ``` -->
 
-<!-- :::: {.blackbox data-latex=""} -->
-<!-- ::: {.center data-latex=""} -->
-<!-- <font size="4">**For `r vol_takeaways_function(site = "ONCOLOGY")[1]` in `r full_month` `r full_year`:**</font> -->
-<!-- ::: -->
-<!-- <font size="4">--  Total ambulatory encounters were `r vol_takeaways_function(site = "ONCOLOGY")[2]`. This is `r vol_takeaways_function(site = "ONCOLOGY")[3]`.</font><br/> -->
-<!-- <font size="4">--  In-person encounters `r vol_takeaways_function(site = "ONCOLOGY")[4]`.</font><br/> -->
-<!-- <font size="4">--  Total ambulatory encounters `r vol_takeaways_function(site = "ONCOLOGY")[5]` from `r last_year` monthly average and `r vol_takeaways_function(site = "ONCOLOGY")[6]` from 2019 monthly average. -->
-<!-- :::: -->
-_______________________________________________________________________________________________________________________________________________________________
-### ONCOLOGY Volume by Dept
-<!-- <span style='font-size: 16px; color: black'>**ONCOLOGY `r todays_month`-`r todays_year` MTD Volume by Department**</span><br/> -->
-<!-- <span style='font-size: 14px; color: black'>*Includes visits up to `r date_end`</span><br/> -->
-<span style='font-size: 16px; color: black'>**ONCOLOGY `r full_month`-`r full_year` Volume by Department**</span><br/>
-```{r ONCOLOGY Metrics Output5, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
-# monthly_vol_dept_function(site = "ONCOLOGY")
-```
-_________________________________________________________________________________________________________________________________________________________________
-*End of Report.*
-<br/>
+<!-- <!-- :::: {.blackbox data-latex=""} --> -->
+<!-- <!-- ::: {.center data-latex=""} --> -->
+<!-- <!-- <font size="4">**For `r vol_takeaways_function(site = "ONCOLOGY")[1]` in `r full_month` `r full_year`:**</font> --> -->
+<!-- <!-- ::: --> -->
+<!-- <!-- <font size="4">--  Total ambulatory encounters were `r vol_takeaways_function(site = "ONCOLOGY")[2]`. This is `r vol_takeaways_function(site = "ONCOLOGY")[3]`.</font><br/> --> -->
+<!-- <!-- <font size="4">--  In-person encounters `r vol_takeaways_function(site = "ONCOLOGY")[4]`.</font><br/> --> -->
+<!-- <!-- <font size="4">--  Total ambulatory encounters `r vol_takeaways_function(site = "ONCOLOGY")[5]` from `r last_year` monthly average and `r vol_takeaways_function(site = "ONCOLOGY")[6]` from 2019 monthly average. --> -->
+<!-- <!-- :::: --> -->
+<!-- _______________________________________________________________________________________________________________________________________________________________ -->
+<!-- ### ONCOLOGY Volume by Dept -->
+<!-- <!-- <span style='font-size: 16px; color: black'>**ONCOLOGY `r todays_month`-`r todays_year` MTD Volume by Department**</span><br/> --> -->
+<!-- <!-- <span style='font-size: 14px; color: black'>*Includes visits up to `r date_end`</span><br/> --> -->
+<!-- <span style='font-size: 16px; color: black'>**ONCOLOGY `r full_month`-`r full_year` Volume by Department**</span><br/> -->
+<!-- ```{r ONCOLOGY Metrics Output5, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'} -->
+<!-- # monthly_vol_dept_function(site = "ONCOLOGY") -->
+<!-- ``` -->
+<!-- _________________________________________________________________________________________________________________________________________________________________ -->
+<!-- *End of Report.* -->
+<!-- <br/> -->

@@ -2601,14 +2601,14 @@ reactable(monthly_vol_dept,
 ## MSBI {.tabset .tabset-fade .tabset-pills}
 ### MSBI Daily Volume
 ```{r MSBI Metrics Output1, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
-print(daily_vol_site_function(site = "MSBI"))
-print(daily_vol_last_year_site_function(site = "MSBI"))
+#print(daily_vol_site_function(site = "MSBI"))
+#print(daily_vol_last_year_site_function(site = "MSBI"))
 ```
 _________________________________________________________________________________________________________________________________________________________________
 ### MSBI Weekly Volume
 ```{r MSBI Metrics Output2, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
-print(weekly_vol_site_function(site = "MSBI"))
-print(weekly_vol_last_year_site_function(site = "MSBI"))
+#print(weekly_vol_site_function(site = "MSBI"))
+#print(weekly_vol_last_year_site_function(site = "MSBI"))
 ```
 _________________________________________________________________________________________________________________________________________________________________
 ### MSBI Monthly Volume
@@ -2684,14 +2684,14 @@ ________________________________________________________________________________
 ## MSH- AMBULATORY CARE {.tabset .tabset-fade .tabset-pills}
 ### MSH- AMBULATORY CARE Daily Volume
 ```{r MSH- Ambulatory Care Metrics Output1, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
-print(daily_vol_site_function(site = "MSH- AMBULATORY CARE"))
-print(daily_vol_last_year_site_function(site = "MSH- AMBULATORY CARE"))
+#print(daily_vol_site_function(site = "MSH- AMBULATORY CARE"))
+#print(daily_vol_last_year_site_function(site = "MSH- AMBULATORY CARE"))
 ```
 _________________________________________________________________________________________________________________________________________________________________
 ### MSH- AMBULATORY CARE Weekly Volume
 ```{r MSH- Ambulatory Care Metrics Output2, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
-print(weekly_vol_site_function(site = "MSH- AMBULATORY CARE"))
-print(weekly_vol_last_year_site_function(site = "MSH- AMBULATORY CARE"))
+#print(weekly_vol_site_function(site = "MSH- AMBULATORY CARE"))
+#print(weekly_vol_last_year_site_function(site = "MSH- AMBULATORY CARE"))
 ```
 _________________________________________________________________________________________________________________________________________________________________
 ### MSH- AMBULATORY CARE Monthly Volume
@@ -2725,14 +2725,14 @@ ________________________________________________________________________________
 ## MSH-MSDFP {.tabset .tabset-fade .tabset-pills}
 ### MSH-MSDFP Daily Volume
 ```{r MSH-MSDFP Metrics Output1, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
-print(daily_vol_site_function(site = "MSH-MSDFP"))
-print(daily_vol_last_year_site_function(site = "MSH-MSDFP"))
+#print(daily_vol_site_function(site = "MSH-MSDFP"))
+#print(daily_vol_last_year_site_function(site = "MSH-MSDFP"))
 ```
 _________________________________________________________________________________________________________________________________________________________________
 ### MSH-MSDFP Weekly Volume
 ```{r MSH-MSDFP Metrics Output2, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
-print(weekly_vol_site_function(site = "MSH-MSDFP"))
-print(weekly_vol_last_year_site_function(site = "MSH-MSDFP"))
+#print(weekly_vol_site_function(site = "MSH-MSDFP"))
+#print(weekly_vol_last_year_site_function(site = "MSH-MSDFP"))
 ```
 _________________________________________________________________________________________________________________________________________________________________
 ### MSH-MSDFP Monthly Volume
@@ -2767,14 +2767,14 @@ ________________________________________________________________________________
 ## MSM {.tabset .tabset-fade .tabset-pills}
 ### MSM Daily Volume
 ```{r MSM Metrics Output1, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
-print(daily_vol_site_function(site = "MSM"))
-print(daily_vol_last_year_site_function(site = "MSM"))
+#print(daily_vol_site_function(site = "MSM"))
+#print(daily_vol_last_year_site_function(site = "MSM"))
 ```
 _________________________________________________________________________________________________________________________________________________________________
 ### MSM Weekly Volume
 ```{r MSM Metrics Output2, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
-print(weekly_vol_site_function(site = "MSM"))
-print(weekly_vol_last_year_site_function(site = "MSM"))
+#print(weekly_vol_site_function(site = "MSM"))
+#print(weekly_vol_last_year_site_function(site = "MSM"))
 ```
 _________________________________________________________________________________________________________________________________________________________________
 ### MSM Monthly Volume
@@ -2830,14 +2830,14 @@ ________________________________________________________________________________
 ## MSUS {.tabset .tabset-fade .tabset-pills}
 ### MSUS Daily Volume
 ```{r MSUS Metrics Output1, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
-print(daily_vol_site_function(site = "MSUS"))
-print(daily_vol_last_year_site_function(site = "MSUS"))
+#print(daily_vol_site_function(site = "MSUS"))
+#print(daily_vol_last_year_site_function(site = "MSUS"))
 ```
 _________________________________________________________________________________________________________________________________________________________________
 ### MSUS Weekly Volume
 ```{r MSUS Metrics Output2, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
-print(weekly_vol_site_function(site = "MSUS"))
-print(weekly_vol_last_year_site_function(site = "MSUS"))
+#print(weekly_vol_site_function(site = "MSUS"))
+#print(weekly_vol_last_year_site_function(site = "MSUS"))
 ```
 _________________________________________________________________________________________________________________________________________________________________
 ### MSUS Monthly Volume
@@ -2872,14 +2872,14 @@ ________________________________________________________________________________
 ## MSW {.tabset .tabset-fade .tabset-pills}
 ### MSW Daily Volume
 ```{r MSW Metrics Output1, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
-print(daily_vol_site_function(site = "MSW"))
-print(daily_vol_last_year_site_function(site = "MSW"))
+#print(daily_vol_site_function(site = "MSW"))
+#print(daily_vol_last_year_site_function(site = "MSW"))
 ```
 _________________________________________________________________________________________________________________________________________________________________
 ### MSW Weekly Volume
 ```{r MSW Metrics Output2, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
-print(weekly_vol_site_function(site = "MSW"))
-print(weekly_vol_last_year_site_function(site = "MSW"))
+#print(weekly_vol_site_function(site = "MSW"))
+#print(weekly_vol_last_year_site_function(site = "MSW"))
 ```
 _________________________________________________________________________________________________________________________________________________________________
 ### MSW Monthly Volume
@@ -2913,14 +2913,14 @@ ________________________________________________________________________________
 ## NETWORK {.tabset .tabset-fade .tabset-pills}
 ### NETWORK Daily Volume
 ```{r Network Metrics Output1, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
-print(daily_vol_site_function(site = "NETWORK"))
-print(daily_vol_last_year_site_function(site = "NETWORK"))
+#print(daily_vol_site_function(site = "NETWORK"))
+#print(daily_vol_last_year_site_function(site = "NETWORK"))
 ```
 _________________________________________________________________________________________________________________________________________________________________
 ### NETWORK Weekly Volume
 ```{r Network Metrics Output2, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
-print(weekly_vol_site_function(site = "NETWORK"))
-print(weekly_vol_last_year_site_function(site = "NETWORK"))
+#print(weekly_vol_site_function(site = "NETWORK"))
+#print(weekly_vol_last_year_site_function(site = "NETWORK"))
 ```
 _________________________________________________________________________________________________________________________________________________________________
 ### NETWORK Monthly Volume
@@ -2973,49 +2973,3 @@ ________________________________________________________________________________
 <!-- print(vol_breakdown_site_graph(site = "NYEE")) -->
 <!-- ``` -->
 <!-- _________________________________________________________________________________________________________________________________________________________________ -->
-<!-- ## ONCOLOGY {.tabset .tabset-fade .tabset-pills} -->
-<!-- ### ONCOLOGY Daily Volume -->
-<!-- ```{r Oncology Metrics Output1, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'} -->
-<!-- print(daily_vol_site_function(site = "ONCOLOGY")) -->
-<!-- print(daily_vol_last_year_site_function(site = "ONCOLOGY")) -->
-<!-- ``` -->
-<!-- _________________________________________________________________________________________________________________________________________________________________ -->
-<!-- *End of Report.* -->
-<!-- ### ONCOLOGY Weekly Volume -->
-<!-- ```{r Oncology Metrics Output2, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'} -->
-<!-- print(weekly_vol_site_function(site = "ONCOLOGY")) -->
-<!-- print(weekly_vol_last_year_site_function(site = "ONCOLOGY")) -->
-<!-- ``` -->
-<!-- _________________________________________________________________________________________________________________________________________________________________ -->
-<!-- *End of Report.* -->
-<!-- ### ONCOLOGY Monthly Volume -->
-<!-- ```{r Oncology Metrics Output3, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'} -->
-<!-- print(monthly_vol_site_function(site = "ONCOLOGY")) -->
-<!-- ``` -->
-<!-- _________________________________________________________________________________________________________________________________________________________________ -->
-<!-- *End of Report.* -->
-<!-- ### ONCOLOGY Volume Graphs -->
-<!-- ```{r Oncology Metrics Output4, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'} -->
-<!-- print(vol_trend_site_graph(site = "ONCOLOGY")) -->
-<!-- print(vol_breakdown_site_graph(site = "ONCOLOGY")) -->
-<!-- ``` -->
-
-<!-- <!-- :::: {.blackbox data-latex=""} --> -->
-<!-- <!-- ::: {.center data-latex=""} --> -->
-<!-- <!-- <font size="4">**For `r vol_takeaways_function(site = "ONCOLOGY")[1]` in `r full_month` `r full_year`:**</font> --> -->
-<!-- <!-- ::: --> -->
-<!-- <!-- <font size="4">--  Total ambulatory encounters were `r vol_takeaways_function(site = "ONCOLOGY")[2]`. This is `r vol_takeaways_function(site = "ONCOLOGY")[3]`.</font><br/> --> -->
-<!-- <!-- <font size="4">--  In-person encounters `r vol_takeaways_function(site = "ONCOLOGY")[4]`.</font><br/> --> -->
-<!-- <!-- <font size="4">--  Total ambulatory encounters `r vol_takeaways_function(site = "ONCOLOGY")[5]` from `r last_year` monthly average and `r vol_takeaways_function(site = "ONCOLOGY")[6]` from 2019 monthly average. --> -->
-<!-- <!-- :::: --> -->
-<!-- _______________________________________________________________________________________________________________________________________________________________ -->
-<!-- ### ONCOLOGY Volume by Dept -->
-<!-- <!-- <span style='font-size: 16px; color: black'>**ONCOLOGY `r todays_month`-`r todays_year` MTD Volume by Department**</span><br/> --> -->
-<!-- <!-- <span style='font-size: 14px; color: black'>*Includes visits up to `r date_end`</span><br/> --> -->
-<!-- <span style='font-size: 16px; color: black'>**ONCOLOGY `r full_month`-`r full_year` Volume by Department**</span><br/> -->
-<!-- ```{r ONCOLOGY Metrics Output5, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'} -->
-<!-- # monthly_vol_dept_function(site = "ONCOLOGY") -->
-<!-- ``` -->
-<!-- _________________________________________________________________________________________________________________________________________________________________ -->
-<!-- *End of Report.* -->
-<!-- <br/> -->

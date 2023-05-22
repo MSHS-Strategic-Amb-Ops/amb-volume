@@ -3268,7 +3268,7 @@ ________________________________________________________________________________
 <!-- <span style='font-size: 16px; color: black'>**MSH-MSDFP `r todays_month`-`r todays_year` MTD Volume by Department**</span><br/> -->
 <!-- <span style='font-size: 14px; color: black'>*Includes visits up to `r date_end`</span><br/> -->
 <span style='font-size: 16px; color: black'>**MSH-MSDFP `r full_month`-`r full_year` Volume by Department**</span><br/>
-```{r MSH-MSDFP Metrics Output5, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
+```{r MSH-MSDFP Metrics Output6, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
 monthly_vol_dept_function(site = "MSH-MSDFP")
 ```
 _________________________________________________________________________________________________________________________________________________________________

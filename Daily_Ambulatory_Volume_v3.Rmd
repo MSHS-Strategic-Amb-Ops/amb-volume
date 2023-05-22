@@ -276,14 +276,12 @@ scale_fill_MountSinai <- function(palette = "all", discrete = TRUE, reverse = FA
 ```{r Import Data, echo = FALSE, warning = FALSE, message = FALSE}
 '%!in%' <- function(x,y)!('%in%'(x,y))
 
-# scheduling_data_raw <- readRDS("/SharedDrive/deans/Presidents/SixSigma/Individual Folders/Current Employees/Engineers/So Youn Kweon/server-upload/historical_data.rds") %>%
-#   # filter(!is.na(Campus)) %>%
-#   # filter(Campus %in% c("NETWORK","MSM","MSH-MSDFP","ONCOLOGY","MSW","MSBI","MSUS","MSH- AMBULATORY CARE","MSDD")) %>%
+# scheduling_data_raw <- readRDS("historical_data.rds") %>%
+#   mutate(Campus = ifelse(Campus == "MSDD", "MSDMG", Campus)) %>%
+#   filter(!is.na(Campus)) %>%
+#   filter(Campus %in% c("NETWORK","MSM","MSH-MSDFP","MSW","MSBI","MSUS","MSH- AMBULATORY CARE","MSDMG")) %>%
 #   filter(Appt.Status == "Arrived")%>%
 #   filter(Appt.DateYear >= as.Date("2022-01-01", format="%Y-%m-%d") & Appt.DateYear <= as.Date(max(Appt.Made.DTTM), format="%Y-%m-%d"))
-# 
-# require(openxlsx)
-# write.xlsx(scheduling_data_raw, "/SharedDrive/deans/Presidents/SixSigma/Individual Folders/Current Employees/Engineers/So Youn Kweon/server-upload/scheduling_data_Dec22.xlsx")
 
 scheduling_data_raw <- readRDS("/nfs/data/Applications/Ambulatory/Data_Updated/historical_data.rds") %>%
   mutate(Campus = ifelse(Campus == "MSDD", "MSDMG", Campus)) %>%
@@ -297,9 +295,9 @@ rad_onc_data_raw <- read.csv("/nfs/data/Applications/Ambulatory/Rad_Onc_Data.csv
 radiology_data_raw <- read.csv("/nfs/data/Applications/Ambulatory/Radiology_Data.csv")
 radiology_ref <- read.csv("/nfs/data/Applications/Ambulatory/Radiology_Site_Mapping.csv")
 
-# rad_onc_data_raw <- read.csv("/SharedDrive/deans/Presidents/SixSigma/Individual Folders/Current Employees/Engineers/So Youn Kweon/server-upload/Rad_Onc_Data.csv")
-# radiology_data_raw <- read.csv("/SharedDrive/deans/Presidents/SixSigma/Individual Folders/Current Employees/Engineers/So Youn Kweon/server-upload/Radiology_Data.csv")
-# radiology_ref <- read.csv("/SharedDrive/deans/Presidents/SixSigma/Individual Folders/Current Employees/Engineers/So Youn Kweon/server-upload/Radiology_Site_Mapping.csv")
+# rad_onc_data_raw <- read.csv("Rad_Onc_Data.csv")
+# radiology_data_raw <- read.csv("Radiology_Data.csv")
+# radiology_ref <- read.csv("Radiology_Site_Mapping.csv")
 ```
 
 
@@ -1398,17 +1396,17 @@ total_amb_prev_year <- as.character(ifelse(total_amb_prev_year >0,
 ```
 
 
-<!-- :::: {.blackbox data-latex=""} -->
-<!-- ::: {.center data-latex=""} -->
-<!-- <font size="4">**In `r full_month` `r full_year`:**</font> -->
-<!-- ::: -->
-<!-- <font size="4">--  Total ambulatory encounters were `r total_encounters`. This is `r total_encounters_comp`.</font><br/> -->
-<!-- <font size="4">--  In-person encounters `r total_in_person`.</font><br/> -->
-<!-- <font size="4">--  Total ambulatory encounters `r total_amb_prior_year` from `r last_year` monthly average and `r total_amb_prev_year` from 2019 monthly average. -->
-<!-- :::: -->
+:::: {.blackbox data-latex=""}
+::: {.center data-latex=""}
+<font size="4">**In `r full_month` `r full_year`:**</font>
+:::
+<font size="4">--  Total ambulatory encounters were `r total_encounters`. This is `r total_encounters_comp`.</font><br/>
+<font size="4">--  In-person encounters `r total_in_person`.</font><br/>
+<font size="4">--  Total ambulatory encounters `r total_amb_prior_year` from `r last_year` monthly average and `r total_amb_prev_year` from 2019 monthly average.
+::::
 
 
-### MSHS Volume by Specialty
+### MSHS Volume by Specialty `r todays_month`-`r todays_year`
 <span style='font-size: 16px; color: black'>**MSHS `r todays_month`-`r todays_year` MTD Volume by Specialty**</span><br/>
 <span style='font-size: 14px; color: black'>*Includes visits up to `r visits_end_date` </span><br/>
 <!-- <span style='font-size: 14px; color: black'>*Includes Rad Onc data up to `r rad_onc_date` and Radiology data up to `r radiology_date`</span><br/> -->
@@ -1458,7 +1456,7 @@ monthly_vol_mshs_specialty <- monthly_vol_mshs_specialty %>%
                 `monthly_vol_IN PERSON`, `last_year_IN PERSON`, `perc_diff_IN PERSON`,
                 monthly_vol_TELEHEALTH, last_year_TELEHEALTH, perc_diff_TELEHEALTH)
 # Merge Current Month Volume + Average Daily Volume + YTD Volume
-monthly_vol_mshs_specialty <- merge(monthly_vol_mshs_specialty, ytd_vol_mshs_specialty, by = c("Campus.Specialty","Campus"), all = TRUE)
+monthly_vol_mshs_specialty <- merge(ytd_vol_mshs_specialty, monthly_vol_mshs_specialty,  by = c("Campus.Specialty","Campus"), all = TRUE)
 monthly_vol_mshs_specialty[is.na(monthly_vol_mshs_specialty)] <- 0
 # Format for Table Output
 monthly_vol_mshs_specialty <- monthly_vol_mshs_specialty %>%
@@ -1478,32 +1476,9 @@ monthly_vol_mshs_specialty$ytd_var <- percent((monthly_vol_mshs_specialty[[14]] 
 # Format Inf to 100%
 monthly_vol_mshs_specialty[sapply(monthly_vol_mshs_specialty, simplify = 'matrix', is.infinite)] <- percent(1,0)
 monthly_vol_mshs_specialty[sapply(monthly_vol_mshs_specialty, simplify = 'matrix', is.nan)] <- percent(0,0)
-# monthly_vol_mshs_specialty_trend <- monthly_vol %>%
-#   filter(Appt.Year == todays_year) %>%
-#   filter(Visit.Method == "Total") %>%
-#   ungroup() %>%
-#   group_by(Campus.Specialty, Campus, Appt.Year, Appt.MonNum, Appt.Month, Visit.Method) %>%
-#   summarise(monthly_vol = sum(monthly_vol, na.rn = TRUE)) %>%
-#   ungroup() %>%
-#   dplyr::select(Campus.Specialty, Campus, Appt.Month, Appt.MonNum, monthly_vol) %>%
-#   group_by(Campus.Specialty, Appt.Month) %>%
-#   bind_rows(summarise(.,
-#                       across(where(is.numeric), sum),
-#                       across(where(is.character), ~paste0(Campus.Specialty, " Total"))))
-#
-# monthly_vol_mshs_specialty_trend <- unique(monthly_vol_mshs_specialty_trend)
-# monthly_vol_mshs_specialty_trend <- monthly_vol_mshs_specialty_trend %>%
-#   group_by(Campus.Specialty, Campus) %>%
-#   summarise(monthly_vol_trend = list(monthly_vol))
-#
-# monthly_vol_mshs_specialty <- merge(monthly_vol_mshs_specialty, monthly_vol_mshs_specialty_trend)
-#
-# monthly_vol_mshs_specialty[is.na(monthly_vol_mshs_specialty)] <- 0
-#
-# monthly_vol_mshs_specialty <- monthly_vol_mshs_specialty %>%
-#   mutate(order = str_detect(Campus, "Total")) %>%
-#   arrange(Campus.Specialty, order) %>%
-#   dplyr::select(-order)
+
+
+
 # Table Output
 reactable(monthly_vol_mshs_specialty,
           style = list(fontFamily = 'Calibri', fontSize = '14px'),
@@ -1517,7 +1492,12 @@ reactable(monthly_vol_mshs_specialty,
           pagination = FALSE,
           # height = 800,
           wrap = TRUE,
+          
+          # groupBy = c("Campus.Specialty"),
+          
           columnGroups = list(
+            colGroup(name = "", columns = c("Campus.Specialty", "Campus"), sticky = "left",
+                     headerStyle = list(fontSize = "14px")),
             colGroup(name = "Total", columns = c("avg_daily", "monthly_vol_Total", "last_year_Total", "perc_diff_Total"),
                      headerStyle = list(background = "#221f72", color = "white", fontWeight = "Bold", fontSize = "14px")),
             colGroup(name = "IN PERSON", columns = c("monthly_vol_IN PERSON", "last_year_IN PERSON", "perc_diff_IN PERSON"),
@@ -1540,7 +1520,243 @@ reactable(monthly_vol_mshs_specialty,
             }
             }"),
             name = "Specialty",
-            width = 150,
+            width = 200,
+            align = "right"
+            ),
+            Campus = colDef(
+            width = 250,
+            align = "right"
+            ),
+            avg_daily = colDef(name = "Daily Avg. Current Month",
+                           headerStyle = list(background = "#221f72", color = "white", fontWeight = "Bold", fontSize = "14px"),
+                           # style = list(background = "#EBEBF9")
+                           format = colFormat(separators = TRUE)
+                           ),
+            monthly_vol_Total = colDef(name = "Current Month",
+                           headerStyle = list(background = "#221f72", color = "white", fontWeight = "Bold", fontSize = "14px"),
+                           # style = list(background = "#EBEBF9")
+                           format = colFormat(separators = TRUE)
+                           ),
+            last_year_Total = colDef(name = "Same Month Last Year",
+                           headerStyle = list(background = "#221f72", color = "white", fontWeight = "Bold", fontSize = "14px"),
+                           # style = list(background = "#EBEBF9")
+                           format = colFormat(separators = TRUE)
+                           ),
+            perc_diff_Total = colDef(name = "% Variance",
+                           headerStyle = list(background = "#221f72", color = "white", fontWeight = "Bold", fontSize = "14px"),
+                           # style = list(background = "#EBEBF9")
+                          format = colFormat(percent = TRUE, digits = 0),
+                          style = function(value) {
+                            if (value > 0) {
+                              color <- "#008000"
+                              } else if (value < 0) {
+                                color <- "#e00000"
+                                } else {
+                                  color <- "#777"
+                                  }
+                            list(color = color, fontWeight = "bold")
+                            }
+                           ),
+            `monthly_vol_IN PERSON` = colDef(name = "Current Month",
+                           headerStyle = list(background = "#7f7f7f", color = "white", fontWeight = "Bold", fontSize = "14px"),
+                           # style = list(background = "#EBEBF9")
+                           format = colFormat(separators = TRUE)
+                           ),
+            `last_year_IN PERSON` = colDef(name = "Same Month Last Year",
+                           headerStyle = list(background = "#7f7f7f", color = "white", fontWeight = "Bold", fontSize = "14px"),
+                           # style = list(background = "#EBEBF9")
+                           format = colFormat(separators = TRUE)
+                           ),
+            `perc_diff_IN PERSON` = colDef(name = "% Variance",
+                           headerStyle = list(background = "#7f7f7f", color = "white", fontWeight = "Bold", fontSize = "14px"),
+                           # style = list(background = "#EBEBF9")
+                          format = colFormat(percent = TRUE, digits = 0),
+                          style = function(value) {
+                            if (value > 0) {
+                              color <- "#008000"
+                              } else if (value < 0) {
+                                color <- "#e00000"
+                                } else {
+                                  color <- "#777"
+                                  }
+                            list(color = color, fontWeight = "bold")
+                            }
+                           ),
+            `monthly_vol_TELEHEALTH` = colDef(name = "Current Month",
+                           headerStyle = list(background = "#00aeef", color = "white", fontWeight = "Bold", fontSize = "14px"),
+                           # style = list(background = "#EBEBF9")
+                           format = colFormat(separators = TRUE)
+                           ),
+            `last_year_TELEHEALTH` = colDef(name = "Same Month Last Year",
+                           headerStyle = list(background = "#00aeef", color = "white", fontWeight = "Bold", fontSize = "14px"),
+                           # style = list(background = "#EBEBF9")
+                           format = colFormat(separators = TRUE)
+                           ),
+            `perc_diff_TELEHEALTH` = colDef(name = "% Variance",
+                           headerStyle = list(background = "#00aeef", color = "white", fontWeight = "Bold", fontSize = "14px"),
+                           # style = list(background = "#EBEBF9")
+                          format = colFormat(percent = TRUE, digits = 0),
+                          style = function(value) {
+                            if (value > 0) {
+                              color <- "#008000"
+                              } else if (value < 0) {
+                                color <- "#e00000"
+                                } else {
+                                  color <- "#777"
+                                  }
+                            list(color = color, fontWeight = "bold")
+                            }
+                           ),
+            `2022` = colDef(
+                           headerStyle = list(background = "#d80b8c", color = "white", fontWeight = "Bold", fontSize = "14px"),
+                           # style = list(background = "#EBEBF9")
+                           format = colFormat(separators = TRUE)
+                           ),
+            `2023` = colDef(
+                           headerStyle = list(background = "#d80b8c", color = "white", fontWeight = "Bold", fontSize = "14px"),
+                           # style = list(background = "#EBEBF9")
+                           format = colFormat(separators = TRUE)
+                           ),
+            `ytd_var` = colDef(name = "% Variance",
+                           headerStyle = list(background = "#d80b8c", color = "white", fontWeight = "Bold", fontSize = "14px"),
+                           # style = list(background = "#EBEBF9")
+                          format = colFormat(percent = TRUE, digits = 0),
+                          style = function(value) {
+                            if (value > 0) {
+                              color <- "#008000"
+                              } else if (value < 0) {
+                                color <- "#e00000"
+                                } else {
+                                  color <- "#777"
+                                  }
+                            list(color = color, fontWeight = "bold")
+                            }
+                           )
+          )
+            # monthly_vol_trend = colDef(cell = function(value, index) {
+            #   sparkline(monthly_vol_mshs_specialty$monthly_vol_trend[[index]], tooltipFormat =  '{{x}}: {{y}}')
+            #   },
+#               name = "Total Volume by Month",
+#              headerStyle = list(background = "#d80b8c", color = "white", fontWeight = "Bold", fontSize = "14px")
+)
+```
+
+
+### MSHS Volume by Specialty `r full_month`-`r full_year`
+<span style='font-size: 16px; color: black'>**MSHS `r full_month`-`r full_year` MTD Volume by Specialty**</span><br/>
+<span style='font-size: 14px; color: black'>*Includes visits up to `r visits_end_date` </span><br/>
+<!-- <span style='font-size: 14px; color: black'>*Includes Rad Onc data up to `r rad_onc_date` and Radiology data up to `r radiology_date`</span><br/> -->
+```{r MSHS Volume by Speicalty, echo = FALSE, warning = FALSE, message = FALSE}
+# Total Current Month Volume
+monthly_vol_mshs_specialty <- monthly_vol %>%
+  filter(Appt.Month == full_month) %>%
+  arrange(Visit.Method, Appt.MonNum) %>%
+  group_by(Campus.Specialty, Campus, Visit.Method, Appt.Year, Appt.Month) %>%
+  summarise(monthly_vol = sum(monthly_vol, na.rm = TRUE)) %>%
+  pivot_wider(names_from = Appt.Year,
+              values_from = monthly_vol,
+              values_fill = 0) %>%
+  pivot_longer(5:6,
+               names_to = "Appt.Year",
+               values_to = "monthly_vol") %>%
+  mutate(last_year = shift(monthly_vol)) %>%
+  mutate(perc_diff = percent((monthly_vol - last_year)/last_year,1)) %>%
+  filter(!is.na(last_year)) %>%
+  pivot_wider(names_from = Visit.Method,
+              values_from = monthly_vol:perc_diff)
+# monthly_vol_mshs_specialty <- add_column(monthly_vol_mshs_specialty, avg_daily = NA, .after = "Campus")
+# Average Daily Volume for Total
+daily_avg_mshs <- scheduling_data %>%
+  filter(Appt.Status == "Arrived") %>%
+  mutate(Appt.Month = strftime(Appt.DateYear, format = "%B")) %>%
+  filter(Appt.Year == full_year) %>%
+  filter(Appt.Month == full_month) %>%
+  group_by(Campus.Specialty, Campus, Appt.DateYear) %>%
+  summarise(total = n()) %>%
+  group_by(Campus.Specialty, Campus) %>%
+  summarise(avg_daily = round(mean(total, na.rm = TRUE),0))
+# YTD Volume for Total
+ytd_vol_mshs_specialty <- monthly_vol %>%
+  filter(Visit.Method == "Total") %>%
+  filter(Appt.MonNum <=  as.numeric(strftime(todays_date, format = "%m"))) %>%
+  group_by(Campus.Specialty, Campus, Appt.Year) %>%
+  summarise(ytd_vol = sum(monthly_vol, na.rm = TRUE)) %>%
+  pivot_wider(names_from = Appt.Year,
+              values_from = ytd_vol,
+              values_fill = 0)
+ytd_vol_mshs_specialty$ytd_var <- percent((ytd_vol_mshs_specialty[[4]] - ytd_vol_mshs_specialty[[3]])/ytd_vol_mshs_specialty[[3]],0)
+# Merge Current Month Volume + Average Daily Volume
+monthly_vol_mshs_specialty <- merge(monthly_vol_mshs_specialty, daily_avg_mshs, by = c("Campus.Specialty","Campus"), all = TRUE)
+monthly_vol_mshs_specialty <- monthly_vol_mshs_specialty %>%
+  dplyr::select(Campus.Specialty, Campus, avg_daily, monthly_vol_Total, last_year_Total, perc_diff_Total,
+                `monthly_vol_IN PERSON`, `last_year_IN PERSON`, `perc_diff_IN PERSON`,
+                monthly_vol_TELEHEALTH, last_year_TELEHEALTH, perc_diff_TELEHEALTH)
+# Merge Current Month Volume + Average Daily Volume + YTD Volume
+monthly_vol_mshs_specialty <- merge(ytd_vol_mshs_specialty, monthly_vol_mshs_specialty,  by = c("Campus.Specialty","Campus"), all = TRUE)
+monthly_vol_mshs_specialty[is.na(monthly_vol_mshs_specialty)] <- 0
+# Format for Table Output
+monthly_vol_mshs_specialty <- monthly_vol_mshs_specialty %>%
+  group_by(Campus.Specialty) %>%
+  bind_rows(summarise(.,
+                      across(where(is.numeric), sum),
+                      across(where(is.character), ~paste0(Campus.Specialty, " Total")))) %>%
+  arrange(Campus.Specialty)
+monthly_vol_mshs_specialty <- unique(monthly_vol_mshs_specialty)
+# Re-calculate Specialty Total
+monthly_vol_mshs_specialty <- monthly_vol_mshs_specialty %>%
+  mutate(perc_diff_Total = percent((monthly_vol_Total - last_year_Total)/last_year_Total,0),
+         `perc_diff_IN PERSON` = percent((`monthly_vol_IN PERSON` - `last_year_IN PERSON`)/`last_year_IN PERSON`,0),
+         perc_diff_TELEHEALTH = percent((monthly_vol_TELEHEALTH - last_year_TELEHEALTH)/last_year_TELEHEALTH,0)) %>%
+  arrange(Campus.Specialty)
+monthly_vol_mshs_specialty$ytd_var <- percent((monthly_vol_mshs_specialty[[14]] - monthly_vol_mshs_specialty[[13]])/monthly_vol_mshs_specialty[[13]],0)
+# Format Inf to 100%
+monthly_vol_mshs_specialty[sapply(monthly_vol_mshs_specialty, simplify = 'matrix', is.infinite)] <- percent(1,0)
+monthly_vol_mshs_specialty[sapply(monthly_vol_mshs_specialty, simplify = 'matrix', is.nan)] <- percent(0,0)
+
+
+
+# Table Output
+reactable(monthly_vol_mshs_specialty,
+          style = list(fontFamily = 'Calibri', fontSize = '14px'),
+          defaultColDef = colDef(align = "center",
+                                 headerStyle = list(background = "#dddedd", fontWeight = "Bold", fontSize = "14px"),
+                                 headerClass = "bar-sort-header"),
+          # groupBy = "Campus.Specialty",
+          # defaultExpanded = TRUE,
+          highlight = TRUE,
+          # filterable = TRUE,
+          pagination = FALSE,
+          # height = 800,
+          wrap = TRUE,
+          
+          # groupBy = c("Campus.Specialty"),
+          
+          columnGroups = list(
+            colGroup(name = "", columns = c("Campus.Specialty", "Campus"), sticky = "left",
+                     headerStyle = list(fontSize = "14px")),
+            colGroup(name = "Total", columns = c("avg_daily", "monthly_vol_Total", "last_year_Total", "perc_diff_Total"),
+                     headerStyle = list(background = "#221f72", color = "white", fontWeight = "Bold", fontSize = "14px")),
+            colGroup(name = "IN PERSON", columns = c("monthly_vol_IN PERSON", "last_year_IN PERSON", "perc_diff_IN PERSON"),
+                     headerStyle = list(background = "#7f7f7f", color = "white", fontWeight = "Bold", fontSize = "14px")),
+            colGroup(name = "TELEHEALTH", columns = c("monthly_vol_TELEHEALTH", "last_year_TELEHEALTH", "perc_diff_TELEHEALTH"),
+                     headerStyle = list(background = "#00aeef", color = "white", fontWeight = "Bold", fontSize = "14px")),
+            colGroup(name =  paste0(full_month," YTD Total"), columns = c(as.character(as.numeric(full_year)-1),full_year,"ytd_var"),
+                     headerStyle = list(background = "#d80b8c", color = "white", fontWeight = "Bold", fontSize = "14px"))
+            ),
+          columns = list(
+            Campus.Specialty = colDef(
+            style = JS("function(rowInfo, colInfo, state) {
+            var firstSorted = state.sorted[0]
+            // Merge cells if unsorted or sorting by school
+            if (!firstSorted || firstSorted.id === 'Campus.Specialty') {
+            var prevRow = state.pageRows[rowInfo.viewIndex - 1]
+            if (prevRow && rowInfo.row['Campus.Specialty'] === prevRow['Campus.Specialty']) {
+            return { visibility: 'hidden' }
+            }
+            }
+            }"),
+            name = "Specialty",
+            width = 200,
             align = "right"
             ),
             Campus = colDef(
@@ -2288,12 +2504,12 @@ vol_takeaways_function <- function(site){
 ```
 
 
-```{r Monthly Volume by Department, echo = FALSE, warning = FALSE, message = FALSE}
-monthly_vol_dept_function <- function(site){
+```{r Monthly Volume by Department (Current Month), echo = FALSE, warning = FALSE, message = FALSE}
+current_monthly_vol_dept_function <- function(site){
   # site <- "MSBI"
 monthly_vol_dept <- monthly_vol %>%
   filter(Campus == site) %>%
-  filter(Appt.Month == full_month) %>%
+  filter(Appt.Month == todays_month) %>%
   arrange(Visit.Method, Appt.MonNum) %>%
   group_by(Department, Visit.Method) %>%
   pivot_wider(names_from = Appt.Year,
@@ -2317,7 +2533,7 @@ daily_avg_dept <- scheduling_data %>%
   filter(Campus == site) %>%
   mutate(Appt.Month = strftime(Appt.DateYear, format = "%B")) %>%
   filter(Appt.Year == todays_year) %>%
-  filter(Appt.Month == full_month) %>%
+  filter(Appt.Month == todays_month) %>%
   group_by(Campus, Campus.Specialty, Department, Appt.DateYear) %>%
   summarise(total = n()) %>%
   group_by(Campus, Campus.Specialty, Department) %>%
@@ -2335,7 +2551,7 @@ ytd_vol_dept <- monthly_vol %>%
               values_fill = 0)
 ytd_vol_dept$ytd_var <- percent((ytd_vol_dept[[4]] - ytd_vol_dept[[3]])/ytd_vol_dept[[3]],0)
 # Merge for Table Output
-monthly_vol_dept <- merge(monthly_vol_dept, ytd_vol_dept, by = c("Campus.Specialty","Department"), all = TRUE)
+monthly_vol_dept <- merge(ytd_vol_dept, monthly_vol_dept, by = c("Campus.Specialty","Department"), all = TRUE)
 monthly_vol_dept[is.na(monthly_vol_dept)] <- 0
 # Summarize for Department Total
 monthly_vol_dept <- monthly_vol_dept %>%
@@ -2389,16 +2605,268 @@ reactable(monthly_vol_dept,
           highlight = TRUE,
           # filterable = TRUE,
           pagination = FALSE,
-          # height = 800,
+          height = 800,
           wrap = TRUE,
           columnGroups = list(
+            colGroup(name = "", columns = c("Campus.Specialty", "Department"), sticky = "left",
+                     headerStyle = list(fontSize = "14px")),
             colGroup(name = "Total", columns = c("avg_daily", "monthly_vol_Total", "last_year_Total", "perc_diff_Total"),
                      headerStyle = list(background = "#221f72", color = "white", fontWeight = "Bold", fontSize = "14px")),
             colGroup(name = "IN PERSON", columns = c("monthly_vol_IN PERSON", "last_year_IN PERSON", "perc_diff_IN PERSON"),
                      headerStyle = list(background = "#7f7f7f", color = "white", fontWeight = "Bold", fontSize = "14px")),
             colGroup(name = "TELEHEALTH", columns = c("monthly_vol_TELEHEALTH", "last_year_TELEHEALTH", "perc_diff_TELEHEALTH"),
                      headerStyle = list(background = "#00aeef", color = "white", fontWeight = "Bold", fontSize = "14px")),
-            colGroup(name =  paste0(full_month," YTD Total"), columns = c(as.character(as.numeric(todays_year)-1),todays_year,"ytd_var"),
+            colGroup(name =  paste0(todays_month," YTD Total"), columns = c(as.character(as.numeric(todays_year)-1),todays_year,"ytd_var"),
+                     headerStyle = list(background = "#d80b8c", color = "white", fontWeight = "Bold", fontSize = "14px"))
+            ),
+          columns = list(
+            Campus.Specialty = colDef(
+            style = JS("function(rowInfo, colInfo, state) {
+            var firstSorted = state.sorted[0]
+            // Merge cells if unsorted or sorting by school
+            if (!firstSorted || firstSorted.id === 'Campus.Specialty') {
+            var prevRow = state.pageRows[rowInfo.viewIndex - 1]
+            if (prevRow && rowInfo.row['Campus.Specialty'] === prevRow['Campus.Specialty']) {
+            return { visibility: 'hidden' }
+            }
+            }
+            }"),
+            name = "Specialty",
+            width = 150,
+            align = "right"
+            ),
+            Department = colDef(
+              width = 250,
+              align = "right"
+            ),
+            avg_daily = colDef(name = "Daily Avg. Current Month",
+                           headerStyle = list(background = "#221f72", color = "white", fontWeight = "Bold", fontSize = "14px"),
+                           # style = list(background = "#EBEBF9")
+                           format = colFormat(separators = TRUE)
+                           ),
+            monthly_vol_Total = colDef(name = "Current Month",
+                           headerStyle = list(background = "#221f72", color = "white", fontWeight = "Bold", fontSize = "14px"),
+                           # style = list(background = "#EBEBF9")
+                           format = colFormat(separators = TRUE)
+                           ),
+            last_year_Total = colDef(name = "Same Month Last Year",
+                           headerStyle = list(background = "#221f72", color = "white", fontWeight = "Bold", fontSize = "14px"),
+                           # style = list(background = "#EBEBF9")
+                           format = colFormat(separators = TRUE)
+                           ),
+            perc_diff_Total = colDef(name = "% Variance",
+                           headerStyle = list(background = "#221f72", color = "white", fontWeight = "Bold", fontSize = "14px"),
+                           # style = list(background = "#EBEBF9")
+                          format = colFormat(percent = TRUE, digits = 0),
+                          style = function(value) {
+                            if (value > 0) {
+                              color <- "#008000"
+                              } else if (value < 0) {
+                                color <- "#e00000"
+                                } else {
+                                  color <- "#777"
+                                  }
+                            list(color = color, fontWeight = "bold")
+                            }
+                           ),
+            `monthly_vol_IN PERSON` = colDef(name = "Current Month",
+                           headerStyle = list(background = "#7f7f7f", color = "white", fontWeight = "Bold", fontSize = "14px"),
+                           # style = list(background = "#EBEBF9")
+                           format = colFormat(separators = TRUE)
+                           ),
+            `last_year_IN PERSON` = colDef(name = "Same Month Last Year",
+                           headerStyle = list(background = "#7f7f7f", color = "white", fontWeight = "Bold", fontSize = "14px"),
+                           # style = list(background = "#EBEBF9")
+                           format = colFormat(separators = TRUE)
+                           ),
+            `perc_diff_IN PERSON` = colDef(name = "% Variance",
+                           headerStyle = list(background = "#7f7f7f", color = "white", fontWeight = "Bold", fontSize = "14px"),
+                           # style = list(background = "#EBEBF9")
+                          format = colFormat(percent = TRUE, digits = 0),
+                          style = function(value) {
+                            if (value > 0) {
+                              color <- "#008000"
+                              } else if (value < 0) {
+                                color <- "#e00000"
+                                } else {
+                                  color <- "#777"
+                                  }
+                            list(color = color, fontWeight = "bold")
+                            }
+                           ),
+            `monthly_vol_TELEHEALTH` = colDef(name = "Current Month",
+                           headerStyle = list(background = "#00aeef", color = "white", fontWeight = "Bold", fontSize = "14px"),
+                           # style = list(background = "#EBEBF9")
+                           format = colFormat(separators = TRUE)
+                           ),
+            `last_year_TELEHEALTH` = colDef(name = "Same Month Last Year",
+                           headerStyle = list(background = "#00aeef", color = "white", fontWeight = "Bold", fontSize = "14px"),
+                           # style = list(background = "#EBEBF9")
+                           format = colFormat(separators = TRUE)
+                           ),
+            `perc_diff_TELEHEALTH` = colDef(name = "% Variance",
+                           headerStyle = list(background = "#00aeef", color = "white", fontWeight = "Bold", fontSize = "14px"),
+                           # style = list(background = "#EBEBF9")
+                          format = colFormat(percent = TRUE, digits = 0),
+                          style = function(value) {
+                            if (value > 0) {
+                              color <- "#008000"
+                              } else if (value < 0) {
+                                color <- "#e00000"
+                                } else {
+                                  color <- "#777"
+                                  }
+                            list(color = color, fontWeight = "bold")
+                            }
+                           ),
+            `2022` = colDef(
+                           headerStyle = list(background = "#d80b8c", color = "white", fontWeight = "Bold", fontSize = "14px"),
+                           # style = list(background = "#EBEBF9")
+                           format = colFormat(separators = TRUE)
+                           ),
+            `2023` = colDef(
+                           headerStyle = list(background = "#d80b8c", color = "white", fontWeight = "Bold", fontSize = "14px"),
+                           # style = list(background = "#EBEBF9")
+                           format = colFormat(separators = TRUE)
+                           ),
+            `ytd_var` = colDef(name = "% Variance",
+                           headerStyle = list(background = "#d80b8c", color = "white", fontWeight = "Bold", fontSize = "14px"),
+                           # style = list(background = "#EBEBF9")
+                          format = colFormat(percent = TRUE, digits = 0),
+                          style = function(value) {
+                            if (value > 0) {
+                              color <- "#008000"
+                              } else if (value < 0) {
+                                color <- "#e00000"
+                                } else {
+                                  color <- "#777"
+                                  }
+                            list(color = color, fontWeight = "bold")
+                            }
+                           )
+            # monthly_vol_trend = colDef(cell = function(value, index) {
+            #   sparkline(monthly_vol_dept$monthly_vol_trend[[index]], tooltipFormat =  '{{x}}: {{y}}')
+            #   },
+            #   name = "Total Volume by Month",
+            #  headerStyle = list(background = "#d80b8c", color = "white", fontWeight = "Bold", fontSize = "14px"))
+))
+}
+```
+
+
+```{r Monthly Volume by Department (Full Month), echo = FALSE, warning = FALSE, message = FALSE}
+monthly_vol_dept_function <- function(site){
+  # site <- "MSBI"
+monthly_vol_dept <- monthly_vol %>%
+  filter(Campus == site) %>%
+  filter(Appt.Month == full_month) %>%
+  arrange(Visit.Method, Appt.MonNum) %>%
+  group_by(Department, Visit.Method) %>%
+  pivot_wider(names_from = Appt.Year,
+              values_from = monthly_vol,
+              values_fill = 0) %>%
+  pivot_longer(7:8,
+               names_to = "Appt.Year",
+               values_to = "monthly_vol") %>%
+  mutate(last_year = shift(monthly_vol)) %>%
+  mutate(perc_diff = percent((monthly_vol - last_year)/last_year,0)) %>%
+  filter(!is.na(last_year)) %>%
+  pivot_wider(names_from = Visit.Method,
+              values_from = monthly_vol:perc_diff) %>%
+  dplyr::select(Campus.Specialty, Department, monthly_vol_Total, last_year_Total, perc_diff_Total,
+                `monthly_vol_IN PERSON`, `last_year_IN PERSON`, `perc_diff_IN PERSON`,
+                monthly_vol_TELEHEALTH, last_year_TELEHEALTH, perc_diff_TELEHEALTH)
+monthly_vol_dept <- add_column(monthly_vol_dept, avg_daily = NA, .after = "Department")
+# Average Daily Volume for Total
+daily_avg_dept <- scheduling_data %>%
+  filter(Appt.Status == "Arrived") %>%
+  filter(Campus == site) %>%
+  mutate(Appt.Month = strftime(Appt.DateYear, format = "%B")) %>%
+  filter(Appt.Year == full_year) %>%
+  filter(Appt.Month == full_month) %>%
+  group_by(Campus, Campus.Specialty, Department, Appt.DateYear) %>%
+  summarise(total = n()) %>%
+  group_by(Campus, Campus.Specialty, Department) %>%
+  summarise(avg_daily = round(mean(total, na.rm = TRUE),0))
+monthly_vol_dept$avg_daily <- daily_avg_dept$avg_daily[match(monthly_vol_dept$Department, daily_avg_dept$Department)]
+# Current Month YTD Volume
+ytd_vol_dept <- monthly_vol %>%
+  filter(Campus == site) %>%
+  filter(Visit.Method == "Total") %>%
+  filter(Appt.MonNum <=  as.numeric(format((lubridate::floor_date(max(scheduling_data$Appt.DateYear), unit = "month")-1), "%m"))) %>%
+  group_by(Campus.Specialty, Department, Appt.Year) %>%
+  summarise(ytd_vol = sum(monthly_vol, na.rm = TRUE)) %>%
+  pivot_wider(names_from = Appt.Year,
+              values_from = ytd_vol,
+              values_fill = 0)
+ytd_vol_dept$ytd_var <- percent((ytd_vol_dept[[4]] - ytd_vol_dept[[3]])/ytd_vol_dept[[3]],0)
+# Merge for Table Output
+monthly_vol_dept <- merge(ytd_vol_dept, monthly_vol_dept, by = c("Campus.Specialty","Department"), all = TRUE)
+monthly_vol_dept[is.na(monthly_vol_dept)] <- 0
+# Summarize for Department Total
+monthly_vol_dept <- monthly_vol_dept %>%
+  group_by(Campus.Specialty) %>%
+  bind_rows(summarise(.,
+                      across(where(is.numeric), sum),
+                      across(where(is.character), ~paste0(Campus.Specialty, " Total"))))
+monthly_vol_dept <- unique(monthly_vol_dept)
+# Re-calculate Specialty Total
+monthly_vol_dept <- monthly_vol_dept %>%
+  mutate(perc_diff_Total = percent((monthly_vol_Total - last_year_Total)/last_year_Total,0),
+         `perc_diff_IN PERSON` = percent((`monthly_vol_IN PERSON` - `last_year_IN PERSON`)/`last_year_IN PERSON`,0),
+         perc_diff_TELEHEALTH = percent((monthly_vol_TELEHEALTH - last_year_TELEHEALTH)/last_year_TELEHEALTH,0)) %>%
+  arrange(Campus.Specialty)
+monthly_vol_dept$ytd_var <- percent((monthly_vol_dept[[14]] - monthly_vol_dept[[13]])/monthly_vol_dept[[13]],0)
+# Format Inf to 100%
+monthly_vol_dept[sapply(monthly_vol_dept, simplify = 'matrix', is.infinite)] <- percent(1,0)
+monthly_vol_dept[sapply(monthly_vol_dept, simplify = 'matrix', is.nan)] <- percent(0,0)
+# monthly_vol_dept_trend <- monthly_vol %>%
+#   filter(Campus == site) %>%
+#   filter(Appt.Year == full_year) %>%
+#   filter(Visit.Method == "Total") %>%
+#   ungroup() %>%
+#   dplyr::select(-Campus) %>%
+#   group_by(Campus.Specialty, Appt.Year, Appt.MonNum, Appt.Month, Visit.Method) %>%
+#   bind_rows(summarise(.,
+#                       across(where(is.numeric), sum),
+#                       across(where(is.character), ~paste0(Campus.Specialty, " Total")))) %>%
+#   arrange(Campus.Specialty, Department, Appt.MonNum)
+#
+# monthly_vol_dept_trend <- unique(monthly_vol_dept_trend)
+# monthly_vol_dept_trend <- monthly_vol_dept_trend %>%
+#   group_by(Campus.Specialty, Department) %>%
+#   summarise(monthly_vol_trend = list(monthly_vol))
+#
+# monthly_vol_dept <- merge(monthly_vol_dept, monthly_vol_dept_trend)
+#
+# monthly_vol_dept[is.na(monthly_vol_dept)] <- 0
+#
+# monthly_vol_dept <- monthly_vol_dept %>%
+#   mutate(order = str_detect(Department, "Total")) %>%
+#   arrange(Campus.Specialty, order) %>%
+#   dplyr::select(-order)
+reactable(monthly_vol_dept,
+          style = list(fontFamily = 'Calibri', fontSize = '14px'),
+          defaultColDef = colDef(align = "center",
+                                 headerStyle = list(background = "#dddedd", fontWeight = "Bold", fontSize = "14px"),
+                                 headerClass = "bar-sort-header"),
+          # groupBy = "Campus.Specialty",
+          # defaultExpanded = TRUE,
+          highlight = TRUE,
+          # filterable = TRUE,
+          pagination = FALSE,
+          height = 800,
+          wrap = TRUE,
+          columnGroups = list(
+            colGroup(name = "", columns = c("Campus.Specialty", "Department"), sticky = "left",
+                     headerStyle = list(fontSize = "14px")),
+            colGroup(name = "Total", columns = c("avg_daily", "monthly_vol_Total", "last_year_Total", "perc_diff_Total"),
+                     headerStyle = list(background = "#221f72", color = "white", fontWeight = "Bold", fontSize = "14px")),
+            colGroup(name = "IN PERSON", columns = c("monthly_vol_IN PERSON", "last_year_IN PERSON", "perc_diff_IN PERSON"),
+                     headerStyle = list(background = "#7f7f7f", color = "white", fontWeight = "Bold", fontSize = "14px")),
+            colGroup(name = "TELEHEALTH", columns = c("monthly_vol_TELEHEALTH", "last_year_TELEHEALTH", "perc_diff_TELEHEALTH"),
+                     headerStyle = list(background = "#00aeef", color = "white", fontWeight = "Bold", fontSize = "14px")),
+            colGroup(name =  paste0(full_month," YTD Total"), columns = c(as.character(as.numeric(full_year)-1),full_year,"ytd_var"),
                      headerStyle = list(background = "#d80b8c", color = "white", fontWeight = "Bold", fontSize = "14px"))
             ),
           columns = list(
@@ -2631,15 +3099,27 @@ vol_takeaways_function(site = "MSBI")[1]
 <!-- <font size="4">--  In-person encounters `r vol_takeaways_function(site = "MSBI")[4]`.</font><br/> -->
 <!-- <font size="4">--  Total ambulatory encounters `r vol_takeaways_function(site = "MSBI")[5]` from `r last_year` monthly average and `r vol_takeaways_function(site = "MSBI")[6]` from 2019 monthly average. -->
 <!-- :::: -->
+
 __________________________________________________________________________________________________________________________________________________________
-### MSBI Volume by Dept
+### MSBI Volume by Dept `r todays_month`-`r todays_year`
+<!-- <span style='font-size: 16px; color: black'>**MSBI `r todays_month`-`r todays_year` MTD Volume by Department**</span><br/> -->
+<!-- <span style='font-size: 14px; color: black'>*Includes visits up to `r date_end`</span><br/> -->
+<span style='font-size: 16px; color: black'>**MSBI `r todays_month`-`r todays_year` Volume by Department**</span><br/>
+```{r MSBI Metrics Output5, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
+current_monthly_vol_dept_function(site = "MSBI")
+```
+_______________________________________________________________________________________________________________________________________________________________
+### MSBI Volume by Dept `r full_month`-`r full_year`
 <!-- <span style='font-size: 16px; color: black'>**MSBI `r todays_month`-`r todays_year` MTD Volume by Department**</span><br/> -->
 <!-- <span style='font-size: 14px; color: black'>*Includes visits up to `r date_end`</span><br/> -->
 <span style='font-size: 16px; color: black'>**MSBI `r full_month`-`r full_year` Volume by Department**</span><br/>
-```{r MSBI Metrics Output5, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
-# monthly_vol_dept_function(site = "MSBI")
+```{r MSBI Metrics Output6, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
+monthly_vol_dept_function(site = "MSBI")
 ```
 _________________________________________________________________________________________________________________________________________________________________
+
+
+
 ## MSDMG {.tabset .tabset-fade .tabset-pills}
 ### MSDMG Daily Volume
 ```{r MSDMG Metrics Output1, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
@@ -2672,15 +3152,26 @@ print(vol_breakdown_site_graph(site = "MSDMG"))
 <!-- <font size="4">--  In-person encounters `r vol_takeaways_function(site = "MSDMG")[4]`.</font><br/> -->
 <!-- <font size="4">--  Total ambulatory encounters `r vol_takeaways_function(site = "MSDMG")[5]` from `r last_year` monthly average and `r vol_takeaways_function(site = "MSDMG")[6]` from 2019 monthly average. -->
 <!-- :::: -->
+__________________________________________________________________________________________________________________________________________________________
+### MSDMG Volume by Dept `r todays_month`-`r todays_year`
+<!-- <span style='font-size: 16px; color: black'>**MSBI `r todays_month`-`r todays_year` MTD Volume by Department**</span><br/> -->
+<!-- <span style='font-size: 14px; color: black'>*Includes visits up to `r date_end`</span><br/> -->
+<span style='font-size: 16px; color: black'>**MSBI `r todays_month`-`r todays_year` Volume by Department**</span><br/>
+```{r MSDMG Metrics Output5, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
+current_monthly_vol_dept_function(site = "MSDMG")
+```
 _________________________________________________________________________________________________________________________________________________________________
-### MSDMG Volume by Dept
+### MSDMG Volume by Dept `r full_month`-`r full_year`
 <!-- <span style='font-size: 16px; color: black'>**MSDMG `r todays_month`-`r todays_year` MTD Volume by Department**</span><br/> -->
 <!-- <span style='font-size: 14px; color: black'>*Includes visits up to `r date_end`</span><br/> -->
 <span style='font-size: 16px; color: black'>**MSDMG `r full_month`-`r full_year` Volume by Department**</span><br/>
-```{r MSDMG Metrics Output5, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
-# monthly_vol_dept_function(site = "MSDMG")
+```{r MSDMG Metrics Output6, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
+monthly_vol_dept_function(site = "MSDMG")
 ```
 _________________________________________________________________________________________________________________________________________________________________
+
+
+
 ## MSH- AMBULATORY CARE {.tabset .tabset-fade .tabset-pills}
 ### MSH- AMBULATORY CARE Daily Volume
 ```{r MSH- Ambulatory Care Metrics Output1, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
@@ -2713,15 +3204,26 @@ print(vol_breakdown_site_graph(site = "MSH- AMBULATORY CARE"))
 <!-- <font size="4">--  In-person encounters `r vol_takeaways_function(site = "MSH- AMBULATORY CARE")[4]`.</font><br/> -->
 <!-- <font size="4">--  Total ambulatory encounters `r vol_takeaways_function(site = "MSH- AMBULATORY CARE")[5]` from `r last_year` monthly average and `r vol_takeaways_function(site = "MSH- AMBULATORY CARE")[6]` from 2019 monthly average. -->
 <!-- :::: -->
+__________________________________________________________________________________________________________________________________________________________
+### MSH- AMBULATORY CARE Volume by Dept `r todays_month`-`r todays_year`
+<!-- <span style='font-size: 16px; color: black'>**MSBI `r todays_month`-`r todays_year` MTD Volume by Department**</span><br/> -->
+<!-- <span style='font-size: 14px; color: black'>*Includes visits up to `r date_end`</span><br/> -->
+<span style='font-size: 16px; color: black'>**MSBI `r todays_month`-`r todays_year` Volume by Department**</span><br/>
+```{r MSH- AMBULATORY CARE Metrics Output5, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
+current_monthly_vol_dept_function(site = "MSH- AMBULATORY CARE")
+```
 _________________________________________________________________________________________________________________________________________________________________
-### MSH- AMBULATORY CARE Volume by Dept
+### MSH- AMBULATORY CARE Volume by Dept `r full_month`-`r full_year`
 <!-- <span style='font-size: 16px; color: black'>**MSH- AMBULATORY CARE `r todays_month`-`r todays_year` MTD Volume by Department**</span><br/> -->
 <!-- <span style='font-size: 14px; color: black'>*Includes visits up to `r date_end`</span><br/> -->
 <span style='font-size: 16px; color: black'>**MSH- AMBULATORY CARE Volume `r full_month`-`r full_year` Volume by Department**</span><br/>
-```{r MSH- AMBULATORY CARE Metrics Output5, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
-# monthly_vol_dept_function(site = "MSH- AMBULATORY CARE")
+```{r MSH- AMBULATORY CARE Metrics Output6, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
+monthly_vol_dept_function(site = "MSH- AMBULATORY CARE")
 ```
 _________________________________________________________________________________________________________________________________________________________________
+
+
+
 ## MSH-MSDFP {.tabset .tabset-fade .tabset-pills}
 ### MSH-MSDFP Daily Volume
 ```{r MSH-MSDFP Metrics Output1, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
@@ -2754,16 +3256,25 @@ print(vol_breakdown_site_graph(site = "MSH-MSDFP"))
 <!-- <font size="4">--  In-person encounters `r vol_takeaways_function(site = "MSH-MSDFP")[4]`.</font><br/> -->
 <!-- <font size="4">--  Total ambulatory encounters `r vol_takeaways_function(site = "MSH-MSDFP")[5]` from `r last_year` monthly average and `r vol_takeaways_function(site = "MSH-MSDFP")[6]` from 2019 monthly average. -->
 <!-- :::: -->
-
+### MSH-MSDFP Volume by Dept
+<!-- <span style='font-size: 16px; color: black'>**MSH-MSDFP `r todays_month`-`r todays_year` MTD Volume by Department**</span><br/> -->
+<!-- <span style='font-size: 14px; color: black'>*Includes visits up to `r date_end`</span><br/> -->
+<span style='font-size: 16px; color: black'>**MSH-MSDFP `r full_month`-`r full_year` Volume by Department**</span><br/>
+```{r MSH-MSDFP Metrics Output5, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
+monthly_vol_dept_function(site = "MSH-MSDFP")
+```
 _________________________________________________________________________________________________________________________________________________________________
 ### MSH-MSDFP Volume by Dept
 <!-- <span style='font-size: 16px; color: black'>**MSH-MSDFP `r todays_month`-`r todays_year` MTD Volume by Department**</span><br/> -->
 <!-- <span style='font-size: 14px; color: black'>*Includes visits up to `r date_end`</span><br/> -->
 <span style='font-size: 16px; color: black'>**MSH-MSDFP `r full_month`-`r full_year` Volume by Department**</span><br/>
 ```{r MSH-MSDFP Metrics Output5, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
-# monthly_vol_dept_function(site = "MSH-MSDFP")
+monthly_vol_dept_function(site = "MSH-MSDFP")
 ```
 _________________________________________________________________________________________________________________________________________________________________
+
+
+
 ## MSM {.tabset .tabset-fade .tabset-pills}
 ### MSM Daily Volume
 ```{r MSM Metrics Output1, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
@@ -2796,13 +3307,22 @@ print(vol_breakdown_site_graph(site = "MSM"))
 <!-- <font size="4">--  In-person encounters `r vol_takeaways_function(site = "MSM")[4]`.</font><br/> -->
 <!-- <font size="4">--  Total ambulatory encounters `r vol_takeaways_function(site = "MSM")[5]` from `r last_year` monthly average and `r vol_takeaways_function(site = "MSM")[6]` from 2019 monthly average. -->
 <!-- :::: -->
+
+__________________________________________________________________________________________________________________________________________________________
+### MSM Volume by Dept `r todays_month`-`r todays_year`
+<!-- <span style='font-size: 16px; color: black'>**MSBI `r todays_month`-`r todays_year` MTD Volume by Department**</span><br/> -->
+<!-- <span style='font-size: 14px; color: black'>*Includes visits up to `r date_end`</span><br/> -->
+<span style='font-size: 16px; color: black'>**MSBI `r todays_month`-`r todays_year` Volume by Department**</span><br/>
+```{r MSM Metrics Output5, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
+current_monthly_vol_dept_function(site = "MSM")
+```
 _________________________________________________________________________________________________________________________________________________________________
-### MSM Volume by Dept
+### MSM Volume by Dept `r full_month`-`r full_year`
 <!-- <span style='font-size: 16px; color: black'>**MSM `r todays_month`-`r todays_year` MTD Volume by Department**</span><br/> -->
 <!-- <span style='font-size: 14px; color: black'>*Includes visits up to `r date_end`</span><br/> -->
 <span style='font-size: 16px; color: black'>**MSM `r full_month`-`r full_year` Volume by Department**</span><br/>
-```{r MSM Metrics Output5, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
-# monthly_vol_dept_function(site = "MSM")
+```{r MSM Metrics Output6, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
+monthly_vol_dept_function(site = "MSM")
 ```
 _________________________________________________________________________________________________________________________________________________________________
 <!-- ## MSQ {.tabset .tabset-fade .tabset-pills} -->
@@ -2860,15 +3380,27 @@ ________________________________________________________________________________
 <!-- <font size="4">--  In-person encounters `r vol_takeaways_function(site = "MSUS")[4]`.</font><br/> -->
 <!-- <font size="4">--  Total ambulatory encounters `r vol_takeaways_function(site = "MSUS")[5]` from `r last_year` monthly average and `r vol_takeaways_function(site = "MSUS")[6]` from 2019 monthly average. -->
 <!-- :::: -->
+
+__________________________________________________________________________________________________________________________________________________________
+### MSUS Volume by Dept `r todays_month`-`r todays_year`
+<!-- <span style='font-size: 16px; color: black'>**MSBI `r todays_month`-`r todays_year` MTD Volume by Department**</span><br/> -->
+<!-- <span style='font-size: 14px; color: black'>*Includes visits up to `r date_end`</span><br/> -->
+<span style='font-size: 16px; color: black'>**MSBI `r todays_month`-`r todays_year` Volume by Department**</span><br/>
+```{r MSUS Metrics Output5, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
+current_monthly_vol_dept_function(site = "MSUS")
+```
 _________________________________________________________________________________________________________________________________________________________________
-### MSUS Volume by Dept
+### MSUS Volume by Dept `r full_month`-`r full_year`
 <!-- <span style='font-size: 16px; color: black'>**MSUS `r todays_month`-`r todays_year` MTD Volume by Department**</span><br/> -->
 <!-- <span style='font-size: 14px; color: black'>*Includes visits up to `r date_end`</span><br/> -->
 <span style='font-size: 16px; color: black'>**MSUS `r full_month`-`r full_year` Volume by Department**</span><br/>
-```{r MSUS Metrics Output5, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
+```{r MSUS Metrics Output6, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
 monthly_vol_dept_function(site = "MSUS")
 ```
 _________________________________________________________________________________________________________________________________________________________________
+
+
+
 ## MSW {.tabset .tabset-fade .tabset-pills}
 ### MSW Daily Volume
 ```{r MSW Metrics Output1, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
@@ -2901,15 +3433,26 @@ print(vol_breakdown_site_graph(site = "MSW"))
 <!-- <font size="4">--  In-person encounters `r vol_takeaways_function(site = "MSW")[4]`.</font><br/> -->
 <!-- <font size="4">--  Total ambulatory encounters `r vol_takeaways_function(site = "MSW")[5]` from `r last_year` monthly average and `r vol_takeaways_function(site = "MSW")[6]` from 2019 monthly average. -->
 <!-- :::: -->
+
+### MSW Volume by Dept `r todays_month`-`r todays_year`
+<!-- <span style='font-size: 16px; color: black'>**MSBI `r todays_month`-`r todays_year` MTD Volume by Department**</span><br/> -->
+<!-- <span style='font-size: 14px; color: black'>*Includes visits up to `r date_end`</span><br/> -->
+<span style='font-size: 16px; color: black'>**MSBI `r todays_month`-`r todays_year` Volume by Department**</span><br/>
+```{r MSW Metrics Output5, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
+current_monthly_vol_dept_function(site = "MSW")
+```
 _________________________________________________________________________________________________________________________________________________________________
-### MSW Volume by Dept
+### MSW Volume by Dept `r full_month`-`r full_year`
 <!-- <span style='font-size: 16px; color: black'>**MSW `r todays_month`-`r todays_year` MTD Volume by Department**</span><br/> -->
 <!-- <span style='font-size: 14px; color: black'>*Includes visits up to `r date_end`</span><br/> -->
 <span style='font-size: 16px; color: black'>**MSW `r full_month`-`r full_year` Volume by Department**</span><br/>
-```{r MSW Metrics Output5, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
+```{r MSW Metrics Output6, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
 monthly_vol_dept_function(site = "MSW")
 ```
 _________________________________________________________________________________________________________________________________________________________________
+
+
+
 ## NETWORK {.tabset .tabset-fade .tabset-pills}
 ### NETWORK Daily Volume
 ```{r Network Metrics Output1, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
@@ -2942,12 +3485,19 @@ print(vol_breakdown_site_graph(site = "NETWORK"))
 <!-- <font size="4">--  In-person encounters `r vol_takeaways_function(site = "NETWORK")[4]`.</font><br/> -->
 <!-- <font size="4">--  Total ambulatory encounters `r vol_takeaways_function(site = "NETWORK")[5]` from `r last_year` monthly average and `r vol_takeaways_function(site = "NETWORK")[6]` from 2019 monthly average. -->
 <!-- :::: -->
+### NETWORK Volume by Dept `r todays_month`-`r todays_year`
+<!-- <span style='font-size: 16px; color: black'>**MSBI `r todays_month`-`r todays_year` MTD Volume by Department**</span><br/> -->
+<!-- <span style='font-size: 14px; color: black'>*Includes visits up to `r date_end`</span><br/> -->
+<span style='font-size: 16px; color: black'>**MSBI `r todays_month`-`r todays_year` Volume by Department**</span><br/>
+```{r MSW Metrics Output5, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
+current_monthly_vol_dept_function(site = "NETWORK")
+```
 _________________________________________________________________________________________________________________________________________________________________
-### NETWORK Volume by Dept
+### NETWORK Volume by Dept `r full_month`-`r full_year`
 <!-- <span style='font-size: 16px; color: black'>**NETWORK `r todays_month`-`r todays_year` MTD Volume by Department**</span><br/> -->
 <!-- <span style='font-size: 14px; color: black'>*Includes visits up to `r date_end`</span><br/> -->
 <span style='font-size: 16px; color: black'>**NETWORK `r full_month`-`r full_year` Volume by Department**</span><br/>
-```{r NETWORK Metrics Output5, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
+```{r NETWORK Metrics Output6, fig.height = 7, fig.width = 13, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
 monthly_vol_dept_function(site = "NETWORK")
 ```
 _________________________________________________________________________________________________________________________________________________________________

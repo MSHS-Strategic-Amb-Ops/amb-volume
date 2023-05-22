@@ -110,8 +110,6 @@ h4 {
 
 ```{r Load Packages, echo = FALSE, warning = FALSE, message = FALSE}
 # Load packages -----------------------------------------------------------------------------------
-```{r Load Packages, echo = FALSE, warning = FALSE, message = FALSE}
-# Load packages -----------------------------------------------------------------------------------
 suppressMessages({
   memory.limit(size = 8000000)
   library(readxl)

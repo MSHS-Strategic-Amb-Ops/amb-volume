@@ -110,6 +110,8 @@ h4 {
 
 ```{r Load Packages, echo = FALSE, warning = FALSE, message = FALSE}
 # Load packages -----------------------------------------------------------------------------------
+```{r Load Packages, echo = FALSE, warning = FALSE, message = FALSE}
+# Load packages -----------------------------------------------------------------------------------
 suppressMessages({
   memory.limit(size = 8000000)
   library(readxl)
@@ -1496,7 +1498,8 @@ reactable(monthly_vol_mshs_specialty,
           # groupBy = c("Campus.Specialty"),
           
           columnGroups = list(
-            colGroup(name = "", columns = c("Campus.Specialty", "Campus"), sticky = "left",
+            colGroup(name = "", columns = c("Campus.Specialty", "Campus"), 
+                     # sticky = "left",
                      headerStyle = list(fontSize = "14px")),
             colGroup(name = "Total", columns = c("avg_daily", "monthly_vol_Total", "last_year_Total", "perc_diff_Total"),
                      headerStyle = list(background = "#221f72", color = "white", fontWeight = "Bold", fontSize = "14px")),
@@ -1732,7 +1735,8 @@ reactable(monthly_vol_mshs_specialty,
           # groupBy = c("Campus.Specialty"),
           
           columnGroups = list(
-            colGroup(name = "", columns = c("Campus.Specialty", "Campus"), sticky = "left",
+            colGroup(name = "", columns = c("Campus.Specialty", "Campus"), 
+                     # sticky = "left",
                      headerStyle = list(fontSize = "14px")),
             colGroup(name = "Total", columns = c("avg_daily", "monthly_vol_Total", "last_year_Total", "perc_diff_Total"),
                      headerStyle = list(background = "#221f72", color = "white", fontWeight = "Bold", fontSize = "14px")),
@@ -2608,7 +2612,8 @@ reactable(monthly_vol_dept,
           height = 800,
           wrap = TRUE,
           columnGroups = list(
-            colGroup(name = "", columns = c("Campus.Specialty", "Department"), sticky = "left",
+            colGroup(name = "", columns = c("Campus.Specialty", "Department"), 
+                     # sticky = "left",
                      headerStyle = list(fontSize = "14px")),
             colGroup(name = "Total", columns = c("avg_daily", "monthly_vol_Total", "last_year_Total", "perc_diff_Total"),
                      headerStyle = list(background = "#221f72", color = "white", fontWeight = "Bold", fontSize = "14px")),
@@ -2858,7 +2863,8 @@ reactable(monthly_vol_dept,
           height = 800,
           wrap = TRUE,
           columnGroups = list(
-            colGroup(name = "", columns = c("Campus.Specialty", "Department"), sticky = "left",
+            colGroup(name = "", columns = c("Campus.Specialty", "Department"), 
+                     # sticky = "left",
                      headerStyle = list(fontSize = "14px")),
             colGroup(name = "Total", columns = c("avg_daily", "monthly_vol_Total", "last_year_Total", "perc_diff_Total"),
                      headerStyle = list(background = "#221f72", color = "white", fontWeight = "Bold", fontSize = "14px")),

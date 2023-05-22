@@ -1410,7 +1410,7 @@ total_amb_prev_year <- as.character(ifelse(total_amb_prev_year >0,
 <span style='font-size: 16px; color: black'>**MSHS `r todays_month`-`r todays_year` MTD Volume by Specialty**</span><br/>
 <span style='font-size: 14px; color: black'>*Includes visits up to `r visits_end_date` </span><br/>
 <!-- <span style='font-size: 14px; color: black'>*Includes Rad Onc data up to `r rad_onc_date` and Radiology data up to `r radiology_date`</span><br/> -->
-```{r MSHS Volume by Speicalty, echo = FALSE, warning = FALSE, message = FALSE}
+```{r MSHS Current Volume by Speicalty, echo = FALSE, warning = FALSE, message = FALSE}
 # Total Current Month Volume
 monthly_vol_mshs_specialty <- monthly_vol %>%
   filter(Appt.Month == todays_month) %>%
